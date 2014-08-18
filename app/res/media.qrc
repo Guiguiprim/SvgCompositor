@@ -1,0 +1,22 @@
+<RCC>
+    <qresource prefix="/">
+        <file>media/transparent.svg</file>
+        <file>media/icons/arrow-down.svg</file>
+        <file>media/icons/arrow-left.svg</file>
+        <file>media/icons/arrow-right.svg</file>
+        <file>media/icons/arrow-up.svg</file>
+        <file>media/icons/center-h.svg</file>
+        <file>media/icons/center-v.svg</file>
+        <file>media/icons/download2.svg</file>
+        <file>media/icons/empty.svg</file>
+        <file>media/icons/exit.svg</file>
+        <file>media/icons/image.svg</file>
+        <file>media/icons/minus.svg</file>
+        <file>media/icons/minus-red.svg</file>
+        <file>media/icons/plus.svg</file>
+        <file>media/icons/plus-green.svg</file>
+        <file>media/icons/upload2.svg</file>
+        <file>media/icons/zoomin.svg</file>
+        <file>media/icons/zoomout.svg</file>
+    </qresource>
+</RCC>

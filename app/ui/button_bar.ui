@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ButtonBar</class>
+ <widget class="QWidget" name="ButtonBar">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>796</width>
+    <height>80</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout_5">
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="verticalSpacing">
+      <number>6</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Name: </string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="11">
+      <widget class="QToolButton" name="centerVButton">
+       <property name="statusTip">
+        <string>Vertical center</string>
+       </property>
+       <property name="text">
+        <string>Vertical center</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../res/media.qrc">
+         <normaloff>:/media/icons/center-v.svg</normaloff>:/media/icons/center-v.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="8">
+      <widget class="QToolButton" name="upLayoutButton">
+       <property name="toolTip">
+        <string>Lower selection</string>
+       </property>
+       <property name="text">
+        <string>Lower selection</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../res/media.qrc">
+         <normaloff>:/media/icons/upload2.svg</normaloff>:/media/icons/upload2.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="shortcut">
+        <string>PgUp</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="12" rowspan="2">
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="9">
+      <widget class="QToolButton" name="downLayoutButton">
+       <property name="toolTip">
+        <string>Raise selection</string>
+       </property>
+       <property name="text">
+        <string>Raise selection</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../res/media.qrc">
+         <normaloff>:/media/icons/download2.svg</normaloff>:/media/icons/download2.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="shortcut">
+        <string>PgDown</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="6">
+      <widget class="QToolButton" name="addButton">
+       <property name="toolTip">
+        <string>Add image</string>
+       </property>
+       <property name="text">
+        <string>Add image</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../res/media.qrc">
+         <normaloff>:/media/icons/plus-green.svg</normaloff>:/media/icons/plus-green.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="13">
+      <layout class="QHBoxLayout" name="xPosLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QToolButton" name="leftButton">
+         <property name="toolTip">
+          <string>Move left</string>
+         </property>
+         <property name="text">
+          <string>Move left</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../res/media.qrc">
+           <normaloff>:/media/icons/arrow-left.svg</normaloff>:/media/icons/arrow-left.svg</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>16</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="shortcut">
+          <string>Left</string>
+         </property>
+         <property name="autoRepeat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDoubleSpinBox" name="xPosSpin">
+         <property name="toolTip">
+          <string>Horizontal position</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+         <property name="buttonSymbols">
+          <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
+         <property name="decimals">
+          <number>1</number>
+         </property>
+         <property name="minimum">
+          <double>-256.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>256.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="rightButton">
+         <property name="toolTip">
+          <string>Move right</string>
+         </property>
+         <property name="text">
+          <string>Move right</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../res/media.qrc">
+           <normaloff>:/media/icons/arrow-right.svg</normaloff>:/media/icons/arrow-right.svg</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>16</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="shortcut">
+          <string>Right</string>
+         </property>
+         <property name="autoRepeat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="6">
+      <widget class="QToolButton" name="removeButton">
+       <property name="toolTip">
+        <string>Remove selected image</string>
+       </property>
+       <property name="text">
+        <string>Remove selected image</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../res/media.qrc">
+         <normaloff>:/media/icons/minus-red.svg</normaloff>:/media/icons/minus-red.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="8" colspan="4">
+      <layout class="QHBoxLayout" name="scaleLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QToolButton" name="zoomOutButton">
+         <property name="toolTip">
+          <string>Decrease scale</string>
+         </property>
+         <property name="text">
+          <string>Decrease scale</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../res/media.qrc">
+           <normaloff>:/media/icons/zoomout.svg</normaloff>:/media/icons/zoomout.svg</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>16</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="shortcut">
+          <string>-</string>
+         </property>
+         <property name="autoRepeat">
+          <bool>true</bool>
+         </property>
+         <property name="autoRepeatInterval">
+          <number>200</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDoubleSpinBox" name="scaleSpin">
+         <property name="toolTip">
+          <string>Scale</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+         <property name="buttonSymbols">
+          <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
+         <property name="minimum">
+          <double>0.100000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>10.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.100000000000000</double>
+         </property>
+         <property name="value">
+          <double>1.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="zoomInButton">
+         <property name="toolTip">
+          <string>Increase scale</string>
+         </property>
+         <property name="text">
+          <string>Increase scale</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../res/media.qrc">
+           <normaloff>:/media/icons/zoomin.svg</normaloff>:/media/icons/zoomin.svg</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>16</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="shortcut">
+          <string>+</string>
+         </property>
+         <property name="autoRepeat">
+          <bool>true</bool>
+         </property>
+         <property name="autoRepeatInterval">
+          <number>200</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="10">
+      <widget class="QToolButton" name="centerHButton">
+       <property name="toolTip">
+        <string>Horizontal center</string>
+       </property>
+       <property name="text">
+        <string>Horizontal center</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../res/media.qrc">
+         <normaloff>:/media/icons/center-h.svg</normaloff>:/media/icons/center-h.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="7" rowspan="2">
+      <widget class="Line" name="line_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" colspan="2">
+      <widget class="QLineEdit" name="nameEdit"/>
+     </item>
+     <item row="1" column="1">
+      <layout class="QHBoxLayout" name="sizeLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QToolButton" name="sizeDownButton">
+         <property name="toolTip">
+          <string>Decrease size</string>
+         </property>
+         <property name="text">
+          <string>Decrease size</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../res/media.qrc">
+           <normaloff>:/media/icons/minus.svg</normaloff>:/media/icons/minus.svg</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>16</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="autoRepeat">
+          <bool>true</bool>
+         </property>
+         <property name="autoRepeatInterval">
+          <number>200</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="sizeSpin">
+         <property name="toolTip">
+          <string>Size [16, 24, 32, 48, 64, 128, 256]</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+         <property name="buttonSymbols">
+          <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
+         <property name="minimum">
+          <number>16</number>
+         </property>
+         <property name="maximum">
+          <number>256</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="sizeUpButton">
+         <property name="toolTip">
+          <string>Increase size</string>
+         </property>
+         <property name="text">
+          <string>Increase size</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../res/media.qrc">
+           <normaloff>:/media/icons/plus.svg</normaloff>:/media/icons/plus.svg</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>16</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="autoRepeat">
+          <bool>true</bool>
+         </property>
+         <property name="autoRepeatInterval">
+          <number>200</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="13">
+      <layout class="QHBoxLayout" name="yPosLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QToolButton" name="upButton">
+         <property name="statusTip">
+          <string>Move up</string>
+         </property>
+         <property name="text">
+          <string>Move up</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../res/media.qrc">
+           <normaloff>:/media/icons/arrow-up.svg</normaloff>:/media/icons/arrow-up.svg</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>16</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="shortcut">
+          <string>Up</string>
+         </property>
+         <property name="autoRepeat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDoubleSpinBox" name="yPosSpin">
+         <property name="toolTip">
+          <string>Vertical position</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+         <property name="buttonSymbols">
+          <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
+         <property name="decimals">
+          <number>1</number>
+         </property>
+         <property name="minimum">
+          <double>-256.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>256.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="downButton">
+         <property name="toolTip">
+          <string>Move down</string>
+         </property>
+         <property name="text">
+          <string>Move down</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../res/media.qrc">
+           <normaloff>:/media/icons/arrow-down.svg</normaloff>:/media/icons/arrow-down.svg</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>16</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="shortcut">
+          <string>Down</string>
+         </property>
+         <property name="autoRepeat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="5">
+      <widget class="QToolButton" name="noBackButton">
+       <property name="toolTip">
+        <string>No background</string>
+       </property>
+       <property name="text">
+        <string>No background</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../res/media.qrc">
+         <normaloff>:/media/icons/empty.svg</normaloff>:/media/icons/empty.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="4">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>195</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="5">
+      <widget class="QToolButton" name="backgroundButton">
+       <property name="toolTip">
+        <string>Set background</string>
+       </property>
+       <property name="text">
+        <string>Set background</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../res/media.qrc">
+         <normaloff>:/media/icons/image.svg</normaloff>:/media/icons/image.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Size:</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../res/media.qrc"/>
+ </resources>
+ <connections/>
+</ui>

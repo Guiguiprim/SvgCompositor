@@ -38,7 +38,7 @@ qi_create_lib(
   ${svg_compose_public_header}
   ${svg_compose_src}
   ${svg_compose_moc}
-  SHARED
+  STATIC
 )
 
 qi_use_lib(

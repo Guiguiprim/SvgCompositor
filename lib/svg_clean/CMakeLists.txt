@@ -20,6 +20,7 @@ qi_create_lib(
   svg_clean
   ${svg_clean_public_header}
   ${svg_clean_src}
+  STATIC
 )	
 
 qi_use_lib(

@@ -51,12 +51,13 @@ CompositorWidget::CompositorWidget(QWidget *parent)
   connect(_controller, SIGNAL(setCurrentEditor(Editor*)),
           this, SLOT(onSetCurrentEditor(Editor*)));
 
-  _controller->openProject("img/project.xml");
   connect(_controller, SIGNAL(projectChanged(SvgCompose::SvgAssembliesList*)),
           _treeViewController, SLOT(onProjectChanged(SvgCompose::SvgAssembliesList*)));
 
   connect(_treeViewController, SIGNAL(modelChanged(QStandardItemModel*)),
           this, SLOT(xOnModelChanged(QStandardItemModel*)));
+
+  _controller->openProject("img/project.cr");
   SvgCompose::SvgAssembliesList* project = _controller->project();
   if(project)
   {

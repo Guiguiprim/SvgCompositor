@@ -59,7 +59,10 @@ bool generateAssembly(const SvgAssembly* assembly,
   svgXml.appendChild(declaration);
   svgXml.appendChild(root);
 
-  QFile svgFile(outputDir.absoluteFilePath(assembly->name()));
+  QString filename = assembly->name();
+  if(!filename.endsWith(".svg",Qt::CaseInsensitive))
+    filename += ".svg";
+  QFile svgFile(outputDir.absoluteFilePath(filename));
   if(!svgFile.open(QIODevice::WriteOnly | QIODevice::Text))
   {
     qDebug() << "Could not open " << svgFile.fileName() << " for writing";

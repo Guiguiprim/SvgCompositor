@@ -3,13 +3,15 @@
 
 #include <QWidget>
 
-#include "../controller/action.hpp"
+#include "controller/action.hpp"
 
 class QTextEdit;
 
-namespace SvgCompose {
+namespace SvgCompose
+{
 class SvgAssembly;
-}
+} //
+
 
 namespace SvgCompositor
 {
@@ -30,12 +32,6 @@ public:
   void setAssembly(SvgCompose::SvgAssembly* assembly);
   SvgCompose::SvgAssembly* assembly() const;
 
-signals:
-
-public slots:
-
-private slots:
-
 private:
   GraphicsView* _view;
   ButtonBar* _buttonBar;
@@ -48,6 +44,6 @@ private:
 
 };
 
-} // namespace Composition
+} // namespace SvgCompositor
 
 #endif // COMPOSITION_EDITOR_HPP

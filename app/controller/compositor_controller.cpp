@@ -8,7 +8,8 @@
 
 #include "gui/editor.hpp"
 
-namespace SvgCompositor {
+namespace SvgCompositor
+{
 
 CompositorController::CompositorController(QObject *parent)
   : QObject(parent)

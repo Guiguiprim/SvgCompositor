@@ -3,11 +3,12 @@
 
 #include <QObject>
 
-#include "../misc/move_struct.hpp"
+#include "misc/move_struct.hpp"
 
-namespace SvgCompose {
+namespace SvgCompose
+{
 class SvgAssembly;
-}
+} // namespace SvgCompose
 
 namespace SvgCompositor
 {
@@ -39,6 +40,6 @@ private:
   SvgCompose::SvgAssembly* _assembly;
 };
 
-} // namespace Composition
+} // namespace SvgCompositor
 
 #endif // VIEW_CONTROLLER_HPP

@@ -3,15 +3,16 @@
 
 #include <QObject>
 
-#include "../misc/move_struct.hpp"
+#include "misc/move_struct.hpp"
 #include "action.hpp"
 
 class QUndoStack;
 class QWidget;
 
-namespace SvgCompose {
+namespace SvgCompose
+{
 class SvgAssembly;
-}
+} // namespace SvgCompose
 
 namespace SvgCompositor
 {
@@ -37,6 +38,6 @@ private:
   QUndoStack* _undoStack;
 };
 
-} // namespace Composition
+} // namespace SvgCompositor
 
 #endif // EDITOR_CONTROLLER_HPP

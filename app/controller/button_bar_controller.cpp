@@ -2,7 +2,7 @@
 
 #include <svg_compose/svg_assembly.hpp>
 
-#include "../gui/button_bar.hpp"
+#include "gui/button_bar.hpp"
 
 namespace SvgCompositor
 {
@@ -142,4 +142,4 @@ void ButtonBarController::tearDownConnection()
              this, SLOT(xOnPosChanged(int,qreal,qreal)));
 }
 
-} // namespace Composition
+} // namespace SvgCompositor

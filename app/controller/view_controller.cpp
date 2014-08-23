@@ -3,8 +3,8 @@
 #include <svg_compose/svg_assembly.hpp>
 #include <svg_compose/svg_assemblies_list.hpp>
 
-#include "../gui/graphics_item.hpp"
-#include "../gui/graphics_view.hpp"
+#include "gui/graphics_item.hpp"
+#include "gui/graphics_view.hpp"
 
 namespace SvgCompositor
 {
@@ -84,4 +84,4 @@ void ViewController::xOnSelectionChanged()
     emit selectionChanged(_item->indexSelection());
 }
 
-} // namespace Composition
+} // namespace SvgCompositor

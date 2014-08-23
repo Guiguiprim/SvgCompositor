@@ -6,13 +6,14 @@
 
 #include <svg_compose/svg_assembly.hpp>
 
-#include "../command/assembly_command.hpp"
-#include "../misc/last_dir.hpp"
+#include "command/assembly_command.hpp"
+#include "misc/last_dir.hpp"
 
 namespace SvgCompositor
 {
 
-namespace {
+namespace
+{
 inline qreal tronc(qreal x)
 {
   return (qreal)( (int)(x * 10) / 10.0);
@@ -21,7 +22,7 @@ inline qreal tronc_(qreal x)
 {
   return (qreal)( (int)(x * 100) / 100.0);
 }
-}
+} // namespace
 
 EditorController::EditorController(QWidget *parent)
   : QObject(parent)
@@ -123,32 +124,32 @@ void EditorController::onAction(int index, Action action)
   case ScaleIncrease:
     //_assembly->setElementScale(index, _assembly->element(index).scale + 0.1);
     _undoStack->push( new SvgAssemblyCommand::ScaleChanged(_assembly, index,
-                                            _assembly->element(index).scale + 0.1) );
+                                                           _assembly->element(index).scale + 0.1) );
     break;
   case ScaleDecrease:
     //_assembly->setElementScale(index, _assembly->element(index).scale - 0.1);
     _undoStack->push( new SvgAssemblyCommand::ScaleChanged(_assembly, index,
-                                            _assembly->element(index).scale - 0.1) );
+                                                           _assembly->element(index).scale - 0.1) );
     break;
   case MoveUp:
     //_assembly->setElementDy(index, _assembly->element(index).dy - 0.5);
     _undoStack->push( new SvgAssemblyCommand::MoveDy(_assembly, index,
-                                            _assembly->element(index).dy - 0.5) );
+                                                     _assembly->element(index).dy - 0.5) );
     break;
   case MoveDown:
     //_assembly->setElementDy(index, _assembly->element(index).dy + 0.5);
     _undoStack->push( new SvgAssemblyCommand::MoveDy(_assembly, index,
-                                            _assembly->element(index).dy + 0.5) );
+                                                     _assembly->element(index).dy + 0.5) );
     break;
   case MoveRight:
     //_assembly->setElementDx(index, _assembly->element(index).dx + 0.5);
     _undoStack->push( new SvgAssemblyCommand::MoveDx(_assembly, index,
-                                            _assembly->element(index).dx + 0.5) );
+                                                     _assembly->element(index).dx + 0.5) );
     break;
   case MoveLeft:
     //_assembly->setElementDx(index, _assembly->element(index).dx - 0.5);
     _undoStack->push( new SvgAssemblyCommand::MoveDx(_assembly, index,
-                                            _assembly->element(index).dx - 0.5) );
+                                                     _assembly->element(index).dx - 0.5) );
     break;
   default:
     break;
@@ -170,4 +171,4 @@ void EditorController::onElementsMoved(ItemsMove itemsMove)
   }
 }
 
-} // namespace Composition
+} // namespace SvgCompositor

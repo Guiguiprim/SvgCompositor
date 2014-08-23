@@ -12,9 +12,10 @@
 namespace SvgCompositor
 {
 
-namespace {
+namespace
+{
 qreal k_defaultSize = 48;
-}
+} // namespace
 
 GraphicsItem::GraphicsItem()
   : QObject()
@@ -225,4 +226,4 @@ void GraphicsItem::xUpdateZValues()
   }
 }
 
-} // namespace Composition
+} // namespace SvgCompositor

@@ -2,6 +2,8 @@
 
 #include <QMap>
 
+namespace SvgCompositor
+{
 
 QIcon& Icon::buildIcon(const QString& name)
 {
@@ -16,3 +18,5 @@ QIcon& Icon::buildIcon(const QString& name)
   icons[name] = icon;
   return icons[name];
 }
+
+} // namespace SvgCompositor

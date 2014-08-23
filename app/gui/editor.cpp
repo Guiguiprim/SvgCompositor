@@ -8,11 +8,11 @@
 
 #include <svg_compose/svg_assembly.hpp>
 
-#include "../icon.hpp"
-#include "../controller/button_bar_controller.hpp"
-#include "../controller/editor_controller.hpp"
-#include "../controller/view_controller.hpp"
-#include "../misc/move_struct.hpp"
+#include "icon.hpp"
+#include "controller/button_bar_controller.hpp"
+#include "controller/editor_controller.hpp"
+#include "controller/view_controller.hpp"
+#include "misc/move_struct.hpp"
 #include "button_bar.hpp"
 #include "graphics_item.hpp"
 #include "graphics_view.hpp"

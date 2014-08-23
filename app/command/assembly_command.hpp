@@ -8,9 +8,10 @@
 
 #include "../controller/action.hpp"
 
-namespace SvgCompose {
+namespace SvgCompose
+{
 class SvgAssembly;
-}
+} // namespace SvgCompose
 
 namespace SvgCompositor
 {
@@ -48,7 +49,8 @@ protected:
   int _index;
 };
 
-namespace SvgAssemblyCommand {
+namespace SvgAssemblyCommand
+{
 
 // :::::::: SetName ::::::::::
 class SetName : public SvgAssemblyCommandBase

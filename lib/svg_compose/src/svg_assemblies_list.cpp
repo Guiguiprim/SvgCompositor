@@ -76,7 +76,7 @@ void SvgAssembliesList::setFileName(const QString& filename)
 
 void SvgAssembliesList::setOutputDir(const QString& path)
 {
-   _outputDir = dir().relativeFilePath(path);
+  _outputDir = dir().relativeFilePath(path);
 }
 
 bool SvgAssembliesList::load(const QString& filename)
@@ -132,7 +132,7 @@ bool SvgAssembliesList::save(const QString& filename)
   root.setAttribute("outputDir", _outputDir);
 
   QDomProcessingInstruction declaration = doc.createProcessingInstruction(
-        "xml", "version=\"1.0\" encoding=\"UTF-8\"");
+                                            "xml", "version=\"1.0\" encoding=\"UTF-8\"");
   doc.appendChild(declaration);
 
   QMap<SvgAssembly*,QDomDocumentFragment>::iterator it, end;

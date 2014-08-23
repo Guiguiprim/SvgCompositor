@@ -78,4 +78,4 @@ void GraphicsView::xRefitItem()
   }
 }
 
-} // namespace Composition
+} // namespace SvgCompositor

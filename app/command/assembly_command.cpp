@@ -1,10 +1,12 @@
 #include "assembly_command.hpp"
 
 #include <svg_compose/svg_assembly.hpp>
+
 namespace SvgCompositor
 {
 
-namespace {
+namespace
+{
 template<typename T>
 const T* mergeWithBase(T* c1, const QUndoCommand* o)
 {
@@ -33,7 +35,7 @@ const T* mergeWithIndex(T* c1, const QUndoCommand* o)
 
   return c2;
 }
-}
+} // namespace
 
 
 // :::::::: SvgAssemblyCommand ::::::::::
@@ -56,7 +58,8 @@ SvgAssemblyCommandIndex::SvgAssemblyCommandIndex(
   , _index(index)
 {}
 
-namespace SvgAssemblyCommand {
+namespace SvgAssemblyCommand
+{
 
 // :::::::: SetName ::::::::::
 SetName::SetName(

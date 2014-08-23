@@ -11,7 +11,7 @@
 #include <QString>
 #include <QVector>
 
-#include "../misc/move_struct.hpp"
+#include "misc/move_struct.hpp"
 
 class QGraphicsScene;
 class QGraphicsSvgItem;
@@ -64,6 +64,6 @@ private:
   QVector<MovableSvgItem*> _elements;
 };
 
-} // namespace Composition
+} // namespace SvgCompositor
 
 #endif // COMPOSITION_GRAPHICS_ITEM_HPP

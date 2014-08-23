@@ -27,4 +27,4 @@ void MovableSvgItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
   }
 }
 
-} // namespace Composition
+} // namespace SvgCompositor

@@ -3,11 +3,12 @@
 
 #include <QWidget>
 
-#include "../controller/action.hpp"
+#include "controller/action.hpp"
 
-namespace Ui {
+namespace Ui
+{
 class ButtonBar;
-}
+} // namespace Ui
 
 namespace SvgCompositor
 {
@@ -52,6 +53,6 @@ private:
   Ui::ButtonBar* _ui;
 };
 
-} // namespace Composition
+} // namespace SvgCompositor
 
 #endif // COMPOSITION_BUTTON_BAR_HPP

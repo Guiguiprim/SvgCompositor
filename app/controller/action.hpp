@@ -27,6 +27,6 @@ enum Action {
   MoveLeft
 };
 
-} // namespace Composition
+} // namespace SvgCompositor
 
 #endif // COMPOSITION_ACTION_HPP

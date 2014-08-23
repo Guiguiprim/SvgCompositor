@@ -45,8 +45,8 @@ private Q_SLOTS:
   bool xCloseAssembly(QMap<SvgCompose::SvgAssembly*, Editor*>::iterator it, bool force = false);
 
 private:
-    SvgCompose::SvgAssembliesList* _project;
-    QMap<SvgCompose::SvgAssembly*, Editor*> _editors;
+  SvgCompose::SvgAssembliesList* _project;
+  QMap<SvgCompose::SvgAssembly*, Editor*> _editors;
 };
 
 } // namespace SvgCompositor

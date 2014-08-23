@@ -36,6 +36,6 @@ private:
   GraphicsItem* _item;
 };
 
-} // namespace Composition
+} // namespace SvgCompositor
 
 #endif // COMPOSITION_GRAPHICS_VIEW_HPP

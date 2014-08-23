@@ -22,6 +22,6 @@ private:
   static QString _projectDir;
 };
 
-} // namespace Composition
+} // namespace SvgCompositor
 
 #endif // LAST_DIR_HPP

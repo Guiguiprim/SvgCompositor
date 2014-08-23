@@ -5,9 +5,10 @@
 
 #include "action.hpp"
 
-namespace SvgCompose {
+namespace SvgCompose
+{
 class SvgAssembly;
-}
+} // namespace SvgCompose
 
 namespace SvgCompositor
 {
@@ -48,6 +49,6 @@ private:
   int _sIndex;
 };
 
-} // namespace Composition
+} // namespace SvgCompositor
 
 #endif // BUTTON_BARC_ONTROLLER_HPP

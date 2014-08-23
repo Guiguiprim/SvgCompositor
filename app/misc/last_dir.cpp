@@ -4,7 +4,6 @@
 
 namespace SvgCompositor
 {
-
 QString LastDir::_projectDir = "";
 
 QString LastDir::getProjectDir()
@@ -43,4 +42,4 @@ QString LastDir::getLogoDir()
   return settings.value("lastLogoDir","").toString();
 }
 
-} // namespace Composition
+} // namespace SvgCompositor

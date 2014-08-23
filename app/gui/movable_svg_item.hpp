@@ -25,6 +25,6 @@ private:
   bool _isBeingMoved;
 };
 
-} // namespace Composition
+} // namespace SvgCompositor
 
 #endif // COMPOSITION_MOVABLE_SVG_ITEM_HPP

@@ -199,4 +199,4 @@ void ButtonBar::xOnNameEdited()
   emit nameChanged(_ui->nameEdit->text());
 }
 
-} // namespace Composition
+} // namespace SvgCompositor

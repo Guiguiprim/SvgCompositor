@@ -15,9 +15,6 @@ struct ItemMove
 
 typedef QList<ItemMove> ItemsMove;
 
-//qRegisterMetaType<ItemMove>("ItemMove");
-//qRegisterMetaType<ItemsMove>("ItemsMove");
-
 } // namespace SvgCompositor
 
 #endif // MOVE_STRUCT_HPP

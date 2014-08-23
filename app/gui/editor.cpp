@@ -86,6 +86,7 @@ void Editor::setAssembly(SvgCompose::SvgAssembly* assembly)
     _editorController->setAssembly(NULL);
     _buttonBarController->setAssembly(NULL);
 
+    _xmlPreview->setPlainText("");
     disconnect(_assembly, SIGNAL(assemblyChanged(QString)),
                _xmlPreview, SLOT(setPlainText(QString)));
   }
@@ -96,6 +97,7 @@ void Editor::setAssembly(SvgCompose::SvgAssembly* assembly)
     _editorController->setAssembly(_assembly);
     _buttonBarController->setAssembly(_assembly);
 
+    _xmlPreview->setPlainText(assembly->xml());
     connect(_assembly, SIGNAL(assemblyChanged(QString)),
             _xmlPreview, SLOT(setPlainText(QString)));
   }

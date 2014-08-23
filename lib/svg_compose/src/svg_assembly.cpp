@@ -68,6 +68,11 @@ int SvgAssembly::elementsCount() const
   return _elements.count();
 }
 
+SvgAssembliesList* SvgAssembly::project() const
+{
+  return _project;
+}
+
 bool SvgAssembly::load(QDomElement& root)
 {
   if(root.tagName() != k_tag)

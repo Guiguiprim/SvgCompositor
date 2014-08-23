@@ -32,6 +32,7 @@ public:
   SvgAssemblyElement element(int index) const;
   QVector<SvgAssemblyElement> elements() const;
   int elementsCount() const;
+  SvgAssembliesList* project() const;
 
 public slots:
   void setName(const QString& name);

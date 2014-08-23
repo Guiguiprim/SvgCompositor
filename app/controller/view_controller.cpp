@@ -1,6 +1,7 @@
 #include "view_controller.hpp"
 
 #include <svg_compose/svg_assembly.hpp>
+#include <svg_compose/svg_assemblies_list.hpp>
 
 #include "../gui/graphics_item.hpp"
 #include "../gui/graphics_view.hpp"
@@ -65,11 +66,11 @@ void ViewController::xConnectDescription()
 void ViewController::xCreateItem()
 {
   _item = new GraphicsItem;
-  _item->setBackground(_assembly->background());
+  _item->setBackground(_assembly->project()->dir().absoluteFilePath(_assembly->background()));
   int index = 0;
   Q_FOREACH(SvgCompose::SvgAssemblyElement elem, _assembly->elements())
   {
-    _item->addElement(elem.file);
+    _item->addElement(_assembly->project()->dir().absoluteFilePath(elem.file));
     _item->setElementPos(index, elem.dx, elem.dy);
     _item->setElementScale(index, elem.scale);
     ++index;

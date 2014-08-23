@@ -1,7 +1,10 @@
 #include "compositor_widget.hpp"
 
+#include <QAction>
 #include <QApplication>
 #include <QHBoxLayout>
+#include <QMenu>
+#include <QMenuBar>
 #include <QStackedWidget>
 #include <QStandardItemModel>
 #include <QTabWidget>
@@ -27,6 +30,25 @@ CompositorWidget::CompositorWidget(QWidget *parent)
   , _controller(new CompositorController(this))
   , _treeViewController(new TreeViewController(this))
 {
+  QMenuBar* menuBar = new QMenuBar;
+  this->setMenuBar(menuBar);
+
+  QMenu* fileMenu = menuBar->addMenu("File");
+
+  _newProjectAction = fileMenu->addAction("New project", _controller,
+                                          SLOT(createProject()), QKeySequence::New);
+  _openProjectAction = fileMenu->addAction("Open project", _controller,
+                                           SLOT(openProject()), QKeySequence::Open);
+  _saveAssemblyAction = fileMenu->addAction("Save assembly", this,
+                                            SLOT(xSaveCurrentAssembly()), QKeySequence::Save);
+  _saveAllAction = fileMenu->addAction("Save all assemblies", _controller,
+                                       SLOT(saveAll()), QKeySequence::SaveAs);
+  _saveAsAction = fileMenu->addAction("Save project as", _controller,
+                                      SLOT(saveProjectAs()));
+  _closeProjectAction = fileMenu->addAction("Close project", _controller,
+                                            SLOT(closeProject()), QKeySequence::Close);
+  fileMenu->addSeparator();
+  _quitAction = fileMenu->addAction("Quit", this, SLOT(xQuit()), QKeySequence::Quit);
 
   QWidget* widget = new QWidget;
   this->setCentralWidget(widget);
@@ -96,6 +118,18 @@ void CompositorWidget::onRemoveEditor(Editor* editor)
 void CompositorWidget::onSetCurrentEditor(Editor* editor)
 {
   _tabWidget->setCurrentWidget(editor);
+}
+
+void CompositorWidget::xQuit()
+{
+  qApp->quit();
+}
+
+void CompositorWidget::xSaveCurrentAssembly()
+{
+  Editor* editor = qobject_cast<Editor*>(_tabWidget->currentWidget());
+  if(editor)
+    _controller->saveAssembly(editor->assembly());
 }
 
 void CompositorWidget::xOnTabCloseRequested(int index)

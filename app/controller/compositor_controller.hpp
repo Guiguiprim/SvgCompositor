@@ -23,10 +23,11 @@ public:
   SvgCompose::SvgAssembliesList* project() const;
 
 public Q_SLOTS:
-  bool openProject(const QString& filename);
-  bool saveProjectAs(const QString& filename = QString());
+  bool createProject();
+  bool openProject(const QString& filename = QString());
+  bool saveProjectAs();
   bool saveAssembly(SvgCompose::SvgAssembly* assembly);
-  bool saveAllProject();
+  bool saveAll();
   bool closeProject();
 
   bool openAssembly(SvgCompose::SvgAssembly* assembly);

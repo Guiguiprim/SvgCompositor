@@ -25,12 +25,23 @@ SvgCompose::SvgAssembliesList* CompositorController::project() const
   return _project;
 }
 
+bool CompositorController::createProject()
+{
+  return true;
+}
+
 bool CompositorController::openProject(const QString& filename)
 {
   if(_project && !closeProject())
     return false;
 
-  _project = new SvgCompose::SvgAssembliesList(filename, this);
+  QString file = filename;
+  if(filename.isEmpty())
+  {
+    // ask for a project
+  }
+
+  _project = new SvgCompose::SvgAssembliesList(file, this);
   if(!_project->load())
   {
     delete _project;
@@ -41,10 +52,14 @@ bool CompositorController::openProject(const QString& filename)
   return true;
 }
 
-bool CompositorController::saveProjectAs(const QString& filename)
+bool CompositorController::saveProjectAs()
 {
   if(!_project)
     return false;
+
+  QString filename;
+  // ask for a new file project
+
   _project->save(filename);
   return true;
 }
@@ -57,7 +72,7 @@ bool CompositorController::saveAssembly(SvgCompose::SvgAssembly* assembly)
   return true;
 }
 
-bool CompositorController::saveAllProject()
+bool CompositorController::saveAll()
 {
   if(!_project)
     return false;

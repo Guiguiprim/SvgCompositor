@@ -30,6 +30,8 @@ public Q_SLOTS:
   void onSetCurrentEditor(Editor*);
 
 private Q_SLOTS:
+  void xQuit();
+  void xSaveCurrentAssembly();
   void xOnTabCloseRequested(int index);
   void xOnModelChanged(QStandardItemModel* model);
 
@@ -39,6 +41,14 @@ private:
     ProjectWidget* _projectWidget;
     CompositorController* _controller;
     TreeViewController* _treeViewController;
+
+    QAction* _newProjectAction;
+    QAction* _openProjectAction;
+    QAction* _saveAssemblyAction;
+    QAction* _saveAllAction;
+    QAction* _saveAsAction;
+    QAction* _closeProjectAction;
+    QAction* _quitAction;
 
     int _emptyIndex;
     int _tabIndex;

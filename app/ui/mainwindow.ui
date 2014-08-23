@@ -18,7 +18,7 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QListView" name="projectList"/>
+       <widget class="QTreeView" name="projectTreeView"/>
       </item>
       <item>
        <widget class="QToolBar" name="toolBar"/>
@@ -49,7 +49,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="centralLyt" stretch=""/>
+     <layout class="QVBoxLayout" name="centralLyt"/>
     </item>
    </layout>
   </widget>

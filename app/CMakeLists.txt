@@ -13,8 +13,6 @@ set(
   "main.cpp"
   "icon.hpp"
   "icon.cpp"
-  "mainwindow.hpp"
-  "mainwindow.cpp"
 
   "command/assembly_command.hpp"
   "command/assembly_command.cpp"
@@ -22,6 +20,8 @@ set(
   "controller/action.hpp"
   "controller/button_bar_controller.hpp"
   "controller/button_bar_controller.cpp"
+  "controller/compositor_controller.hpp"
+  "controller/compositor_controller.cpp"
   "controller/editor_controller.hpp"
   "controller/editor_controller.cpp"
   "controller/view_controller.hpp"
@@ -29,6 +29,8 @@ set(
 
   "gui/button_bar.hpp"
   "gui/button_bar.cpp"
+  "gui/compositor_widget.hpp"
+  "gui/compositor_widget.cpp"
   "gui/editor.hpp"
   "gui/editor.cpp"
   "gui/graphics_item.hpp"
@@ -46,13 +48,13 @@ set(
 qt4_wrap_cpp(
   svg_compositor_moc
 
-  "mainwindow.hpp"
-
   "controller/button_bar_controller.hpp"
+  "controller/compositor_controller.hpp"
   "controller/editor_controller.hpp"
   "controller/view_controller.hpp"
 
   "gui/button_bar.hpp"
+  "gui/compositor_widget.hpp"
   "gui/editor.hpp"
   "gui/graphics_item.hpp"
   "gui/graphics_view.hpp"

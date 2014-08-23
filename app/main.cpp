@@ -1,7 +1,7 @@
 #include <QApplication>
 #include <QStyleFactory>
 
-#include "mainwindow.hpp"
+#include "gui/compositor_widget.hpp"
 //#include <svg_compose/svg_compose.hpp>
 
 int main(int argc, char* argv[])
@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 //                                      "img/logo/create_folder.svg",
 //                                      "img/result_/create_folder.svg");
 
-  MainWindow window;
+  SvgCompositor::CompositorWidget window;
   window.show();
 
   return app.exec();

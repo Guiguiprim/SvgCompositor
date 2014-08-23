@@ -101,7 +101,9 @@ bool CompositorController::openAssembly(SvgCompose::SvgAssembly* assembly)
   Q_EMIT addEditor(editor, assembly->name());
 
   connect(assembly, SIGNAL(nameChanged(QString)),
-          this, SLOT(xOnAssemblyNameChanged(QString)));
+          this, SLOT(xOnAssemblyChanged()));
+  connect(assembly, SIGNAL(assemblyChanged(bool)),
+          this, SLOT(xOnAssemblyChanged()));
 
   return true;
 }
@@ -116,7 +118,7 @@ bool CompositorController::closeAssembly(SvgCompose::SvgAssembly* assembly)
   return xCloseAssembly(it);
 }
 
-void CompositorController::xOnAssemblyNameChanged(const QString& name)
+void CompositorController::xOnAssemblyChanged()
 {
   SvgCompose::SvgAssembly* assembly = qobject_cast<SvgCompose::SvgAssembly*>(sender());
   if(!assembly)
@@ -126,7 +128,10 @@ void CompositorController::xOnAssemblyNameChanged(const QString& name)
   it = _editors.find(assembly);
   if(it != _editors.end())
   {
-    Q_EMIT renameEditor(it.value(), name);
+    QString title = assembly->name();
+    if(assembly->hasChanged())
+      title = "*" + title;
+    Q_EMIT renameEditor(it.value(), title);
   }
 }
 
@@ -138,7 +143,9 @@ bool CompositorController::xCloseAssembly(
   Q_UNUSED(force)
 
   disconnect(it.key(), SIGNAL(nameChanged(QString)),
-             this, SLOT(xOnAssemblyNameChanged(QString)));
+             this, SLOT(xOnAssemblyChanged()));
+  disconnect(it.key(), SIGNAL(assemblyChanged(bool)),
+             this, SLOT(xOnAssemblyChanged()));
   Q_EMIT removeEditor(it.value());
   delete it.value();
   _editors.remove(it.key());

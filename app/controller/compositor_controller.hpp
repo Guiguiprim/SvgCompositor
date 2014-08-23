@@ -41,7 +41,7 @@ Q_SIGNALS:
   void setCurrentEditor(Editor*);
 
 private Q_SLOTS:
-  void xOnAssemblyNameChanged(const QString& name);
+  void xOnAssemblyChanged();
   bool xCloseAssembly(QMap<SvgCompose::SvgAssembly*, Editor*>::iterator it, bool force = false);
 
 private:

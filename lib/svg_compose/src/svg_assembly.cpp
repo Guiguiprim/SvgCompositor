@@ -8,6 +8,8 @@
 
 namespace SvgCompose
 {
+QDomDocument SvgAssembly::s_dummyDoc = QDomDocument();
+const QString SvgAssembly::k_tag = "assembly";
 
 SvgAssembly::SvgAssembly(SvgAssembliesList* project)
   : QObject(project)
@@ -68,7 +70,7 @@ int SvgAssembly::elementsCount() const
 
 bool SvgAssembly::load(QDomElement& root)
 {
-  if(root.tagName() != "image")
+  if(root.tagName() != k_tag)
     return false;
 
   QString name = root.attribute("name");
@@ -92,7 +94,7 @@ bool SvgAssembly::load(QDomElement& root)
     u.file = elem.attribute("path", "");
     if(!u.file.isEmpty())
     {
-      u.scale = elem.attribute("scale", "0").toDouble();
+      u.scale = elem.attribute("scale", "1").toDouble();
       u.dx = elem.attribute("dx", "0").toDouble();
       u.dy = elem.attribute("dy", "0").toDouble();
       u.checkSize(_project->dir());
@@ -110,22 +112,23 @@ bool SvgAssembly::load(QDomElement& root)
   return true;
 }
 
-QDomElement SvgAssembly::createDom(QDomDocument& doc) const
+QDomDocumentFragment SvgAssembly::createDom() const
 {
-  QDomElement root = doc.createElement("image");
+  QDomDocumentFragment docFrag = emptyFrag();
+  QDomElement root = s_dummyDoc.createElement(k_tag);
   root.setAttribute("name", _name);
   root.setAttribute("size", (int)_size);
 
   if(!_background.isEmpty())
   {
-      QDomElement backElem = doc.createElement("background");
+      QDomElement backElem = s_dummyDoc.createElement("background");
       backElem.setAttribute("path", _background);
       root.appendChild(backElem);
   }
 
   Q_FOREACH(SvgAssemblyElement uElem, _elements)
   {
-      QDomElement dElem = doc.createElement("element");
+      QDomElement dElem = s_dummyDoc.createElement("element");
       dElem.setAttribute("path", uElem.file);
       if(uElem.dx != 0)
           dElem.setAttribute("dx", QString::number(uElem.dx, 'f', 1));
@@ -136,7 +139,17 @@ QDomElement SvgAssembly::createDom(QDomDocument& doc) const
       root.appendChild(dElem);
   }
 
-  return root;
+  docFrag.appendChild(root);
+  return docFrag;
+}
+
+QString SvgAssembly::xml() const
+{
+  QString str;
+  QTextStream stream(&str);
+  QDomDocumentFragment elem = createDom();
+  elem.save(stream, 2);
+  return str;
 }
 
 void SvgAssembly::setName(const QString& name)
@@ -311,17 +324,24 @@ void SvgAssembly::setElementVCenter(int index)
 
 void SvgAssembly::xChanged() const
 {
-  QString str;
-  QTextStream stream(&str);
-  QDomDocument doc;
-  QDomElement elem = createDom(doc);
-  elem.save(stream, 2);
-  emit assemblyChanged(str);
+  emit assemblyChanged(xml());
 }
 
 bool SvgAssembly::xIndexValid(int index) const
 {
   return index >= 0 && index < _elements.count();
+}
+
+QDomDocumentFragment SvgAssembly::emptyFrag()
+{
+  return s_dummyDoc.createDocumentFragment();
+}
+
+QDomDocumentFragment SvgAssembly::toFrag(QDomElement elem)
+{
+  QDomDocumentFragment frag = s_dummyDoc.createDocumentFragment();
+  frag.appendChild(elem.cloneNode().toElement());
+  return frag;
 }
 
 } // namespace Composition

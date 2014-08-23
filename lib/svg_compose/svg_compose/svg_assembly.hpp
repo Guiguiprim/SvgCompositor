@@ -22,7 +22,8 @@ public:
   explicit SvgAssembly(SvgAssembliesList* project, const QString& name);
 
   bool load(QDomElement& root);
-  QDomElement createDom(QDomDocument& doc) const;
+  QDomDocumentFragment createDom() const;
+  QString xml() const;
 
   QString name() const;
   int sizeInt() const;
@@ -73,6 +74,12 @@ private:
   QString _background;
   QVector<SvgAssemblyElement> _elements;
   SvgAssembliesList* _project;
+
+  static QDomDocument s_dummyDoc;
+public:
+  static const QString k_tag;
+  static QDomDocumentFragment emptyFrag();
+  static QDomDocumentFragment toFrag(QDomElement elem);
 };
 
 } // namespace Composition

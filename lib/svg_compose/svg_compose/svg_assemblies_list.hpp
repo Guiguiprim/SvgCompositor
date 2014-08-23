@@ -2,7 +2,10 @@
 #define SVG_ASSEMBLIES_LIST_HPP
 
 #include <QDir>
+#include <QDomDocument>
+#include <QDomElement>
 #include <QFileInfo>
+#include <QMap>
 #include <QObject>
 #include <QVector>
 
@@ -32,8 +35,13 @@ public:
   void setFileName(const QString& filename);
   void setOutputDir(const QString& path);
 
+  bool load(const QString& filename = QString());
+  bool save(const QString& filename = QString());
+
 public slots:
-  void createNew();
+  SvgAssembly* createNew();
+  void saveAssembly(SvgAssembly* assembly);
+  void saveAll();
 
 signals:
   void assemblyCreated(SvgAssembly* assembly);
@@ -42,6 +50,7 @@ private:
   QFileInfo _fileInfo;
   QString _outputDir;
   QVector<SvgAssembly*> _assemblies;
+  QMap<SvgAssembly*,QDomDocumentFragment> _xmlElements;
 };
 
 } // namespace Composition

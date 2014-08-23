@@ -70,7 +70,7 @@ ButtonBar::ButtonBar(QWidget *parent)
   connect(_ui->nameEdit, SIGNAL(editingFinished()),
           SLOT(xOnNameEdited()));
 
-  setButtonsSize(20);
+  //setButtonsSize(20);
 }
 
 ButtonBar::~ButtonBar()

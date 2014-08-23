@@ -6,10 +6,6 @@
 
 int main(int argc, char* argv[])
 {
-#ifdef Q_WS_X11
-  QApplication::setStyle(QStyleFactory::create("Cleanlooks"));
-#endif
-
   QApplication app(argc, argv);
   QCoreApplication::setOrganizationName("Test");
   QCoreApplication::setApplicationName("SvgUnion");

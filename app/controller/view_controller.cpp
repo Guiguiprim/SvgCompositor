@@ -66,7 +66,8 @@ void ViewController::xConnectDescription()
 void ViewController::xCreateItem()
 {
   _item = new GraphicsItem;
-  _item->setBackground(_assembly->project()->dir().absoluteFilePath(_assembly->background()));
+  if(!_assembly->background().isEmpty())
+    _item->setBackground(_assembly->project()->dir().absoluteFilePath(_assembly->background()));
   int index = 0;
   Q_FOREACH(SvgCompose::SvgAssemblyElement elem, _assembly->elements())
   {

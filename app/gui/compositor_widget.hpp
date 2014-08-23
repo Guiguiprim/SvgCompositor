@@ -5,6 +5,7 @@
 #include <QMap>
 
 class QStackedWidget;
+class QStandardItemModel;
 class QTabWidget;
 
 namespace Ui
@@ -16,6 +17,7 @@ namespace SvgCompositor
 {
 class CompositorController;
 class Editor;
+class TreeViewController;
 
 class CompositorWidget : public QMainWindow
 {
@@ -33,12 +35,14 @@ public Q_SLOTS:
 
 private Q_SLOTS:
   void xOnTabCloseRequested(int index);
+  void xOnModelChanged(QStandardItemModel* model);
 
 private:
     Ui::MainWindow *_ui;
     QStackedWidget* _widgetStack;
     QTabWidget* _tabWidget;
     CompositorController* _controller;
+    TreeViewController* _treeViewController;
 
     int _emptyIndex;
     int _tabIndex;

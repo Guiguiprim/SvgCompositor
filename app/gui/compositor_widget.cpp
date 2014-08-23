@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <QStackedWidget>
+#include <QStandardItemModel>
 #include <QTabWidget>
 
 #include <svg_compose/svg_assembly.hpp>
@@ -9,6 +10,7 @@
 #include <svg_compose/svg_compose.hpp>
 
 #include "controller/compositor_controller.hpp"
+#include "controller/tree_view_controller.hpp"
 #include "gui/editor.hpp"
 #include "icon.hpp"
 
@@ -21,6 +23,7 @@ CompositorWidget::CompositorWidget(QWidget *parent)
   , _widgetStack(new QStackedWidget)
   , _tabWidget(new QTabWidget)
   , _controller(new CompositorController(this))
+  , _treeViewController(new TreeViewController(this))
 {
   _ui->setupUi(this);
 
@@ -28,6 +31,7 @@ CompositorWidget::CompositorWidget(QWidget *parent)
   _ui->toolBar->addAction(Icon::buildIcon("minus-red"), "");
 
   _ui->centralLyt->addWidget(_widgetStack);
+  _ui->projectTreeView->setHeaderHidden(true);
 
   _emptyIndex = _widgetStack->addWidget(new QWidget);
   _tabIndex = _widgetStack->addWidget(_tabWidget);
@@ -37,6 +41,7 @@ CompositorWidget::CompositorWidget(QWidget *parent)
 
   connect(_tabWidget, SIGNAL(tabCloseRequested(int)),
           this, SLOT(xOnTabCloseRequested(int)));
+
   connect(_controller, SIGNAL(addEditor(Editor*,QString)),
           this, SLOT(onAddEditor(Editor*,QString)));
   connect(_controller, SIGNAL(renameEditor(Editor*,QString)),
@@ -47,6 +52,11 @@ CompositorWidget::CompositorWidget(QWidget *parent)
           this, SLOT(onSetCurrentEditor(Editor*)));
 
   _controller->openProject("img/project.xml");
+  connect(_controller, SIGNAL(projectChanged(SvgCompose::SvgAssembliesList*)),
+          _treeViewController, SLOT(onProjectChanged(SvgCompose::SvgAssembliesList*)));
+
+  connect(_treeViewController, SIGNAL(modelChanged(QStandardItemModel*)),
+          this, SLOT(xOnModelChanged(QStandardItemModel*)));
   SvgCompose::SvgAssembliesList* project = _controller->project();
   if(project)
   {
@@ -94,6 +104,11 @@ void CompositorWidget::xOnTabCloseRequested(int index)
   Editor* editor = qobject_cast<Editor*>(_tabWidget->widget(index));
   if(editor)
     _controller->closeAssembly(editor->assembly());
+}
+
+void CompositorWidget::xOnModelChanged(QStandardItemModel* model)
+{
+  _ui->projectTreeView->setModel(model);
 }
 
 } // namespace SvgCompositor

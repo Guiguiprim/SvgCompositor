@@ -230,7 +230,7 @@ void SvgAssembly::addElement(const QString& filePath, int index)
     else
     {
       _elements.push_back(elem);
-      emit elementAdded(absoluteFilePath);
+      emit elementAdded(absoluteFilePath, _elements.count() - 1);
     }
     xChanged();
   }

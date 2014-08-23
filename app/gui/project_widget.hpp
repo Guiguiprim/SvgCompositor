@@ -3,6 +3,10 @@
 
 #include <QWidget>
 
+class QGroupBox;
+class QTreeView;
+class QToolBar;
+
 namespace SvgCompositor
 {
 
@@ -12,6 +16,12 @@ class ProjectWidget : public QWidget
 public:
   explicit ProjectWidget(QWidget *parent = NULL);
 
+  QTreeView* treeView() const;
+
+private:
+  QTreeView* _treeView;
+  QToolBar* _toolBar;
+  QGroupBox* _groupBox;
 };
 
 } // namespace SvgCompositor

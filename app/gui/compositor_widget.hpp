@@ -4,19 +4,16 @@
 #include <QMainWindow>
 #include <QMap>
 
+class QAction;
 class QStackedWidget;
 class QStandardItemModel;
 class QTabWidget;
-
-namespace Ui
-{
-class MainWindow;
-} // namespace Ui
 
 namespace SvgCompositor
 {
 class CompositorController;
 class Editor;
+class ProjectWidget;
 class TreeViewController;
 
 class CompositorWidget : public QMainWindow
@@ -25,7 +22,6 @@ class CompositorWidget : public QMainWindow
 
 public:
     explicit CompositorWidget(QWidget *parent = NULL);
-    ~CompositorWidget();
 
 public Q_SLOTS:
   void onAddEditor(Editor*, const QString& name);
@@ -38,9 +34,9 @@ private Q_SLOTS:
   void xOnModelChanged(QStandardItemModel* model);
 
 private:
-    Ui::MainWindow *_ui;
     QStackedWidget* _widgetStack;
     QTabWidget* _tabWidget;
+    ProjectWidget* _projectWidget;
     CompositorController* _controller;
     TreeViewController* _treeViewController;
 

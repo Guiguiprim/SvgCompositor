@@ -41,6 +41,8 @@ set(
   "gui/graphics_view.cpp"
   "gui/movable_svg_item.hpp"
   "gui/movable_svg_item.cpp"
+  "gui/project_widget.hpp"
+  "gui/project_widget.cpp"
 
   "misc/last_dir.hpp"
   "misc/last_dir.cpp"
@@ -62,12 +64,12 @@ qt4_wrap_cpp(
   "gui/graphics_item.hpp"
   "gui/graphics_view.hpp"
   "gui/movable_svg_item.hpp"
+  "gui/project_widget.hpp"
 )
 
 qt4_wrap_ui(
   svg_compositor_ui
   "ui/button_bar.ui"
-  "ui/mainwindow.ui"
 )
 
 qt4_add_resources(

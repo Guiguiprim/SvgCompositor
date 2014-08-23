@@ -1,9 +1,11 @@
 #include "compositor_widget.hpp"
-#include "ui_mainwindow.h"
 
+#include <QApplication>
+#include <QHBoxLayout>
 #include <QStackedWidget>
 #include <QStandardItemModel>
 #include <QTabWidget>
+#include <QTreeView>
 
 #include <svg_compose/svg_assembly.hpp>
 #include <svg_compose/svg_assemblies_list.hpp>
@@ -11,27 +13,28 @@
 
 #include "controller/compositor_controller.hpp"
 #include "controller/tree_view_controller.hpp"
-#include "gui/editor.hpp"
-#include "icon.hpp"
+#include "editor.hpp"
+#include "project_widget.hpp"
 
 namespace SvgCompositor
 {
 
 CompositorWidget::CompositorWidget(QWidget *parent)
   : QMainWindow(parent)
-  ,_ui(new Ui::MainWindow)
   , _widgetStack(new QStackedWidget)
   , _tabWidget(new QTabWidget)
+  , _projectWidget(new ProjectWidget)
   , _controller(new CompositorController(this))
   , _treeViewController(new TreeViewController(this))
 {
-  _ui->setupUi(this);
 
-  _ui->toolBar->addAction(Icon::buildIcon("plus-green"),"");
-  _ui->toolBar->addAction(Icon::buildIcon("minus-red"), "");
+  QWidget* widget = new QWidget;
+  this->setCentralWidget(widget);
 
-  _ui->centralLyt->addWidget(_widgetStack);
-  _ui->projectTreeView->setHeaderHidden(true);
+  QHBoxLayout* lyt = new QHBoxLayout(widget);
+  lyt->setMargin(0);
+  lyt->addWidget(_projectWidget, 1);
+  lyt->addWidget(_widgetStack, 3);
 
   _emptyIndex = _widgetStack->addWidget(new QWidget);
   _tabIndex = _widgetStack->addWidget(_tabWidget);
@@ -70,11 +73,6 @@ CompositorWidget::CompositorWidget(QWidget *parent)
   //SvgCompose::generateAssemblies(project);
 }
 
-CompositorWidget::~CompositorWidget()
-{
-  delete _ui;
-}
-
 void CompositorWidget::onAddEditor(Editor* editor, const QString& name)
 {
   _tabWidget->addTab(editor, name);
@@ -109,7 +107,7 @@ void CompositorWidget::xOnTabCloseRequested(int index)
 
 void CompositorWidget::xOnModelChanged(QStandardItemModel* model)
 {
-  _ui->projectTreeView->setModel(model);
+  _projectWidget->treeView()->setModel(model);
 }
 
 } // namespace SvgCompositor

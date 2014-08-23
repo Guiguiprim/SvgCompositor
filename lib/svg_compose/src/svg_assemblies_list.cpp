@@ -162,6 +162,7 @@ void SvgAssembliesList::saveAssembly(SvgAssembly* assembly)
     return;
 
   _xmlElements[assembly] = assembly->createDom();
+  assembly->setHasChanged(false);
   save();
 }
 
@@ -170,6 +171,7 @@ void SvgAssembliesList::saveAll()
   Q_FOREACH(SvgAssembly* assembly, _assemblies)
   {
     _xmlElements[assembly] = assembly->createDom();
+    assembly->setHasChanged(false);
   }
   save();
 }

@@ -34,6 +34,9 @@ public:
   int elementsCount() const;
   SvgAssembliesList* project() const;
 
+  void setHasChanged(bool changed = true);
+  bool hasChanged() const;
+
 public slots:
   void setName(const QString& name);
   void setSize(SvgAssemblySize size);
@@ -63,10 +66,11 @@ signals:
   void elementRaised(int index);
 
   void assemblyLoaded();
-  void assemblyChanged(const QString& xml) const;
+  void assemblyChanged(const QString& xml);
+  void assemblyChanged(bool);
 
 private:
-  void xChanged() const;
+  void xChanged();
   bool xIndexValid(int index) const;
 
 private:
@@ -75,6 +79,7 @@ private:
   QString _background;
   QVector<SvgAssemblyElement> _elements;
   SvgAssembliesList* _project;
+  bool _hasChanged;
 
   static QDomDocument s_dummyDoc;
 public:

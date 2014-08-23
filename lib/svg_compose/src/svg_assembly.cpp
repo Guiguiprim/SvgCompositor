@@ -18,6 +18,7 @@ SvgAssembly::SvgAssembly(SvgAssembliesList* project)
   , _background("")
   , _elements()
   , _project(project)
+  , _hasChanged(false)
 {
 }
 
@@ -28,6 +29,7 @@ SvgAssembly::SvgAssembly(SvgAssembliesList* project, const QString& name)
   , _background("")
   , _elements()
   , _project(project)
+  , _hasChanged(false)
 {
 }
 
@@ -73,6 +75,20 @@ SvgAssembliesList* SvgAssembly::project() const
   return _project;
 }
 
+void SvgAssembly::setHasChanged(bool changed)
+{
+  if(_hasChanged != changed)
+  {
+    _hasChanged = changed;
+    Q_EMIT assemblyChanged(_hasChanged);
+  }
+}
+
+bool SvgAssembly::hasChanged() const
+{
+  return _hasChanged;
+}
+
 bool SvgAssembly::load(QDomElement& root)
 {
   if(root.tagName() != k_tag)
@@ -113,6 +129,7 @@ bool SvgAssembly::load(QDomElement& root)
   _background = background;
   _elements = unions;
 
+  _hasChanged = false;
   emit assemblyLoaded();
   return true;
 }
@@ -327,9 +344,10 @@ void SvgAssembly::setElementVCenter(int index)
   }
 }
 
-void SvgAssembly::xChanged() const
+void SvgAssembly::xChanged()
 {
   emit assemblyChanged(xml());
+  setHasChanged(true);
 }
 
 bool SvgAssembly::xIndexValid(int index) const

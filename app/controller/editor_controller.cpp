@@ -20,7 +20,7 @@ inline qreal tronc(qreal x)
 }
 inline qreal tronc_(qreal x)
 {
-  return (qreal)( (int)(x * 100) / 100.0);
+  return (qreal)( (int)(x * 1000) / 1000.0);
 }
 } // namespace
 
@@ -124,12 +124,12 @@ void EditorController::onAction(int index, Action action)
   case ScaleIncrease:
     //_assembly->setElementScale(index, _assembly->element(index).scale + 0.1);
     _undoStack->push( new SvgAssemblyCommand::ScaleChanged(_assembly, index,
-                                                           _assembly->element(index).scale + 0.1) );
+                                                           tronc_(_assembly->element(index).scale * 1.1)) );
     break;
   case ScaleDecrease:
     //_assembly->setElementScale(index, _assembly->element(index).scale - 0.1);
     _undoStack->push( new SvgAssemblyCommand::ScaleChanged(_assembly, index,
-                                                           _assembly->element(index).scale - 0.1) );
+                                                           tronc_(_assembly->element(index).scale * 0.9)) );
     break;
   case MoveUp:
     //_assembly->setElementDy(index, _assembly->element(index).dy - 0.5);

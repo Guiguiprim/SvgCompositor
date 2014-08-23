@@ -274,6 +274,9 @@
          <property name="buttonSymbols">
           <enum>QAbstractSpinBox::NoButtons</enum>
          </property>
+         <property name="decimals">
+          <number>3</number>
+         </property>
          <property name="minimum">
           <double>0.100000000000000</double>
          </property>

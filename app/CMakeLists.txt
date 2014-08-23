@@ -24,6 +24,8 @@ set(
   "controller/compositor_controller.cpp"
   "controller/editor_controller.hpp"
   "controller/editor_controller.cpp"
+  "controller/tree_view_controller.hpp"
+  "controller/tree_view_controller.cpp"
   "controller/view_controller.hpp"
   "controller/view_controller.cpp"
 
@@ -51,6 +53,7 @@ qt4_wrap_cpp(
   "controller/button_bar_controller.hpp"
   "controller/compositor_controller.hpp"
   "controller/editor_controller.hpp"
+  "controller/tree_view_controller.hpp"
   "controller/view_controller.hpp"
 
   "gui/button_bar.hpp"

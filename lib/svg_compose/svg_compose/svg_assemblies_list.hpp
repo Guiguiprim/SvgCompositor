@@ -40,11 +40,12 @@ public:
 
 public slots:
   SvgAssembly* createNew();
-  void saveAssembly(SvgAssembly* assembly);
+  void saveAssembly(SvgCompose::SvgAssembly* assembly);
   void saveAll();
 
 signals:
-  void assemblyCreated(SvgAssembly* assembly);
+  void assemblyAdded(SvgCompose::SvgAssembly* assembly);
+  void assemblyRemoved(SvgCompose::SvgAssembly* assembly);
 
 private:
   QFileInfo _fileInfo;

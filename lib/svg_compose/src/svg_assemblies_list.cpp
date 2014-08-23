@@ -110,7 +110,7 @@ bool SvgAssembliesList::load(const QString& filename)
     {
       _assemblies.push_back(assembly);
       _xmlElements[assembly] = SvgAssembly::toFrag(elem);
-      emit assemblyCreated(assembly);
+      emit assemblyAdded(assembly);
     }
     else
     {
@@ -181,7 +181,7 @@ SvgAssembly* SvgAssembliesList::createNew()
   SvgAssembly* assembly = new SvgAssembly(this);
   _assemblies.push_back(assembly);
   _xmlElements[assembly] = QDomDocumentFragment();
-  emit assemblyCreated(assembly);
+  emit assemblyAdded(assembly);
   return assembly;
 }
 

@@ -1,6 +1,7 @@
 #include "compositor_controller.hpp"
 
 #include <QFileDialog>
+#include <QMessageBox>
 #include <QMetaType>
 #include <QUndoGroup>
 
@@ -147,7 +148,11 @@ bool CompositorController::closeProject()
 {
   // Check for save all or cancel !
   while(!_editors.isEmpty())
-    xCloseAssembly(_editors.begin(), true);
+  {
+    SvgCompose::SvgAssembly* assembly = _editors.begin().key();
+    Editor* editor = _editors.begin().value();
+    xCloseAssembly(assembly, editor, true);
+  }
 
   Q_EMIT projectChanged(NULL);
   delete _project;
@@ -202,7 +207,7 @@ bool CompositorController::closeAssembly(SvgCompose::SvgAssembly* assembly)
   if(it == _editors.end())
     return false;
 
-  return xCloseAssembly(it);
+  return xCloseAssembly(it.key(), it.value());
 }
 
 void CompositorController::setOutputDir(const QString& outputDir)
@@ -229,20 +234,39 @@ void CompositorController::xOnAssemblyChanged()
 }
 
 bool CompositorController::xCloseAssembly(
-    QMap<SvgCompose::SvgAssembly*, Editor*>::iterator it,
+    SvgCompose::SvgAssembly* assembly,
+    Editor* editor,
     bool force)
 {
-  // Check for save or cancel !
-  Q_UNUSED(force)
+  bool toReset = false;
+  if(!force && assembly->hasChanged())
+  {
+    QMessageBox::StandardButton ret = QMessageBox::question(
+               _parentWidget, tr("Save changes"), tr("The current assembly has some unsaved changes. Do you want to save them ?"),
+               QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+    if(ret == QMessageBox::Cancel)
+      return false;
+    else if(ret == QMessageBox::Discard)
+      toReset = true;
+    else
+    {
+      assembly->saveCurrentState();
+      _project->save();
+    }
+  }
 
-  disconnect(it.key(), SIGNAL(nameChanged(QString)),
+  disconnect(assembly, SIGNAL(nameChanged(QString)),
              this, SLOT(xOnAssemblyChanged()));
-  disconnect(it.key(), SIGNAL(assemblyChanged(bool)),
+  disconnect(assembly, SIGNAL(assemblyChanged(bool)),
              this, SLOT(xOnAssemblyChanged()));
-  Q_EMIT removeEditor(it.value());
-  _undoGroup->removeStack(it.value()->undoStack());
-  delete it.value();
-  _editors.remove(it.key());
+  Q_EMIT removeEditor(editor);
+  _undoGroup->removeStack(editor->undoStack());
+  delete editor;
+  _editors.remove(assembly);
+
+  if(toReset) // reset the assembly to the last save state
+    assembly->resetLastState();
+
   return true;
 }
 

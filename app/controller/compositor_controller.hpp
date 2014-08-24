@@ -53,7 +53,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
   void xOnAssemblyChanged();
-  bool xCloseAssembly(QMap<SvgCompose::SvgAssembly*, Editor*>::iterator it, bool force = false);
+  bool xCloseAssembly(SvgCompose::SvgAssembly* assembly, Editor* editor, bool force = false);
 
 private:
   QWidget* _parentWidget;

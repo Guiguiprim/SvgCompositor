@@ -2,6 +2,7 @@
 
 #include <QFileDialog>
 #include <QMetaType>
+#include <QUndoGroup>
 
 #include <svg_compose/svg_assembly.hpp>
 #include <svg_compose/svg_assemblies_list.hpp>
@@ -19,6 +20,7 @@ CompositorController::CompositorController(QWidget *parent)
   , _parentWidget(parent)
   , _project(NULL)
   , _editors()
+  , _undoGroup(new QUndoGroup(this))
 {
   qRegisterMetaType<SvgCompose::SvgAssembly*>("SvgCompose::SvgAssembly*");
   qRegisterMetaType<SvgCompose::SvgAssembliesList*>("SvgCompose::SvgAssembliesList*");
@@ -27,6 +29,11 @@ CompositorController::CompositorController(QWidget *parent)
 SvgCompose::SvgAssembliesList* CompositorController::project() const
 {
   return _project;
+}
+
+QUndoGroup* CompositorController::undoGroup() const
+{
+  return _undoGroup;
 }
 
 void CompositorController::updateWindowTitle()
@@ -161,6 +168,7 @@ bool CompositorController::openAssembly(SvgCompose::SvgAssembly* assembly)
   Editor* editor = new Editor;
   editor->setAssembly(assembly);
   _editors[assembly] = editor;
+  _undoGroup->addStack(editor->undoStack());
 
   Q_EMIT addEditor(editor, assembly->name());
 
@@ -232,6 +240,7 @@ bool CompositorController::xCloseAssembly(
   disconnect(it.key(), SIGNAL(assemblyChanged(bool)),
              this, SLOT(xOnAssemblyChanged()));
   Q_EMIT removeEditor(it.value());
+  _undoGroup->removeStack(it.value()->undoStack());
   delete it.value();
   _editors.remove(it.key());
   return true;

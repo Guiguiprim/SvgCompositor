@@ -6,6 +6,7 @@
 #include "controller/action.hpp"
 
 class QTextEdit;
+class QUndoStack;
 
 namespace SvgCompose
 {
@@ -28,6 +29,8 @@ class Editor : public QWidget
 public:
   explicit Editor(QWidget *parent = 0);
   ~Editor();
+
+  QUndoStack* undoStack() const;
 
   void setAssembly(SvgCompose::SvgAssembly* assembly);
   SvgCompose::SvgAssembly* assembly() const;

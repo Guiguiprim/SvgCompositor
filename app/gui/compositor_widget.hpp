@@ -40,6 +40,7 @@ private Q_SLOTS:
   void xQuit();
   void xSaveCurrentAssembly();
   void xOnTabCloseRequested(int index);
+  void xOnTabChanged(int index);
   void xOnModelChanged(QStandardItemModel* model);
 
 private:

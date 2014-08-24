@@ -9,6 +9,7 @@
 #include <QStandardItemModel>
 #include <QTabWidget>
 #include <QTreeView>
+#include <QUndoGroup>
 
 #include <svg_compose/svg_assembly.hpp>
 #include <svg_compose/svg_assemblies_list.hpp>
@@ -52,6 +53,17 @@ CompositorWidget::CompositorWidget(QWidget *parent)
   fileMenu->addSeparator();
   _quitAction = fileMenu->addAction("Quit", this, SLOT(xQuit()), QKeySequence::Quit);
 
+  QMenu* editionMenu = menuBar->addMenu("Edition");
+  QAction* redoAction = _controller->undoGroup()->createRedoAction(this);
+  redoAction->setShortcut(QKeySequence::Redo);
+  redoAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  editionMenu->addAction(redoAction);
+
+  QAction* undoAction = _controller->undoGroup()->createUndoAction(this);
+  undoAction->setShortcut(QKeySequence::Undo);
+  undoAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  editionMenu->addAction(undoAction);
+
   QWidget* widget = new QWidget;
   this->setCentralWidget(widget);
 
@@ -68,6 +80,8 @@ CompositorWidget::CompositorWidget(QWidget *parent)
 
   connect(_tabWidget, SIGNAL(tabCloseRequested(int)),
           this, SLOT(xOnTabCloseRequested(int)));
+  connect(_tabWidget, SIGNAL(currentChanged(int)),
+          this, SLOT(xOnTabChanged(int)));
 
   connect(_controller, SIGNAL(setWindowTitle(QString)),
           this, SLOT(setWindowTitle(QString)));
@@ -165,6 +179,13 @@ void CompositorWidget::xOnTabCloseRequested(int index)
   Editor* editor = qobject_cast<Editor*>(_tabWidget->widget(index));
   if(editor)
     _controller->closeAssembly(editor->assembly());
+}
+
+void CompositorWidget::xOnTabChanged(int index)
+{
+  Editor* editor = qobject_cast<Editor*>(_tabWidget->widget(index));
+  if(editor)
+    _controller->undoGroup()->setActiveStack(editor->undoStack());
 }
 
 void CompositorWidget::xOnModelChanged(QStandardItemModel* model)

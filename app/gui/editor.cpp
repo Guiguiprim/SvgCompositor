@@ -78,6 +78,11 @@ Editor::Editor(QWidget *parent)
 Editor::~Editor()
 {}
 
+QUndoStack* Editor::undoStack() const
+{
+  return _editorController->undoStack();
+}
+
 void Editor::setAssembly(SvgCompose::SvgAssembly* assembly)
 {
   if(_assembly)

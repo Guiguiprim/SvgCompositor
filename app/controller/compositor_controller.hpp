@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QMap>
 
+class QUndoGroup;
 class QWidget;
 
 namespace SvgCompose
@@ -23,6 +24,7 @@ public:
   explicit CompositorController(QWidget *parent = NULL);
 
   SvgCompose::SvgAssembliesList* project() const;
+  QUndoGroup* undoGroup() const;
 
   void updateWindowTitle();
 
@@ -57,6 +59,7 @@ private:
   QWidget* _parentWidget;
   SvgCompose::SvgAssembliesList* _project;
   QMap<SvgCompose::SvgAssembly*, Editor*> _editors;
+  QUndoGroup* _undoGroup;
 
 public:
   static const QString k_windowTitle;

@@ -14,6 +14,21 @@ namespace SvgCompose
 {
 class SvgAssembliesList;
 
+struct SvgAssemblyData
+{
+  QString name;
+  SvgAssemblySize size;
+  QString background;
+  QVector<SvgAssemblyElement> elements;
+
+  SvgAssemblyData(QString n = "Untitled", SvgAssemblySize s = S48, QString b = QString());
+  SvgAssemblyData(const SvgAssemblyData& d);
+  const SvgAssemblyData& operator=(const SvgAssemblyData& d);
+};
+
+bool operator==(const SvgAssemblyData& d1, const SvgAssemblyData& d2);
+bool operator!=(const SvgAssemblyData& d1, const SvgAssemblyData& d2);
+
 class SvgAssembly : public QObject
 {
   Q_OBJECT  
@@ -22,7 +37,7 @@ public:
   explicit SvgAssembly(SvgAssembliesList* project, const QString& name);
 
   bool load(QDomElement& root);
-  QDomDocumentFragment createDom() const;
+  QDomElement createDom(bool lastSave = false) const;
   QString xml() const;
 
   QString name() const;
@@ -34,7 +49,8 @@ public:
   int elementsCount() const;
   SvgAssembliesList* project() const;
 
-  void setHasChanged(bool changed = true);
+  void saveCurrentState();
+  void resetLastState();
   bool hasChanged() const;
 
 public slots:
@@ -74,10 +90,8 @@ private:
   bool xIndexValid(int index) const;
 
 private:
-  QString _name;
-  SvgAssemblySize _size;
-  QString _background;
-  QVector<SvgAssemblyElement> _elements;
+  SvgAssemblyData _data;
+  SvgAssemblyData _lastSaveData;
   SvgAssembliesList* _project;
   bool _hasChanged;
 

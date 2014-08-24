@@ -1,5 +1,8 @@
 #include <svg_compose/svg_assemblies_list.hpp>
 
+#include <QDomDocument>
+#include <QDomElement>
+
 #include <svg_compose/svg_assembly.hpp>
 
 #include <QDebug>
@@ -110,7 +113,6 @@ bool SvgAssembliesList::load(const QString& filename)
     if(assembly->load(elem))
     {
       _assemblies.push_back(assembly);
-      _xmlElements[assembly] = SvgAssembly::toFrag(elem);
       emit assemblyAdded(assembly);
     }
     else
@@ -136,13 +138,9 @@ bool SvgAssembliesList::save(const QString& filename)
                                             "xml", "version=\"1.0\" encoding=\"UTF-8\"");
   doc.appendChild(declaration);
 
-  QMap<SvgAssembly*,QDomDocumentFragment>::iterator it, end;
-  for(it = _xmlElements.begin(), end = _xmlElements.end(); it != end; ++it)
+  Q_FOREACH(SvgAssembly* assemblie, _assemblies)
   {
-    if(it->hasChildNodes())
-    {
-      root.appendChild(it->cloneNode().toDocumentFragment());
-    }
+    root.appendChild(assemblie->createDom(true));
   }
   doc.appendChild(root);
 
@@ -172,9 +170,7 @@ void SvgAssembliesList::saveAssembly(SvgAssembly* assembly)
 {
   if(!assembly || !_assemblies.contains(assembly))
     return;
-
-  _xmlElements[assembly] = assembly->createDom();
-  assembly->setHasChanged(false);
+  assembly->saveCurrentState();
   save();
 }
 
@@ -182,8 +178,7 @@ void SvgAssembliesList::saveAll()
 {
   Q_FOREACH(SvgAssembly* assembly, _assemblies)
   {
-    _xmlElements[assembly] = assembly->createDom();
-    assembly->setHasChanged(false);
+    assembly->saveCurrentState();
   }
   save();
 }
@@ -192,7 +187,6 @@ SvgAssembly* SvgAssembliesList::createNew()
 {
   SvgAssembly* assembly = new SvgAssembly(this);
   _assemblies.push_back(assembly);
-  _xmlElements[assembly] = QDomDocumentFragment();
   emit assemblyAdded(assembly);
   return assembly;
 }

@@ -8,15 +8,59 @@
 
 namespace SvgCompose
 {
+SvgAssemblyData::SvgAssemblyData(QString n, SvgAssemblySize s, QString b)
+  : name(n)
+  , size(s)
+  , background(b)
+  , elements()
+{}
+
+SvgAssemblyData::SvgAssemblyData(const SvgAssemblyData& d)
+  : name(d.name)
+  , size(d.size)
+  , background(d.background)
+  , elements(d.elements)
+{}
+
+const SvgAssemblyData& SvgAssemblyData::operator=(const SvgAssemblyData& d)
+{
+  name = d.name;
+  size = d.size;
+  background = d.background;
+  elements = d.elements;
+  return *this;
+}
+
+bool operator==(const SvgAssemblyData& d1, const SvgAssemblyData& d2)
+{
+  if(d1.name != d2.name)
+    return false;
+  if(d1.size != d2.size)
+    return false;
+  if(d1.background != d2.background)
+    return false;
+  if(d1.elements.size() != d2.elements.size())
+    return false;
+  for(int i=0; i<d1.elements.size(); ++i)
+  {
+    if(d1.elements.at(i) != d2.elements.at(i))
+      return false;
+  }
+  return true;
+}
+
+bool operator!=(const SvgAssemblyData& d1, const SvgAssemblyData& d2)
+{
+  return !(d1 == d2);
+}
+
 QDomDocument SvgAssembly::s_dummyDoc = QDomDocument();
 const QString SvgAssembly::k_tag = "assembly";
 
 SvgAssembly::SvgAssembly(SvgAssembliesList* project)
   : QObject(project)
-  , _name("Untitled")
-  , _size(S48)
-  , _background("")
-  , _elements()
+  , _data("Untitled", S48, "")
+  , _lastSaveData(_data)
   , _project(project)
   , _hasChanged(false)
 {
@@ -24,10 +68,8 @@ SvgAssembly::SvgAssembly(SvgAssembliesList* project)
 
 SvgAssembly::SvgAssembly(SvgAssembliesList* project, const QString& name)
   : QObject(project)
-  , _name(name)
-  , _size(S48)
-  , _background("")
-  , _elements()
+  , _data(name, S48, "")
+  , _lastSaveData(_data)
   , _project(project)
   , _hasChanged(false)
 {
@@ -35,39 +77,39 @@ SvgAssembly::SvgAssembly(SvgAssembliesList* project, const QString& name)
 
 QString SvgAssembly::name() const
 {
-  return _name;
+  return _data.name;
 }
 
 int SvgAssembly::sizeInt() const
 {
-  return (int)_size;
+  return (int)_data.size;
 }
 
 SvgAssemblySize SvgAssembly::size() const
 {
-  return _size;
+  return _data.size;
 }
 
 QString SvgAssembly::background() const
 {
-  return _background;
+  return _data.background;
 }
 
 SvgAssemblyElement SvgAssembly::element(int index) const
 {
   if(xIndexValid(index))
-    return _elements.at(index);
+    return _data.elements.at(index);
   return SvgAssemblyElement();
 }
 
 QVector<SvgAssemblyElement> SvgAssembly::elements() const
 {
-  return _elements;
+  return _data.elements;
 }
 
 int SvgAssembly::elementsCount() const
 {
-  return _elements.count();
+  return _data.elements.count();
 }
 
 SvgAssembliesList* SvgAssembly::project() const
@@ -75,11 +117,22 @@ SvgAssembliesList* SvgAssembly::project() const
   return _project;
 }
 
-void SvgAssembly::setHasChanged(bool changed)
+void SvgAssembly::saveCurrentState()
 {
-  if(_hasChanged != changed)
+  _lastSaveData = _data;
+  if(_hasChanged != false)
   {
-    _hasChanged = changed;
+    _hasChanged = false;
+    Q_EMIT assemblyChanged(_hasChanged);
+  }
+}
+
+void SvgAssembly::resetLastState()
+{
+  _data = _lastSaveData;
+  if(_hasChanged != false)
+  {
+    _hasChanged = false;
     Q_EMIT assemblyChanged(_hasChanged);
   }
 }
@@ -124,31 +177,36 @@ bool SvgAssembly::load(QDomElement& root)
     elem = elem.nextSiblingElement("element");
   }
 
-  _name = name;
-  _size = toComposeSize(size);
-  _background = background;
-  _elements = unions;
+  _data.name = name;
+  _data.size = toComposeSize(size);
+  _data.background = background;
+  _data.elements = unions;
 
+  _lastSaveData = _data;
   _hasChanged = false;
   emit assemblyLoaded();
   return true;
 }
 
-QDomDocumentFragment SvgAssembly::createDom() const
+QDomElement SvgAssembly::createDom(bool lastSave) const
 {
-  QDomDocumentFragment docFrag = emptyFrag();
+  const SvgAssemblyData* data;
+  if(lastSave)
+    data = &_lastSaveData;
+  else
+    data = &_data;
   QDomElement root = s_dummyDoc.createElement(k_tag);
-  root.setAttribute("name", _name);
-  root.setAttribute("size", (int)_size);
+  root.setAttribute("name", data->name);
+  root.setAttribute("size", (int)data->size);
 
-  if(!_background.isEmpty())
+  if(!data->background.isEmpty())
   {
       QDomElement backElem = s_dummyDoc.createElement("background");
-      backElem.setAttribute("path", _background);
+      backElem.setAttribute("path", data->background);
       root.appendChild(backElem);
   }
 
-  Q_FOREACH(SvgAssemblyElement uElem, _elements)
+  Q_FOREACH(SvgAssemblyElement uElem, data->elements)
   {
       QDomElement dElem = s_dummyDoc.createElement("element");
       dElem.setAttribute("path", uElem.file);
@@ -160,25 +218,23 @@ QDomDocumentFragment SvgAssembly::createDom() const
           dElem.setAttribute("scale", QString::number(uElem.scale, 'f', 3));
       root.appendChild(dElem);
   }
-
-  docFrag.appendChild(root);
-  return docFrag;
+  return root;
 }
 
 QString SvgAssembly::xml() const
 {
   QString str;
   QTextStream stream(&str);
-  QDomDocumentFragment elem = createDom();
+  QDomElement elem = createDom();
   elem.save(stream, 2);
   return str;
 }
 
 void SvgAssembly::setName(const QString& name)
 {
-  if(!name.isEmpty() && _name != name)
+  if(!name.isEmpty() && _data.name != name)
   {
-    _name = name;
+    _data.name = name;
     emit nameChanged(name);
     xChanged();
   }
@@ -186,9 +242,9 @@ void SvgAssembly::setName(const QString& name)
 
 void SvgAssembly::setSize(SvgAssemblySize size)
 {
-  if(_size != size)
+  if(_data.size != size)
   {
-    _size = size;
+    _data.size = size;
     emit sizeChanged((int)size);
     xChanged();
   }
@@ -198,18 +254,18 @@ void SvgAssembly::setBackground(const QString& filePath)
 {
   QString absoluteFilePath = _project->dir().absoluteFilePath(filePath);
   if(!filePath.isEmpty() && QFileInfo(absoluteFilePath).exists()
-     && _background != absoluteFilePath)
+     && _data.background != absoluteFilePath)
   {
     QString file = absoluteFilePath;
-    _background = _project->dir().relativeFilePath(absoluteFilePath);
+    _data.background = _project->dir().relativeFilePath(absoluteFilePath);
     emit backgroundChanged(file);
     xChanged();
   }
   else if((filePath.isEmpty() || !QFileInfo(absoluteFilePath).exists())
-          && !_background.isEmpty())
+          && !_data.background.isEmpty())
   {
-    _background = "";
-    emit backgroundChanged(_background);
+    _data.background = "";
+    emit backgroundChanged(_data.background);
     xChanged();
   }
 }
@@ -224,13 +280,13 @@ void SvgAssembly::addElement(const QString& filePath, int index)
     elem.checkSize(_project->dir());
     if(xIndexValid(index))
     {
-      _elements.insert(index, elem);
+      _data.elements.insert(index, elem);
       emit elementAdded(absoluteFilePath, index);
     }
     else
     {
-      _elements.push_back(elem);
-      emit elementAdded(absoluteFilePath, _elements.count() - 1);
+      _data.elements.push_back(elem);
+      emit elementAdded(absoluteFilePath, _data.elements.count() - 1);
     }
     xChanged();
   }
@@ -240,7 +296,7 @@ void SvgAssembly::removeElement(int index)
 {
   if(xIndexValid(index))
   {
-    _elements.remove(index);
+    _data.elements.remove(index);
     emit elementRemoved(index);
     xChanged();
   }
@@ -248,9 +304,9 @@ void SvgAssembly::removeElement(int index)
 
 void SvgAssembly::setElementScale(int index, qreal scale)
 {
-  if(xIndexValid(index) && _elements.at(index).scale != scale)
+  if(xIndexValid(index) && _data.elements.at(index).scale != scale)
   {
-    _elements[index].scale = scale;
+    _data.elements[index].scale = scale;
     emit elementScaleChanged(index, scale);
     xChanged();
   }
@@ -258,9 +314,9 @@ void SvgAssembly::setElementScale(int index, qreal scale)
 
 void SvgAssembly::setElementDx(int index, qreal dx)
 {
-  if(xIndexValid(index) && _elements.at(index).dx != dx)
+  if(xIndexValid(index) && _data.elements.at(index).dx != dx)
   {
-    _elements[index].dx = dx;
+    _data.elements[index].dx = dx;
     emit elementDxChanged(index, dx);
     xChanged();
   }
@@ -268,9 +324,9 @@ void SvgAssembly::setElementDx(int index, qreal dx)
 
 void SvgAssembly::setElementDy(int index, qreal dy)
 {
-  if(xIndexValid(index) && _elements.at(index).dy != dy)
+  if(xIndexValid(index) && _data.elements.at(index).dy != dy)
   {
-    _elements[index].dy = dy;
+    _data.elements[index].dy = dy;
     emit elementDyChanged(index, dy);
     xChanged();
   }
@@ -279,10 +335,10 @@ void SvgAssembly::setElementDy(int index, qreal dy)
 void SvgAssembly::setElementPos(int index, qreal dx, qreal dy)
 {
   if(xIndexValid(index) &&
-     (_elements.at(index).dx != dx || _elements.at(index).dy != dy))
+     (_data.elements.at(index).dx != dx || _data.elements.at(index).dy != dy))
   {
-    _elements[index].dx = dx;
-    _elements[index].dy = dy;
+    _data.elements[index].dx = dx;
+    _data.elements[index].dy = dy;
     emit elementPosChanged(index, dx, dy);
     xChanged();
   }
@@ -292,9 +348,9 @@ void SvgAssembly::lowerElement(int index)
 {
   if(xIndexValid(index) && index > 0)
   {
-    SvgAssemblyElement tmp = _elements[index];
-    _elements[index] = _elements[index-1];
-    _elements[index-1] = tmp;
+    SvgAssemblyElement tmp = _data.elements[index];
+    _data.elements[index] = _data.elements[index-1];
+    _data.elements[index-1] = tmp;
     emit elementLowered(index);
     xChanged();
   }
@@ -302,11 +358,11 @@ void SvgAssembly::lowerElement(int index)
 
 void SvgAssembly::raiseElement(int index)
 {
-  if(xIndexValid(index) && index+1 < _elements.count())
+  if(xIndexValid(index) && index+1 < _data.elements.count())
   {
-    SvgAssemblyElement tmp = _elements[index];
-    _elements[index] = _elements[index+1];
-    _elements[index+1] = tmp;
+    SvgAssemblyElement tmp = _data.elements[index];
+    _data.elements[index] = _data.elements[index+1];
+    _data.elements[index+1] = tmp;
     emit elementRaised(index);
     xChanged();
   }
@@ -314,14 +370,14 @@ void SvgAssembly::raiseElement(int index)
 
 void SvgAssembly::setElementHCenter(int index)
 {
-  if(xIndexValid(index) && _elements.at(index).validSize)
+  if(xIndexValid(index) && _data.elements.at(index).validSize)
   {
     qreal dx;
-    qreal sx = _elements.at(index).sx * _elements.at(index).scale;
-    dx = ((int)_size - sx) / 2.0;
-    if(_elements.at(index).dx != dx)
+    qreal sx = _data.elements.at(index).sx * _data.elements.at(index).scale;
+    dx = ((int)_data.size - sx) / 2.0;
+    if(_data.elements.at(index).dx != dx)
     {
-      _elements[index].dx = dx;
+      _data.elements[index].dx = dx;
       emit elementDxChanged(index, dx);
       xChanged();
     }
@@ -330,14 +386,14 @@ void SvgAssembly::setElementHCenter(int index)
 
 void SvgAssembly::setElementVCenter(int index)
 {
-  if(xIndexValid(index) && _elements.at(index).validSize)
+  if(xIndexValid(index) && _data.elements.at(index).validSize)
   {
     qreal dy;
-    qreal sy = _elements.at(index).sy * _elements.at(index).scale;
-    dy = ((int)_size - sy) / 2.0;
-    if(_elements.at(index).dy != dy)
+    qreal sy = _data.elements.at(index).sy * _data.elements.at(index).scale;
+    dy = ((int)_data.size - sy) / 2.0;
+    if(_data.elements.at(index).dy != dy)
     {
-      _elements[index].dy = dy;
+      _data.elements[index].dy = dy;
       emit elementDyChanged(index, dy);
       xChanged();
     }
@@ -347,12 +403,17 @@ void SvgAssembly::setElementVCenter(int index)
 void SvgAssembly::xChanged()
 {
   emit assemblyChanged(xml());
-  setHasChanged(true);
+  bool hasChanged = !(_data == _lastSaveData);
+  if(_hasChanged != hasChanged)
+  {
+    _hasChanged = hasChanged;
+    Q_EMIT assemblyChanged(_hasChanged);
+  }
 }
 
 bool SvgAssembly::xIndexValid(int index) const
 {
-  return index >= 0 && index < _elements.count();
+  return index >= 0 && index < _data.elements.count();
 }
 
 QDomDocumentFragment SvgAssembly::emptyFrag()

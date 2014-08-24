@@ -25,6 +25,9 @@ struct SvgAssemblyElement {
   void checkSize(const QDir& projectDir);
 };
 
+bool operator==(const SvgAssemblyElement& u1, const SvgAssemblyElement& u2);
+bool operator!=(const SvgAssemblyElement& u1, const SvgAssemblyElement& u2);
+
 } // namespace Composition
 
 #endif // SVG_ASSEMBLIY_ELEMENT_HPP

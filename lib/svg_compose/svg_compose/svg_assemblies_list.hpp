@@ -2,8 +2,6 @@
 #define SVG_ASSEMBLIES_LIST_HPP
 
 #include <QDir>
-#include <QDomDocument>
-#include <QDomElement>
 #include <QFileInfo>
 #include <QMap>
 #include <QObject>
@@ -54,7 +52,6 @@ private:
   QFileInfo _fileInfo;
   QString _outputDir;
   QVector<SvgAssembly*> _assemblies;
-  QMap<SvgAssembly*,QDomDocumentFragment> _xmlElements;
 };
 
 } // namespace Composition

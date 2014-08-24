@@ -83,4 +83,22 @@ void SvgAssemblyElement::checkSize(const QDir& projectDir)
   }
 }
 
+bool operator==(const SvgAssemblyElement& u1, const SvgAssemblyElement& u2)
+{
+  if(u1.file != u2.file)
+    return false;
+  if(u1.scale != u2.scale)
+    return false;
+  if(u1.dx != u2.dx)
+    return false;
+  if(u1.dy != u2.dy)
+    return false;
+  return true;
+}
+
+bool operator!=(const SvgAssemblyElement& u1, const SvgAssemblyElement& u2)
+{
+  return !(u1 == u2);
+}
+
 } // namespace Composition

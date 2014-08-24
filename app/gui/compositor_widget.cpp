@@ -98,6 +98,8 @@ CompositorWidget::CompositorWidget(QWidget *parent)
           _treeViewController, SLOT(onDoubleClicked(QModelIndex)));
   connect(_projectWidget->treeView(), SIGNAL(clicked(QModelIndex)),
           _treeViewController, SLOT(onClicked(QModelIndex)));
+  connect(_projectWidget, SIGNAL(customMenuRequested(QModelIndex,QPoint)),
+          _treeViewController, SLOT(customMenuRequested(QModelIndex,QPoint)));
   connect(_projectWidget, SIGNAL(outputDirChanged(QString)),
           _controller, SLOT(setOutputDir(QString)));
 

@@ -29,6 +29,7 @@ ProjectWidget::ProjectWidget(QWidget *parent)
   lyt->addWidget(_groupBox);
 
   _treeView->setHeaderHidden(true);
+  _treeView->setContextMenuPolicy(Qt::CustomContextMenu);
 
 
   QVBoxLayout* gLyt = new QVBoxLayout(_groupBox);
@@ -37,6 +38,8 @@ ProjectWidget::ProjectWidget(QWidget *parent)
 
   connect(_outputDir, SIGNAL(editingFinished()),
           this, SLOT(outputDirChanged()));
+  connect(_treeView, SIGNAL(customContextMenuRequested(QPoint)),
+          this, SLOT(onCustomMenuRequested(QPoint)));
 }
 
 QTreeView* ProjectWidget::treeView() const
@@ -57,6 +60,13 @@ void ProjectWidget::setOutputDir(const QString& outputDir)
 void ProjectWidget::outputDirChanged()
 {
   Q_EMIT outputDirChanged(_outputDir->text());
+}
+
+void ProjectWidget::onCustomMenuRequested(const QPoint& pos)
+{
+  QModelIndex index = _treeView->indexAt(pos);
+  QPoint gPos = _treeView->mapToGlobal(pos);
+  Q_EMIT customMenuRequested(index, gPos);
 }
 
 } // namespace SvgCompositor

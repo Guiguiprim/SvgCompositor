@@ -3,8 +3,10 @@
 
 #include <QObject>
 #include <QMap>
+#include <QModelIndex>
 
-class QModelIndex;
+class QAction;
+class QPoint;
 class QStandardItem;
 class QStandardItemModel;
 
@@ -40,6 +42,11 @@ public Q_SLOTS:
 
   void onClicked(const QModelIndex& index);
   void onDoubleClicked(const QModelIndex& index);
+  void customMenuRequested(const QModelIndex& index, const QPoint& pos);
+
+private Q_SLOTS:
+  void xOnOpenTriggered();
+  void xOnDeleteTriggered();
 
 Q_SIGNALS:
   void modelChanged(QStandardItemModel* model);
@@ -58,6 +65,9 @@ private:
   QStandardItemModel* _model;
   SvgCompose::SvgAssembliesList* _project;
   Link _link;
+  QModelIndex _menuIndex;
+  QAction* _openAction;
+  QAction* _deleteAction;
 };
 
 } // namespace SvgCompositor

@@ -5,6 +5,7 @@
 
 class QGroupBox;
 class QLineEdit;
+class QModelIndex;
 class QTreeView;
 class QToolBar;
 
@@ -23,9 +24,11 @@ public:
 public Q_SLOTS:
   void setOutputDir(const QString& outputDir);
   void outputDirChanged();
+  void onCustomMenuRequested(const QPoint& pos);
 
 Q_SIGNALS:
   void outputDirChanged(const QString& outputDir);
+  void customMenuRequested(const QModelIndex& index, const QPoint& pos);
 
 private:
   QTreeView* _treeView;

@@ -1,5 +1,8 @@
 #include "tree_view_controller.hpp"
 
+#include <QAction>
+#include <QMenu>
+#include <QPoint>
 #include <QStandardItem>
 #include <QStandardItemModel>
 
@@ -9,12 +12,32 @@
 
 namespace SvgCompositor {
 
+namespace
+{
+enum Role
+{
+  TypeRole = Qt::UserRole + 1
+};
+enum ItemType
+{
+  AssemblyType,
+  BackgroundType,
+  ElementType
+};
+} // namespace
+
 TreeViewController::TreeViewController(QObject *parent)
   : QObject(parent)
   , _model(NULL)
   , _project(NULL)
   , _link()
 {
+  _openAction = new QAction("Open", this);
+  connect(_openAction, SIGNAL(triggered())
+          , this, SLOT(xOnOpenTriggered()));
+  _deleteAction = new QAction("Delete", this);
+  connect(_deleteAction, SIGNAL(triggered())
+          , this, SLOT(xOnDeleteTriggered()));
 }
 
 QStandardItemModel* TreeViewController::model() const
@@ -168,6 +191,30 @@ void TreeViewController::onDoubleClicked(const QModelIndex& index)
   SvgCompose::SvgAssembly* assembly = _link.key(item, NULL);
   if(assembly)
     Q_EMIT openAssembly(assembly);
+}
+
+void TreeViewController::customMenuRequested(const QModelIndex& index, const QPoint& pos)
+{
+  _menuIndex = index;
+  QStandardItem* item = _model->itemFromIndex(index);
+  if(item->data(TypeRole) != AssemblyType)
+    return;
+
+  QList<QAction*> actions;
+  actions << _openAction << _deleteAction;
+
+  if(actions.count() > 0)
+    QMenu::exec(actions, pos);
+}
+
+void TreeViewController::xOnOpenTriggered()
+{
+  onDoubleClicked(_menuIndex);
+}
+
+void TreeViewController::xOnDeleteTriggered()
+{
+
 }
 
 void TreeViewController::xAddAssembly(SvgCompose::SvgAssembly* assembly, QStandardItem* root)

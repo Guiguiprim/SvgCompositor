@@ -143,6 +143,8 @@ void CompositorWidget::xSaveCurrentAssembly()
   Editor* editor = qobject_cast<Editor*>(_tabWidget->currentWidget());
   if(editor)
     _controller->saveAssembly(editor->assembly());
+  else
+    _controller->saveAll();
 }
 
 void CompositorWidget::xOnTabCloseRequested(int index)

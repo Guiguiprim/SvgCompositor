@@ -44,14 +44,20 @@ public Q_SLOTS:
   void onDoubleClicked(const QModelIndex& index);
   void customMenuRequested(const QModelIndex& index, const QPoint& pos);
 
+  void onGenerateImageTriggered();
+  void onDeleteTriggered();
+
 private Q_SLOTS:
   void xOnOpenTriggered();
-  void xOnDeleteTriggered();
 
 Q_SIGNALS:
   void modelChanged(QStandardItemModel* model);
   void openAssembly(SvgCompose::SvgAssembly* assembly);
   void showAssembly(SvgCompose::SvgAssembly* assembly);
+  void removeAssembly(SvgCompose::SvgAssembly* assembly);
+  void generateImage(SvgCompose::SvgAssembly* assembly);
+
+  void enableAssemblyActions(bool enable);
 
 private:
   void xAddAssembly(SvgCompose::SvgAssembly* assembly, QStandardItem* root);
@@ -61,13 +67,16 @@ private:
   void xAssemblyConnectionSetup(SvgCompose::SvgAssembly* assembly);
   void xAssemblyConnectionTearDown(SvgCompose::SvgAssembly* assembly);
 
+  bool xSetLastClickedAssembly(const QModelIndex& index);
+  void xSetLastClickedAssembly(SvgCompose::SvgAssembly* assembly);
+
 private:
   QStandardItemModel* _model;
   SvgCompose::SvgAssembliesList* _project;
   Link _link;
-  QModelIndex _menuIndex;
   QAction* _openAction;
   QAction* _deleteAction;
+  SvgCompose::SvgAssembly* _lastClickedAssembly;
 };
 
 } // namespace SvgCompositor

@@ -84,11 +84,13 @@ CompositorWidget::CompositorWidget(QWidget *parent)
 
   _tabWidget->setTabsClosable(true);
 
+  // TabWiget connections
   connect(_tabWidget, SIGNAL(tabCloseRequested(int)),
           this, SLOT(xOnTabCloseRequested(int)));
   connect(_tabWidget, SIGNAL(currentChanged(int)),
           this, SLOT(xOnTabChanged(int)));
 
+  // Controller connections
   connect(_controller, SIGNAL(setWindowTitle(QString)),
           this, SLOT(setWindowTitle(QString)));
   connect(_controller, SIGNAL(addEditor(Editor*,QString)),
@@ -99,27 +101,50 @@ CompositorWidget::CompositorWidget(QWidget *parent)
           this, SLOT(onRemoveEditor(Editor*)));
   connect(_controller, SIGNAL(setCurrentEditor(Editor*)),
           this, SLOT(onSetCurrentEditor(Editor*)));
+
   connect(_controller, SIGNAL(outputDirChanged(QString)),
           _projectWidget, SLOT(setOutputDir(QString)));
 
   connect(_controller, SIGNAL(projectChanged(SvgCompose::SvgAssembliesList*)),
           _treeViewController, SLOT(onProjectChanged(SvgCompose::SvgAssembliesList*)));
+
   connect(_controller, SIGNAL(projectChanged(SvgCompose::SvgAssembliesList*)),
           this, SLOT(onProjectChanged(SvgCompose::SvgAssembliesList*)));
 
+  // TreeView Controller connections
   connect(_treeViewController, SIGNAL(openAssembly(SvgCompose::SvgAssembly*)),
           _controller, SLOT(openAssembly(SvgCompose::SvgAssembly*)));
   connect(_treeViewController, SIGNAL(showAssembly(SvgCompose::SvgAssembly*)),
           _controller, SLOT(showAssembly(SvgCompose::SvgAssembly*)));
+  connect(_treeViewController, SIGNAL(generateImage(SvgCompose::SvgAssembly*)),
+          _controller, SLOT(generateAssemblyImage(SvgCompose::SvgAssembly*)));
+  connect(_treeViewController, SIGNAL(removeAssembly(SvgCompose::SvgAssembly*)),
+          _controller, SLOT(removeAssembly(SvgCompose::SvgAssembly*)));
+
+  connect(_treeViewController, SIGNAL(enableAssemblyActions(bool)),
+          _projectWidget, SLOT(enableAssemblyAction(bool)));
+
   connect(_treeViewController, SIGNAL(modelChanged(QStandardItemModel*)),
           this, SLOT(xOnModelChanged(QStandardItemModel*)));
 
+  // projectWidget::TreeView connections
   connect(_projectWidget->treeView(), SIGNAL(doubleClicked(QModelIndex)),
           _treeViewController, SLOT(onDoubleClicked(QModelIndex)));
   connect(_projectWidget->treeView(), SIGNAL(clicked(QModelIndex)),
           _treeViewController, SLOT(onClicked(QModelIndex)));
+
+  // projectWidget connections
   connect(_projectWidget, SIGNAL(customMenuRequested(QModelIndex,QPoint)),
           _treeViewController, SLOT(customMenuRequested(QModelIndex,QPoint)));
+  connect(_projectWidget, SIGNAL(generateAssemblyImage()),
+          _treeViewController, SLOT(onGenerateImageTriggered()));
+  connect(_projectWidget, SIGNAL(removeAssembly()),
+          _treeViewController, SLOT(onDeleteTriggered()));
+
+  connect(_projectWidget, SIGNAL(generateProjectImages()),
+          _controller, SLOT(generateProjectImages()));
+  connect(_projectWidget, SIGNAL(addAssembly()),
+          _controller, SLOT(createAssembly()));
   connect(_projectWidget, SIGNAL(outputDirChanged(QString)),
           _controller, SLOT(setOutputDir(QString)));
 

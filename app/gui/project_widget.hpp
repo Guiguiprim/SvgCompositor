@@ -3,7 +3,6 @@
 
 #include <QWidget>
 
-class QGroupBox;
 class QLineEdit;
 class QModelIndex;
 class QTreeView;
@@ -26,15 +25,23 @@ public Q_SLOTS:
   void outputDirChanged();
   void onCustomMenuRequested(const QPoint& pos);
 
+  void enableAssemblyAction(bool enable);
+
 Q_SIGNALS:
   void outputDirChanged(const QString& outputDir);
   void customMenuRequested(const QModelIndex& index, const QPoint& pos);
 
+  void addAssembly();
+  void removeAssembly();
+  void generateAssemblyImage();
+  void generateProjectImages();
+
 private:
   QTreeView* _treeView;
   QToolBar* _toolBar;
-  QGroupBox* _groupBox;
   QLineEdit* _outputDir;
+  QAction* _removeAction;
+  QAction* _generateAction;
 };
 
 } // namespace SvgCompositor

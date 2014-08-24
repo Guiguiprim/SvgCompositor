@@ -1,6 +1,6 @@
 #include "project_widget.hpp"
 
-#include <QGroupBox>
+#include <QAction>
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
@@ -18,7 +18,6 @@ ProjectWidget::ProjectWidget(QWidget *parent)
   : QWidget(parent)
   , _treeView(new QTreeView)
   , _toolBar(new QToolBar)
-  , _groupBox(new QGroupBox("Project actions:"))
   , _outputDir(new QLineEdit)
 {
   QVBoxLayout* lyt = new QVBoxLayout(this);
@@ -26,15 +25,20 @@ ProjectWidget::ProjectWidget(QWidget *parent)
   lyt->addWidget(_outputDir);
   lyt->addWidget(_treeView);
   lyt->addWidget(_toolBar);
-  lyt->addWidget(_groupBox);
 
   _treeView->setHeaderHidden(true);
   _treeView->setContextMenuPolicy(Qt::CustomContextMenu);
 
-
-  QVBoxLayout* gLyt = new QVBoxLayout(_groupBox);
-  gLyt->addWidget(new QPushButton("Create SVG"));
-  gLyt->addWidget(new QPushButton("Create Icon"));
+  _toolBar->addAction(Icon::add(), "Add new assembly",
+                      this, SIGNAL(addAssembly()));
+  _removeAction = _toolBar->addAction(Icon::remove(), "Remove assembly",
+                                      this, SIGNAL(removeAssembly()));
+  _toolBar->addSeparator();
+  _generateAction = _toolBar->addAction(Icon::image(), "Generate current assembly image",
+                                        this, SIGNAL(generateAssemblyImage()));
+  _toolBar->addAction(Icon::images(), "Generate project images",
+                      this, SIGNAL(generateProjectImages()));
+  enableAssemblyAction(false);
 
   connect(_outputDir, SIGNAL(editingFinished()),
           this, SLOT(outputDirChanged()));
@@ -67,6 +71,12 @@ void ProjectWidget::onCustomMenuRequested(const QPoint& pos)
   QModelIndex index = _treeView->indexAt(pos);
   QPoint gPos = _treeView->mapToGlobal(pos);
   Q_EMIT customMenuRequested(index, gPos);
+}
+
+void ProjectWidget::enableAssemblyAction(bool enable)
+{
+  _removeAction->setEnabled(enable);
+  _generateAction->setEnabled(enable);
 }
 
 } // namespace SvgCompositor

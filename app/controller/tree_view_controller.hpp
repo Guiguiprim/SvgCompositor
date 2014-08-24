@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QMap>
 
+class QModelIndex;
 class QStandardItem;
 class QStandardItemModel;
 
@@ -37,12 +38,17 @@ public Q_SLOTS:
   void onElementAdded(const QString& file, int index);
   void onElementRemoved(int index);
 
+  void onClicked(const QModelIndex& index);
+  void onDoubleClicked(const QModelIndex& index);
+
 Q_SIGNALS:
   void modelChanged(QStandardItemModel* model);
+  void openAssembly(SvgCompose::SvgAssembly* assembly);
+  void showAssembly(SvgCompose::SvgAssembly* assembly);
 
 private:
-  void assemblyConnectionSetup(SvgCompose::SvgAssembly* assembly);
-  void assemblyConnectionTearDown(SvgCompose::SvgAssembly* assembly);
+  void xAssemblyConnectionSetup(SvgCompose::SvgAssembly* assembly);
+  void xAssemblyConnectionTearDown(SvgCompose::SvgAssembly* assembly);
 
 private:
   QStandardItemModel* _model;

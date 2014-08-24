@@ -87,9 +87,17 @@ CompositorWidget::CompositorWidget(QWidget *parent)
   connect(_controller, SIGNAL(projectChanged(SvgCompose::SvgAssembliesList*)),
           this, SLOT(onProjectChanged(SvgCompose::SvgAssembliesList*)));
 
+  connect(_treeViewController, SIGNAL(openAssembly(SvgCompose::SvgAssembly*)),
+          _controller, SLOT(openAssembly(SvgCompose::SvgAssembly*)));
+  connect(_treeViewController, SIGNAL(showAssembly(SvgCompose::SvgAssembly*)),
+          _controller, SLOT(showAssembly(SvgCompose::SvgAssembly*)));
   connect(_treeViewController, SIGNAL(modelChanged(QStandardItemModel*)),
           this, SLOT(xOnModelChanged(QStandardItemModel*)));
 
+  connect(_projectWidget->treeView(), SIGNAL(doubleClicked(QModelIndex)),
+          _treeViewController, SLOT(onDoubleClicked(QModelIndex)));
+  connect(_projectWidget->treeView(), SIGNAL(clicked(QModelIndex)),
+          _treeViewController, SLOT(onClicked(QModelIndex)));
   _controller->openProject("img/project.cr");
   SvgCompose::SvgAssembliesList* project = _controller->project();
   if(project)

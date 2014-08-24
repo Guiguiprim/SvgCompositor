@@ -33,6 +33,7 @@ public Q_SLOTS:
   bool closeProject();
 
   bool openAssembly(SvgCompose::SvgAssembly* assembly);
+  bool showAssembly(SvgCompose::SvgAssembly* assembly);
   bool closeAssembly(SvgCompose::SvgAssembly* assembly);
   void setOutputDir(const QString& outputDir);
 

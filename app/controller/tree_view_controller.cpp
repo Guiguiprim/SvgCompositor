@@ -35,7 +35,7 @@ void TreeViewController::onProjectChanged(
     Link::iterator it, end;
     for(it = _link.begin(), end = _link.end(); it != end; ++it)
     {
-      assemblyConnectionTearDown(it.key());
+      xAssemblyConnectionTearDown(it.key());
     }
     _link.clear();
     disconnect(_project, SIGNAL(assemblyAdded(SvgCompose::SvgAssembly*)),
@@ -59,7 +59,7 @@ void TreeViewController::onProjectChanged(
       item->setEditable(false);
       root->appendRow(item);
       _link[assembly] = item;
-      assemblyConnectionSetup(assembly);
+      xAssemblyConnectionSetup(assembly);
 
       QString imgFile;
       QStandardItem* subitem;
@@ -114,7 +114,7 @@ void TreeViewController::onAssemblyAdded(SvgCompose::SvgAssembly* assembly)
     QStandardItem* item = new QStandardItem(assembly->name());
     root->appendRow(root);
     _link[assembly] = item;
-    assemblyConnectionSetup(assembly);
+    xAssemblyConnectionSetup(assembly);
   }
 }
 
@@ -123,7 +123,7 @@ void TreeViewController::onAssemblyRemoved(SvgCompose::SvgAssembly* assembly)
   Link::iterator it = _link.find(assembly);
   if(it != _link.end())
   {
-    assemblyConnectionTearDown(it.key());
+    xAssemblyConnectionTearDown(it.key());
     QStandardItem* root = _model->invisibleRootItem();
     root->removeRow(it.value()->row());
     _link.remove(it.key());
@@ -191,7 +191,23 @@ void TreeViewController::onElementRemoved(int index)
   }
 }
 
-void TreeViewController::assemblyConnectionSetup(SvgCompose::SvgAssembly* assembly)
+void TreeViewController::onClicked(const QModelIndex& index)
+{
+  QStandardItem* item = _model->itemFromIndex(index);
+  SvgCompose::SvgAssembly* assembly = _link.key(item, NULL);
+  if(assembly)
+    Q_EMIT showAssembly(assembly);
+}
+
+void TreeViewController::onDoubleClicked(const QModelIndex& index)
+{
+  QStandardItem* item = _model->itemFromIndex(index);
+  SvgCompose::SvgAssembly* assembly = _link.key(item, NULL);
+  if(assembly)
+    Q_EMIT openAssembly(assembly);
+}
+
+void TreeViewController::xAssemblyConnectionSetup(SvgCompose::SvgAssembly* assembly)
 {
   connect(assembly, SIGNAL(nameChanged(QString)),
           this, SLOT(onAssemblyChanged()));
@@ -205,7 +221,7 @@ void TreeViewController::assemblyConnectionSetup(SvgCompose::SvgAssembly* assemb
           this, SLOT(onElementRemoved(int)));
 }
 
-void TreeViewController::assemblyConnectionTearDown(SvgCompose::SvgAssembly* assembly)
+void TreeViewController::xAssemblyConnectionTearDown(SvgCompose::SvgAssembly* assembly)
 {
   disconnect(assembly, SIGNAL(nameChanged(QString)),
              this, SLOT(onAssemblyChanged()));

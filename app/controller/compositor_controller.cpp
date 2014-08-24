@@ -115,16 +115,8 @@ bool CompositorController::closeProject()
 
 bool CompositorController::openAssembly(SvgCompose::SvgAssembly* assembly)
 {
-  if(!assembly || !_project)
-    return false;
-
-  QMap<SvgCompose::SvgAssembly*, Editor*>::iterator it;
-  it = _editors.find(assembly);
-  if(it != _editors.end())
-  {
-    Q_EMIT setCurrentEditor(it.value());
+  if(showAssembly(assembly))
     return true;
-  }
 
   if(!_project->assemblies().contains(assembly))
     return false;
@@ -141,6 +133,21 @@ bool CompositorController::openAssembly(SvgCompose::SvgAssembly* assembly)
           this, SLOT(xOnAssemblyChanged()));
 
   return true;
+}
+
+bool CompositorController::showAssembly(SvgCompose::SvgAssembly* assembly)
+{
+  if(!assembly || !_project)
+    return false;
+
+  QMap<SvgCompose::SvgAssembly*, Editor*>::iterator it;
+  it = _editors.find(assembly);
+  if(it != _editors.end())
+  {
+    Q_EMIT setCurrentEditor(it.value());
+    return true;
+  }
+  return false;
 }
 
 bool CompositorController::closeAssembly(SvgCompose::SvgAssembly* assembly)

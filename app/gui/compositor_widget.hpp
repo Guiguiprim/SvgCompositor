@@ -9,6 +9,11 @@ class QStackedWidget;
 class QStandardItemModel;
 class QTabWidget;
 
+namespace SvgCompose
+{
+class SvgAssembliesList;
+}
+
 namespace SvgCompositor
 {
 class CompositorController;
@@ -29,6 +34,7 @@ public Q_SLOTS:
   void onRenameEditor(Editor*, const QString& name);
   void onRemoveEditor(Editor*);
   void onSetCurrentEditor(Editor*);
+  void onProjectChanged(SvgCompose::SvgAssembliesList* _project);
 
 private Q_SLOTS:
   void xQuit();

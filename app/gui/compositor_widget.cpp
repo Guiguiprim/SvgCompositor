@@ -84,6 +84,8 @@ CompositorWidget::CompositorWidget(QWidget *parent)
 
   connect(_controller, SIGNAL(projectChanged(SvgCompose::SvgAssembliesList*)),
           _treeViewController, SLOT(onProjectChanged(SvgCompose::SvgAssembliesList*)));
+  connect(_controller, SIGNAL(projectChanged(SvgCompose::SvgAssembliesList*)),
+          this, SLOT(onProjectChanged(SvgCompose::SvgAssembliesList*)));
 
   connect(_treeViewController, SIGNAL(modelChanged(QStandardItemModel*)),
           this, SLOT(xOnModelChanged(QStandardItemModel*)));
@@ -101,6 +103,9 @@ CompositorWidget::CompositorWidget(QWidget *parent)
   //SvgCompose::generateAssemblies(project);
   connect(_projectWidget, SIGNAL(outputDirChanged(QString)),
           _controller, SLOT(setOutputDir(QString)));
+
+  this->resize(800, 700);
+  onProjectChanged(NULL);
 }
 
 void CompositorWidget::setWindowTitle(const QString& title)
@@ -131,6 +136,15 @@ void CompositorWidget::onRemoveEditor(Editor* editor)
 void CompositorWidget::onSetCurrentEditor(Editor* editor)
 {
   _tabWidget->setCurrentWidget(editor);
+}
+
+void CompositorWidget::onProjectChanged(SvgCompose::SvgAssembliesList* _project)
+{
+  bool active = _project == NULL ? false : true;
+  _projectWidget->setEnabled(active);
+  _saveAssemblyAction->setEnabled(active);
+  _saveAllAction->setEnabled(active);
+  _saveAsAction->setEnabled(active);
 }
 
 void CompositorWidget::xQuit()

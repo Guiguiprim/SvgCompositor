@@ -12,11 +12,19 @@
         <file>media/icons/exit.svg</file>
         <file>media/icons/image.svg</file>
         <file>media/icons/minus.svg</file>
-        <file>media/icons/minus-red.svg</file>
         <file>media/icons/plus.svg</file>
-        <file>media/icons/plus-green.svg</file>
         <file>media/icons/upload2.svg</file>
         <file>media/icons/zoomin.svg</file>
         <file>media/icons/zoomout.svg</file>
+        <file>media/icons/add.svg</file>
+        <file>media/icons/remove.svg</file>
+        <file>media/icons/close.svg</file>
+        <file>media/icons/file.svg</file>
+        <file>media/icons/folder-open.svg</file>
+        <file>media/icons/images.svg</file>
+        <file>media/icons/redo.svg</file>
+        <file>media/icons/undo.svg</file>
+        <file>media/icons/save.svg</file>
+        <file>media/icons/save_all.svg</file>
     </qresource>
 </RCC>

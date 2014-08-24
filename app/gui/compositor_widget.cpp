@@ -40,30 +40,32 @@ CompositorWidget::CompositorWidget(QWidget *parent)
 
   QMenu* fileMenu = menuBar->addMenu("File");
 
-  _newProjectAction = fileMenu->addAction("New project", _controller,
+  _newProjectAction = fileMenu->addAction(Icon::create(), "New project", _controller,
                                           SLOT(createProject()), QKeySequence::New);
-  _openProjectAction = fileMenu->addAction("Open project", _controller,
+  _openProjectAction = fileMenu->addAction(Icon::open(), "Open project", _controller,
                                            SLOT(openProject()), QKeySequence::Open);
-  _saveAssemblyAction = fileMenu->addAction("Save assembly in project", this,
+  _saveAssemblyAction = fileMenu->addAction(Icon::save(), "Save assembly in project", this,
                                             SLOT(xSaveCurrentAssembly()), QKeySequence::Save);
-  _saveAllAction = fileMenu->addAction("Save all assemblies", _controller,
+  _saveAllAction = fileMenu->addAction(Icon::saveAll(), "Save all assemblies", _controller,
                                        SLOT(saveAll()), QKeySequence::SaveAs);
   _saveAsAction = fileMenu->addAction("Save project as", _controller,
                                       SLOT(saveProjectAs()));
-  _closeAssemblyAction = fileMenu->addAction("Close current assembly", this,
+  _closeAssemblyAction = fileMenu->addAction( "Close current assembly", this,
                                              SLOT(xCloseCurrentAssembly()), QKeySequence::Close);
-  _closeProjectAction = fileMenu->addAction("Close project", _controller,
+  _closeProjectAction = fileMenu->addAction(Icon::close(), "Close project", _controller,
                                             SLOT(closeProject()), QKeySequence("Ctrl+Shift+W"));
   fileMenu->addSeparator();
-  _quitAction = fileMenu->addAction(Icon::buildIcon("exit"), "Quit", this, SLOT(close()), QKeySequence::Quit);
+  _quitAction = fileMenu->addAction(Icon::exit(), "Quit", this, SLOT(close()), QKeySequence::Quit);
 
   QMenu* editionMenu = menuBar->addMenu("Edition");
   QAction* redoAction = _controller->undoGroup()->createRedoAction(this);
+  redoAction->setIcon(Icon::redo());
   redoAction->setShortcut(QKeySequence::Redo);
   redoAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   editionMenu->addAction(redoAction);
 
   QAction* undoAction = _controller->undoGroup()->createUndoAction(this);
+  undoAction->setIcon(Icon::undo());
   undoAction->setShortcut(QKeySequence::Undo);
   undoAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   editionMenu->addAction(undoAction);
@@ -168,6 +170,7 @@ void CompositorWidget::onProjectChanged(SvgCompose::SvgAssembliesList* _project)
   _saveAssemblyAction->setEnabled(active);
   _saveAllAction->setEnabled(active);
   _saveAsAction->setEnabled(active);
+  _closeProjectAction->setEnabled(active);
   _closeAssemblyAction->setEnabled(false);
 }
 

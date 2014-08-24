@@ -109,7 +109,7 @@
        </property>
        <property name="icon">
         <iconset resource="../res/media.qrc">
-         <normaloff>:/media/icons/plus-green.svg</normaloff>:/media/icons/plus-green.svg</iconset>
+         <normaloff>:/media/icons/add.svg</normaloff>:/media/icons/add.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -216,7 +216,7 @@
        </property>
        <property name="icon">
         <iconset resource="../res/media.qrc">
-         <normaloff>:/media/icons/minus-red.svg</normaloff>:/media/icons/minus-red.svg</iconset>
+         <normaloff>:/media/icons/remove.svg</normaloff>:/media/icons/remove.svg</iconset>
        </property>
        <property name="iconSize">
         <size>

@@ -47,6 +47,10 @@ Q_SIGNALS:
   void showAssembly(SvgCompose::SvgAssembly* assembly);
 
 private:
+  void xAddAssembly(SvgCompose::SvgAssembly* assembly, QStandardItem* root);
+  void xAddBackground(const QString& background, QStandardItem* assItem);
+  void xAddElement(const QString& file, int index, QStandardItem* assItem);
+
   void xAssemblyConnectionSetup(SvgCompose::SvgAssembly* assembly);
   void xAssemblyConnectionTearDown(SvgCompose::SvgAssembly* assembly);
 

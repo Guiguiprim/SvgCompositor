@@ -55,33 +55,7 @@ void TreeViewController::onProjectChanged(
     font.setItalic(true);
     Q_FOREACH(SvgCompose::SvgAssembly* assembly, _project->assemblies())
     {
-      QStandardItem* item = new QStandardItem(assembly->name());
-      item->setEditable(false);
-      root->appendRow(item);
-      _link[assembly] = item;
-      xAssemblyConnectionSetup(assembly);
-
-      QString imgFile;
-      QStandardItem* subitem;
-      if(assembly->background().isEmpty())
-        subitem = new QStandardItem("No background");
-      else
-      {
-        imgFile = _project->dir().absoluteFilePath(assembly->background());
-        subitem = new QStandardItem(QIcon(imgFile), assembly->background());
-      }
-      subitem->setEditable(false);
-      subitem->setSelectable(false);
-      subitem->setFont(font);
-      item->appendRow(subitem);
-      Q_FOREACH(SvgCompose::SvgAssemblyElement element, assembly->elements())
-      {
-        imgFile = _project->dir().absoluteFilePath(element.file);
-        subitem = new QStandardItem(QIcon(imgFile), element.file);
-        subitem->setEditable(false);
-        subitem->setSelectable(false);
-        item->appendRow(subitem);
-      }
+      xAddAssembly(assembly, root);
     }
     connect(_project, SIGNAL(assemblyAdded(SvgCompose::SvgAssembly*)),
             this, SLOT(onAssemblyAdded(SvgCompose::SvgAssembly*)));
@@ -113,10 +87,7 @@ void TreeViewController::onAssemblyAdded(SvgCompose::SvgAssembly* assembly)
   if(_project->assemblies().contains(assembly))
   {
     QStandardItem* root = _model->invisibleRootItem();
-    QStandardItem* item = new QStandardItem(assembly->name());
-    root->appendRow(root);
-    _link[assembly] = item;
-    xAssemblyConnectionSetup(assembly);
+    xAddAssembly(assembly, root);
   }
 }
 
@@ -165,17 +136,7 @@ void TreeViewController::onElementAdded(const QString& file, int index)
     Link::iterator it = _link.find(assembly);
     if(it != _link.end())
     {
-      QIcon icon;
-      QString name;
-      if(!file.isEmpty())
-      {
-        QString imgFile = _project->dir().absoluteFilePath(file);
-        if(QFileInfo(imgFile).exists())
-          icon = QIcon(imgFile);
-        name = _project->dir().relativeFilePath(file);
-      }
-      QStandardItem* item = new QStandardItem(icon, name);
-      it.value()->insertRow(index +1, item); // +1 because of backgground
+      xAddElement(file, index, it.value());
     }
   }
 }
@@ -207,6 +168,61 @@ void TreeViewController::onDoubleClicked(const QModelIndex& index)
   SvgCompose::SvgAssembly* assembly = _link.key(item, NULL);
   if(assembly)
     Q_EMIT openAssembly(assembly);
+}
+
+void TreeViewController::xAddAssembly(SvgCompose::SvgAssembly* assembly, QStandardItem* root)
+{
+  QStandardItem* item = new QStandardItem(assembly->name());
+  item->setData(AssemblyType, TypeRole);
+  item->setEditable(false);
+  root->appendRow(item);
+  _link[assembly] = item;
+  xAssemblyConnectionSetup(assembly);
+
+  xAddBackground(assembly->background(), item);
+  for(int i=0; i<assembly->elementsCount(); ++i)
+  {
+    xAddElement(assembly->element(i).file, i, item);
+  }
+}
+
+void TreeViewController::xAddBackground(const QString& background, QStandardItem* assItem)
+{
+  QFont font;
+  font.setItalic(true);
+  QStandardItem* backItem;
+  if(background.isEmpty())
+    backItem = new QStandardItem("No background");
+  else
+  {
+    QString imgFile = _project->dir().absoluteFilePath(background);
+    QString name = _project->dir().relativeFilePath(background);
+    QIcon icon;
+    if(QFileInfo(imgFile).exists())
+      icon = QIcon(imgFile);
+    // TODO else icon = Icon::InvalideFile
+    backItem = new QStandardItem(icon, name);
+  }
+  backItem->setData(BackgroundType, TypeRole);
+  backItem->setEditable(false);
+  backItem->setSelectable(false);
+  backItem->setFont(font);
+  assItem->appendRow(backItem);
+}
+
+void TreeViewController::xAddElement(const QString& file, int index, QStandardItem* assItem)
+{
+  QString imgFile = _project->dir().absoluteFilePath(file);
+  QString name = _project->dir().relativeFilePath(file);
+  QIcon icon;
+  if(QFileInfo(imgFile).exists())
+    icon = QIcon(imgFile);
+  // TODO else icon = Icon::InvalideFile
+  QStandardItem* elemItem = new QStandardItem(icon, name);
+  elemItem->setData(ElementType, TypeRole);
+  elemItem->setEditable(false);
+  elemItem->setSelectable(false);
+  assItem->insertRow(index +1, elemItem); // +1 because of backgground
 }
 
 void TreeViewController::xAssemblyConnectionSetup(SvgCompose::SvgAssembly* assembly)

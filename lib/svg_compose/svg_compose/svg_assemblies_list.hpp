@@ -40,6 +40,7 @@ public:
 
 public Q_SLOTS:
   SvgAssembly* createNew();
+  bool removeAssembly(SvgCompose::SvgAssembly* assembly);
   void saveAssembly(SvgCompose::SvgAssembly* assembly);
   void saveAll();
 

@@ -191,4 +191,17 @@ SvgAssembly* SvgAssembliesList::createNew()
   return assembly;
 }
 
+bool SvgAssembliesList::removeAssembly(SvgCompose::SvgAssembly* assembly)
+{
+  int index = _assemblies.indexOf(assembly);
+  if(index == -1)
+    return false;
+
+  _assemblies.remove(index);
+  Q_EMIT assemblyRemoved(assembly);
+  delete assembly;
+
+  return true;
+}
+
 } // namespace Composition

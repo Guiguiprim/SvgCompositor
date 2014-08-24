@@ -71,6 +71,7 @@ void TreeViewController::onProjectChanged(
         subitem = new QStandardItem(QIcon(imgFile), assembly->background());
       }
       subitem->setEditable(false);
+      subitem->setSelectable(false);
       subitem->setFont(font);
       item->appendRow(subitem);
       Q_FOREACH(SvgCompose::SvgAssemblyElement element, assembly->elements())
@@ -78,6 +79,7 @@ void TreeViewController::onProjectChanged(
         imgFile = _project->dir().absoluteFilePath(element.file);
         subitem = new QStandardItem(QIcon(imgFile), element.file);
         subitem->setEditable(false);
+        subitem->setSelectable(false);
         item->appendRow(subitem);
       }
     }

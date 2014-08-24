@@ -181,7 +181,10 @@ bool CompositorController::closeProject(bool force)
 void CompositorController::createAssembly()
 {
   if(_project)
-    _project->createNew();
+  {
+    SvgCompose::SvgAssembly* assembly = _project->createNew();
+    openAssembly(assembly);
+  }
 }
 
 bool CompositorController::openAssembly(SvgCompose::SvgAssembly* assembly)

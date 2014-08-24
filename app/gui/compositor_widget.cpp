@@ -3,9 +3,9 @@
 #include <QAction>
 #include <QApplication>
 #include <QCloseEvent>
-#include <QHBoxLayout>
 #include <QMenu>
 #include <QMenuBar>
+#include <QSplitter>
 #include <QStackedWidget>
 #include <QStandardItemModel>
 #include <QTabWidget>
@@ -77,13 +77,14 @@ CompositorWidget::CompositorWidget(QWidget *parent)
   undoAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   editionMenu->addAction(undoAction);
 
-  QWidget* widget = new QWidget;
-  this->setCentralWidget(widget);
+  QSplitter* splitter = new QSplitter;
+  splitter->addWidget(_projectWidget);
+  splitter->setCollapsible(0,false);
+  splitter->addWidget(_widgetStack);
+  splitter->setCollapsible(1,false);
+  splitter->setSizes(QList<int>() << 200 << 600);
+  this->setCentralWidget(splitter);
 
-  QHBoxLayout* lyt = new QHBoxLayout(widget);
-  lyt->setMargin(0);
-  lyt->addWidget(_projectWidget, 1);
-  lyt->addWidget(_widgetStack, 3);
 
   _emptyIndex = _widgetStack->addWidget(new QWidget);
   _tabIndex = _widgetStack->addWidget(_tabWidget);

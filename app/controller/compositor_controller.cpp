@@ -1,5 +1,6 @@
 #include "compositor_controller.hpp"
 
+#include <QFileDialog>
 #include <QMetaType>
 
 #include <svg_compose/svg_assembly.hpp>
@@ -7,13 +8,15 @@
 #include <svg_compose/svg_compose.hpp>
 
 #include "gui/editor.hpp"
+#include "misc/last_dir.hpp"
 
 namespace SvgCompositor
 {
 const QString CompositorController::k_windowTitle = "SvgCompositor";
 
-CompositorController::CompositorController(QObject *parent)
+CompositorController::CompositorController(QWidget *parent)
   : QObject(parent)
+  , _parentWidget(parent)
   , _project(NULL)
   , _editors()
 {
@@ -40,6 +43,25 @@ void CompositorController::updateWindowTitle()
 
 bool CompositorController::createProject()
 {
+  if(_project && !closeProject())
+    return false;
+
+  QString file = QFileDialog::getSaveFileName(_parentWidget,
+                                                  tr("Create project"),
+                                                 LastDir::getProjectDir(),
+                                                  tr("Project") + " (*.cr)");
+  if(file.isEmpty())
+    return false;
+  LastDir::saveProjectDir(QFileInfo(file).absolutePath());
+
+  if(!file.endsWith(".cr", Qt::CaseInsensitive))
+    file += ".cr";
+
+  _project = new SvgCompose::SvgAssembliesList(file, this);
+  Q_EMIT projectChanged(_project);
+  updateWindowTitle();
+  connect(_project, SIGNAL(outputDirChanged(QString)),
+          this, SIGNAL(outputDirChanged(QString)));
   return true;
 }
 
@@ -51,7 +73,13 @@ bool CompositorController::openProject(const QString& filename)
   QString file = filename;
   if(filename.isEmpty())
   {
-    // ask for a project
+    file = QFileDialog::getOpenFileName(_parentWidget,
+                                        tr("Open project"),
+                                        LastDir::getProjectDir(),
+                                        tr("Project") + " (*.cr)");
+    if(file.isEmpty())
+      return false;
+    LastDir::saveProjectDir(QFileInfo(file).absolutePath());
   }
 
   _project = new SvgCompose::SvgAssembliesList(file, this);
@@ -74,10 +102,19 @@ bool CompositorController::saveProjectAs()
   if(!_project)
     return false;
 
-  QString filename;
-  // ask for a new file project
+  QString file = QFileDialog::getSaveFileName(_parentWidget,
+                                                  tr("Open project"),
+                                                 LastDir::getProjectDir(),
+                                                  tr("Project") + " (*.cr)");
+  if(file.isEmpty())
+    return false;
+  LastDir::saveProjectDir(QFileInfo(file).absolutePath());
 
-  _project->save(filename);
+  if(!file.endsWith(".cr", Qt::CaseInsensitive))
+    file += ".cr";
+
+  _project->save(file);
+  updateWindowTitle();
   return true;
 }
 

@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QMap>
 
+class QWidget;
+
 namespace SvgCompose
 {
 class SvgAssembliesList;
@@ -18,7 +20,7 @@ class CompositorController : public QObject
 {
   Q_OBJECT
 public:
-  explicit CompositorController(QObject *parent = NULL);
+  explicit CompositorController(QWidget *parent = NULL);
 
   SvgCompose::SvgAssembliesList* project() const;
 
@@ -52,6 +54,7 @@ private Q_SLOTS:
   bool xCloseAssembly(QMap<SvgCompose::SvgAssembly*, Editor*>::iterator it, bool force = false);
 
 private:
+  QWidget* _parentWidget;
   SvgCompose::SvgAssembliesList* _project;
   QMap<SvgCompose::SvgAssembly*, Editor*> _editors;
 

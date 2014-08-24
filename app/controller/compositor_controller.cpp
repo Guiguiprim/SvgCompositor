@@ -258,6 +258,21 @@ void CompositorController::setOutputDir(const QString& outputDir)
     _project->setOutputDir(outputDir);
 }
 
+void CompositorController::generateAssemblyImage(SvgCompose::SvgAssembly* assembly) const
+{
+  if(_project && assembly)
+  {
+    _project->dir().mkpath(_project->outputDir().path()); // ensure that the output dir exists
+    SvgCompose::generateAssembly(assembly, _project->dir(), _project->outputDir());
+  }
+}
+
+void CompositorController::generateProjectImages() const
+{
+  if(_project)
+    SvgCompose::generateAssemblies(_project);
+}
+
 void CompositorController::xOnAssemblyChanged()
 {
   SvgCompose::SvgAssembly* assembly = qobject_cast<SvgCompose::SvgAssembly*>(sender());

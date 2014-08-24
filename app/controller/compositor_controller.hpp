@@ -43,6 +43,9 @@ public Q_SLOTS:
   bool removeAssembly(SvgCompose::SvgAssembly* assembly);
   void setOutputDir(const QString& outputDir);
 
+  void generateAssemblyImage(SvgCompose::SvgAssembly* assembly) const;
+  void generateProjectImages() const;
+
 Q_SIGNALS:
   void setWindowTitle(const QString& title);
   void projectChanged(SvgCompose::SvgAssembliesList* _project);

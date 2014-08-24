@@ -98,17 +98,6 @@ CompositorWidget::CompositorWidget(QWidget *parent)
           _treeViewController, SLOT(onDoubleClicked(QModelIndex)));
   connect(_projectWidget->treeView(), SIGNAL(clicked(QModelIndex)),
           _treeViewController, SLOT(onClicked(QModelIndex)));
-  _controller->openProject("img/project.cr");
-  SvgCompose::SvgAssembliesList* project = _controller->project();
-  if(project)
-  {
-    Q_FOREACH(SvgCompose::SvgAssembly* assembly, project->assemblies())
-    {
-      _controller->openAssembly(assembly);
-    }
-  }
-
-  //SvgCompose::generateAssemblies(project);
   connect(_projectWidget, SIGNAL(outputDirChanged(QString)),
           _controller, SLOT(setOutputDir(QString)));
 

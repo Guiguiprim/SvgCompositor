@@ -42,14 +42,16 @@ CompositorWidget::CompositorWidget(QWidget *parent)
                                           SLOT(createProject()), QKeySequence::New);
   _openProjectAction = fileMenu->addAction("Open project", _controller,
                                            SLOT(openProject()), QKeySequence::Open);
-  _saveAssemblyAction = fileMenu->addAction("Save assembly", this,
+  _saveAssemblyAction = fileMenu->addAction("Save assembly in project", this,
                                             SLOT(xSaveCurrentAssembly()), QKeySequence::Save);
   _saveAllAction = fileMenu->addAction("Save all assemblies", _controller,
                                        SLOT(saveAll()), QKeySequence::SaveAs);
   _saveAsAction = fileMenu->addAction("Save project as", _controller,
                                       SLOT(saveProjectAs()));
+  _closeAssemblyAction = fileMenu->addAction("Close current assembly", this,
+                                             SLOT(xCloseCurrentAssembly()), QKeySequence::Close);
   _closeProjectAction = fileMenu->addAction("Close project", _controller,
-                                            SLOT(closeProject()), QKeySequence::Close);
+                                            SLOT(closeProject()), QKeySequence("Ctrl+Shift+W"));
   fileMenu->addSeparator();
   _quitAction = fileMenu->addAction("Quit", this, SLOT(xQuit()), QKeySequence::Quit);
 
@@ -131,7 +133,10 @@ void CompositorWidget::onAddEditor(Editor* editor, const QString& name)
   _tabWidget->addTab(editor, name);
   _tabWidget->setCurrentWidget(editor);
   if(_widgetStack->currentIndex() == _emptyIndex)
+  {
     _widgetStack->setCurrentIndex(_tabIndex);
+    _closeAssemblyAction->setEnabled(true);
+  }
 }
 
 void CompositorWidget::onRenameEditor(Editor* editor, const QString& name)
@@ -143,7 +148,10 @@ void CompositorWidget::onRemoveEditor(Editor* editor)
 {
   _tabWidget->removeTab(_tabWidget->indexOf(editor));
   if(_tabWidget->count() == 0)
+  {
     _widgetStack->setCurrentIndex(_emptyIndex);
+    _closeAssemblyAction->setEnabled(false);
+  }
 }
 
 void CompositorWidget::onSetCurrentEditor(Editor* editor)
@@ -158,6 +166,7 @@ void CompositorWidget::onProjectChanged(SvgCompose::SvgAssembliesList* _project)
   _saveAssemblyAction->setEnabled(active);
   _saveAllAction->setEnabled(active);
   _saveAsAction->setEnabled(active);
+  _closeAssemblyAction->setEnabled(false);
 }
 
 void CompositorWidget::xQuit()
@@ -172,6 +181,13 @@ void CompositorWidget::xSaveCurrentAssembly()
     _controller->saveAssembly(editor->assembly());
   else
     _controller->saveAll();
+}
+
+void CompositorWidget::xCloseCurrentAssembly()
+{
+  Editor* editor = qobject_cast<Editor*>(_tabWidget->currentWidget());
+  if(editor)
+    _controller->closeAssembly(editor->assembly());
 }
 
 void CompositorWidget::xOnTabCloseRequested(int index)

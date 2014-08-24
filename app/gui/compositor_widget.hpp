@@ -26,7 +26,7 @@ class CompositorWidget : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit CompositorWidget(QWidget *parent = NULL);
+  explicit CompositorWidget(QWidget *parent = NULL);
 
 public Q_SLOTS:
   void setWindowTitle(const QString& title);
@@ -39,27 +39,29 @@ public Q_SLOTS:
 private Q_SLOTS:
   void xQuit();
   void xSaveCurrentAssembly();
+  void xCloseCurrentAssembly();
   void xOnTabCloseRequested(int index);
   void xOnTabChanged(int index);
   void xOnModelChanged(QStandardItemModel* model);
 
 private:
-    QStackedWidget* _widgetStack;
-    QTabWidget* _tabWidget;
-    ProjectWidget* _projectWidget;
-    CompositorController* _controller;
-    TreeViewController* _treeViewController;
+  QStackedWidget* _widgetStack;
+  QTabWidget* _tabWidget;
+  ProjectWidget* _projectWidget;
+  CompositorController* _controller;
+  TreeViewController* _treeViewController;
 
-    QAction* _newProjectAction;
-    QAction* _openProjectAction;
-    QAction* _saveAssemblyAction;
-    QAction* _saveAllAction;
-    QAction* _saveAsAction;
-    QAction* _closeProjectAction;
-    QAction* _quitAction;
+  QAction* _newProjectAction;
+  QAction* _openProjectAction;
+  QAction* _saveAssemblyAction;
+  QAction* _saveAllAction;
+  QAction* _saveAsAction;
+  QAction* _closeAssemblyAction;
+  QAction* _closeProjectAction;
+  QAction* _quitAction;
 
-    int _emptyIndex;
-    int _tabIndex;
+  int _emptyIndex;
+  int _tabIndex;
 };
 
 } // namespace SvgCompositor

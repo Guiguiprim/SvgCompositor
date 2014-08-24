@@ -2,6 +2,7 @@
 
 #include <QAction>
 #include <QApplication>
+#include <QCloseEvent>
 #include <QHBoxLayout>
 #include <QMenu>
 #include <QMenuBar>
@@ -19,6 +20,7 @@
 #include "controller/tree_view_controller.hpp"
 #include "editor.hpp"
 #include "project_widget.hpp"
+#include "icon.hpp"
 
 namespace SvgCompositor
 {
@@ -53,7 +55,7 @@ CompositorWidget::CompositorWidget(QWidget *parent)
   _closeProjectAction = fileMenu->addAction("Close project", _controller,
                                             SLOT(closeProject()), QKeySequence("Ctrl+Shift+W"));
   fileMenu->addSeparator();
-  _quitAction = fileMenu->addAction("Quit", this, SLOT(xQuit()), QKeySequence::Quit);
+  _quitAction = fileMenu->addAction(Icon::buildIcon("exit"), "Quit", this, SLOT(close()), QKeySequence::Quit);
 
   QMenu* editionMenu = menuBar->addMenu("Edition");
   QAction* redoAction = _controller->undoGroup()->createRedoAction(this);
@@ -169,11 +171,6 @@ void CompositorWidget::onProjectChanged(SvgCompose::SvgAssembliesList* _project)
   _closeAssemblyAction->setEnabled(false);
 }
 
-void CompositorWidget::xQuit()
-{
-  qApp->quit();
-}
-
 void CompositorWidget::xSaveCurrentAssembly()
 {
   Editor* editor = qobject_cast<Editor*>(_tabWidget->currentWidget());
@@ -207,6 +204,20 @@ void CompositorWidget::xOnTabChanged(int index)
 void CompositorWidget::xOnModelChanged(QStandardItemModel* model)
 {
   _projectWidget->treeView()->setModel(model);
+}
+
+void CompositorWidget::closeEvent(QCloseEvent* event )
+{
+  if(_controller->project() &&
+     _controller->project()->hasChanged() &&
+     !_controller->closeProject())
+  {
+    event->ignore();
+  }
+  else
+  {
+    event->accept();
+  }
 }
 
 } // namespace SvgCompositor

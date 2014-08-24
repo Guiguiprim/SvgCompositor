@@ -37,12 +37,14 @@ public Q_SLOTS:
   void onProjectChanged(SvgCompose::SvgAssembliesList* _project);
 
 private Q_SLOTS:
-  void xQuit();
   void xSaveCurrentAssembly();
   void xCloseCurrentAssembly();
   void xOnTabCloseRequested(int index);
   void xOnTabChanged(int index);
   void xOnModelChanged(QStandardItemModel* model);
+
+protected:
+  virtual void closeEvent(QCloseEvent* event );
 
 private:
   QStackedWidget* _widgetStack;

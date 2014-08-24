@@ -48,6 +48,7 @@ public Q_SLOTS:
 Q_SIGNALS:
   void assemblyAdded(SvgCompose::SvgAssembly* assembly);
   void assemblyRemoved(SvgCompose::SvgAssembly* assembly);
+  void outputDirChanged(const QString& outputDir);
 
 private:
   QFileInfo _fileInfo;

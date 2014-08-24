@@ -79,6 +79,8 @@ CompositorWidget::CompositorWidget(QWidget *parent)
           this, SLOT(onRemoveEditor(Editor*)));
   connect(_controller, SIGNAL(setCurrentEditor(Editor*)),
           this, SLOT(onSetCurrentEditor(Editor*)));
+  connect(_controller, SIGNAL(outputDirChanged(QString)),
+          _projectWidget, SLOT(setOutputDir(QString)));
 
   connect(_controller, SIGNAL(projectChanged(SvgCompose::SvgAssembliesList*)),
           _treeViewController, SLOT(onProjectChanged(SvgCompose::SvgAssembliesList*)));
@@ -97,6 +99,8 @@ CompositorWidget::CompositorWidget(QWidget *parent)
   }
 
   //SvgCompose::generateAssemblies(project);
+  connect(_projectWidget, SIGNAL(outputDirChanged(QString)),
+          _controller, SLOT(setOutputDir(QString)));
 }
 
 void CompositorWidget::setWindowTitle(const QString& title)

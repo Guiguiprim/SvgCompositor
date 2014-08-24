@@ -4,6 +4,7 @@
 #include <QWidget>
 
 class QGroupBox;
+class QLineEdit;
 class QTreeView;
 class QToolBar;
 
@@ -17,11 +18,20 @@ public:
   explicit ProjectWidget(QWidget *parent = NULL);
 
   QTreeView* treeView() const;
+  QString outputDir() const;
+
+public Q_SLOTS:
+  void setOutputDir(const QString& outputDir);
+  void outputDirChanged();
+
+Q_SIGNALS:
+  void outputDirChanged(const QString& outputDir);
 
 private:
   QTreeView* _treeView;
   QToolBar* _toolBar;
   QGroupBox* _groupBox;
+  QLineEdit* _outputDir;
 };
 
 } // namespace SvgCompositor

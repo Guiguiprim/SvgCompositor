@@ -77,6 +77,7 @@ void SvgAssembliesList::setFileName(const QString& filename)
 void SvgAssembliesList::setOutputDir(const QString& path)
 {
   _outputDir = dir().relativeFilePath(path);
+  Q_EMIT outputDirChanged(_outputDir);
 }
 
 bool SvgAssembliesList::load(const QString& filename)

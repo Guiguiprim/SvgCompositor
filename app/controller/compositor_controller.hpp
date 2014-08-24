@@ -34,6 +34,7 @@ public Q_SLOTS:
 
   bool openAssembly(SvgCompose::SvgAssembly* assembly);
   bool closeAssembly(SvgCompose::SvgAssembly* assembly);
+  void setOutputDir(const QString& outputDir);
 
 Q_SIGNALS:
   void setWindowTitle(const QString& title);
@@ -43,6 +44,7 @@ Q_SIGNALS:
   void renameEditor(Editor*, const QString& name);
   void removeEditor(Editor*);
   void setCurrentEditor(Editor*);
+  void outputDirChanged(const QString& outputDir);
 
 private Q_SLOTS:
   void xOnAssemblyChanged();

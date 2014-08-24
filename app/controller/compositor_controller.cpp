@@ -63,6 +63,9 @@ bool CompositorController::openProject(const QString& filename)
   }
   Q_EMIT projectChanged(_project);
   updateWindowTitle();
+  Q_EMIT outputDirChanged(_project->dir().relativeFilePath(_project->outputDir().absolutePath()));
+  connect(_project, SIGNAL(outputDirChanged(QString)),
+          this, SIGNAL(outputDirChanged(QString)));
   return true;
 }
 
@@ -148,6 +151,12 @@ bool CompositorController::closeAssembly(SvgCompose::SvgAssembly* assembly)
     return false;
 
   return xCloseAssembly(it);
+}
+
+void CompositorController::setOutputDir(const QString& outputDir)
+{
+  if(_project)
+    _project->setOutputDir(outputDir);
 }
 
 void CompositorController::xOnAssemblyChanged()

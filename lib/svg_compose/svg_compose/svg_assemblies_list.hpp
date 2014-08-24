@@ -38,12 +38,13 @@ public:
   bool load(const QString& filename = QString());
   bool save(const QString& filename = QString());
 
-public slots:
+
+public Q_SLOTS:
   SvgAssembly* createNew();
   void saveAssembly(SvgCompose::SvgAssembly* assembly);
   void saveAll();
 
-signals:
+Q_SIGNALS:
   void assemblyAdded(SvgCompose::SvgAssembly* assembly);
   void assemblyRemoved(SvgCompose::SvgAssembly* assembly);
 

@@ -34,7 +34,7 @@ public Q_SLOTS:
   bool saveProjectAs();
   bool saveAssembly(SvgCompose::SvgAssembly* assembly);
   bool saveAll();
-  bool closeProject();
+  bool closeProject(bool force = false);
 
   bool openAssembly(SvgCompose::SvgAssembly* assembly);
   bool showAssembly(SvgCompose::SvgAssembly* assembly);

@@ -144,14 +144,30 @@ bool CompositorController::saveAll()
   return true;
 }
 
-bool CompositorController::closeProject()
+bool CompositorController::closeProject(bool force)
 {
-  // Check for save all or cancel !
+  bool toReset = false;
+  bool tosave = false;
+  if(!force && _project->hasChanged())
+  {
+    QMessageBox::StandardButton ret = QMessageBox::question(
+               _parentWidget, tr("Save changes"), tr("Some assemblies has unsaved changes. Do you want to save them ?"),
+               QMessageBox::SaveAll | QMessageBox::Discard | QMessageBox::Cancel);
+    if(ret == QMessageBox::Cancel)
+      return false;
+    else if(ret == QMessageBox::Discard)
+      toReset = true;
+    else
+      _project->saveAll();
+  }
+
   while(!_editors.isEmpty())
   {
     SvgCompose::SvgAssembly* assembly = _editors.begin().key();
     Editor* editor = _editors.begin().value();
     xCloseAssembly(assembly, editor, true);
+    if(toReset) // reset the assembly to the last save state
+      assembly->resetLastState();
   }
 
   Q_EMIT projectChanged(NULL);

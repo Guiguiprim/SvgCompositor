@@ -22,6 +22,8 @@ public:
 
   SvgCompose::SvgAssembliesList* project() const;
 
+  void updateWindowTitle();
+
 public Q_SLOTS:
   bool createProject();
   bool openProject(const QString& filename = QString());
@@ -34,6 +36,7 @@ public Q_SLOTS:
   bool closeAssembly(SvgCompose::SvgAssembly* assembly);
 
 Q_SIGNALS:
+  void setWindowTitle(const QString& title);
   void projectChanged(SvgCompose::SvgAssembliesList* _project);
 
   void addEditor(Editor*, const QString& name);
@@ -48,6 +51,9 @@ private Q_SLOTS:
 private:
   SvgCompose::SvgAssembliesList* _project;
   QMap<SvgCompose::SvgAssembly*, Editor*> _editors;
+
+public:
+  static const QString k_windowTitle;
 };
 
 } // namespace SvgCompositor

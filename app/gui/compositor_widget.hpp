@@ -24,6 +24,7 @@ public:
     explicit CompositorWidget(QWidget *parent = NULL);
 
 public Q_SLOTS:
+  void setWindowTitle(const QString& title);
   void onAddEditor(Editor*, const QString& name);
   void onRenameEditor(Editor*, const QString& name);
   void onRemoveEditor(Editor*);

@@ -38,6 +38,7 @@ public:
   bool load(const QString& filename = QString());
   bool save(const QString& filename = QString());
 
+  bool hasChanged() const;
 
 public Q_SLOTS:
   SvgAssembly* createNew();

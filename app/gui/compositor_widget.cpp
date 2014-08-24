@@ -30,6 +30,8 @@ CompositorWidget::CompositorWidget(QWidget *parent)
   , _controller(new CompositorController(this))
   , _treeViewController(new TreeViewController(this))
 {
+  this->QMainWindow::setWindowTitle(CompositorController::k_windowTitle);
+
   QMenuBar* menuBar = new QMenuBar;
   this->setMenuBar(menuBar);
 
@@ -67,6 +69,8 @@ CompositorWidget::CompositorWidget(QWidget *parent)
   connect(_tabWidget, SIGNAL(tabCloseRequested(int)),
           this, SLOT(xOnTabCloseRequested(int)));
 
+  connect(_controller, SIGNAL(setWindowTitle(QString)),
+          this, SLOT(setWindowTitle(QString)));
   connect(_controller, SIGNAL(addEditor(Editor*,QString)),
           this, SLOT(onAddEditor(Editor*,QString)));
   connect(_controller, SIGNAL(renameEditor(Editor*,QString)),
@@ -93,6 +97,11 @@ CompositorWidget::CompositorWidget(QWidget *parent)
   }
 
   //SvgCompose::generateAssemblies(project);
+}
+
+void CompositorWidget::setWindowTitle(const QString& title)
+{
+  this->QMainWindow::setWindowTitle(title);
 }
 
 void CompositorWidget::onAddEditor(Editor* editor, const QString& name)

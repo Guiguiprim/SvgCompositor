@@ -156,6 +156,17 @@ bool SvgAssembliesList::save(const QString& filename)
   return true;
 }
 
+bool SvgAssembliesList::hasChanged() const
+{
+  Q_FOREACH(SvgAssembly* assembly, _assemblies)
+  {
+    if(assembly->hasChanged())
+      return true;
+  }
+
+  return false;
+}
+
 void SvgAssembliesList::saveAssembly(SvgAssembly* assembly)
 {
   if(!assembly || !_assemblies.contains(assembly))

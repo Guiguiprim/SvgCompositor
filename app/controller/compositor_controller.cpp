@@ -10,6 +10,7 @@
 
 namespace SvgCompositor
 {
+const QString CompositorController::k_windowTitle = "SvgCompositor";
 
 CompositorController::CompositorController(QObject *parent)
   : QObject(parent)
@@ -23,6 +24,18 @@ CompositorController::CompositorController(QObject *parent)
 SvgCompose::SvgAssembliesList* CompositorController::project() const
 {
   return _project;
+}
+
+void CompositorController::updateWindowTitle()
+{
+  if(_project)
+  {
+    QString title = _project->fileName() + " - " + k_windowTitle;
+    _project->hasChanged() ? "*" + title : title;
+    Q_EMIT setWindowTitle(title);
+  }
+  else
+    Q_EMIT setWindowTitle(k_windowTitle);
 }
 
 bool CompositorController::createProject()
@@ -49,6 +62,7 @@ bool CompositorController::openProject(const QString& filename)
     return false;
   }
   Q_EMIT projectChanged(_project);
+  updateWindowTitle();
   return true;
 }
 
@@ -69,6 +83,7 @@ bool CompositorController::saveAssembly(SvgCompose::SvgAssembly* assembly)
   if(!_project)
     return false;
   _project->saveAssembly(assembly);
+  updateWindowTitle();
   return true;
 }
 
@@ -77,6 +92,7 @@ bool CompositorController::saveAll()
   if(!_project)
     return false;
   _project->saveAll();
+  updateWindowTitle();
   return true;
 }
 
@@ -90,6 +106,7 @@ bool CompositorController::closeProject()
   delete _project;
   _project = NULL;
 
+  updateWindowTitle();
   return true;
 }
 

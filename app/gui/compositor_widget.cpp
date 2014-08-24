@@ -41,7 +41,7 @@ CompositorWidget::CompositorWidget(QWidget *parent)
   QMenu* fileMenu = menuBar->addMenu("File");
 
   _newProjectAction = fileMenu->addAction(Icon::create(), "New project", _controller,
-                                          SLOT(createProject()), QKeySequence::New);
+                                          SLOT(createProject()), QKeySequence("Ctrl+Shift+N"));
   _openProjectAction = fileMenu->addAction(Icon::open(), "Open project", _controller,
                                            SLOT(openProject()), QKeySequence::Open);
   _saveAssemblyAction = fileMenu->addAction(Icon::save(), "Save assembly in project", this,
@@ -58,6 +58,13 @@ CompositorWidget::CompositorWidget(QWidget *parent)
   _quitAction = fileMenu->addAction(Icon::exit(), "Quit", this, SLOT(close()), QKeySequence::Quit);
 
   QMenu* editionMenu = menuBar->addMenu("Edition");
+
+  editionMenu->addAction(_projectWidget->addAssemblyAction());
+  editionMenu->addAction(_projectWidget->removeAssemblyAction());
+  editionMenu->addAction(_projectWidget->generateAssemblyAction());
+  editionMenu->addAction(_projectWidget->generateProjectAction());
+  editionMenu->addSeparator();
+
   QAction* redoAction = _controller->undoGroup()->createRedoAction(this);
   redoAction->setIcon(Icon::redo());
   redoAction->setShortcut(QKeySequence::Redo);
@@ -196,6 +203,8 @@ void CompositorWidget::onProjectChanged(SvgCompose::SvgAssembliesList* _project)
   _saveAllAction->setEnabled(active);
   _saveAsAction->setEnabled(active);
   _closeProjectAction->setEnabled(active);
+  _projectWidget->addAssemblyAction()->setEnabled(active);
+  _projectWidget->generateProjectAction()->setEnabled(active);
   _closeAssemblyAction->setEnabled(false);
 }
 

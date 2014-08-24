@@ -20,6 +20,11 @@ public:
   QTreeView* treeView() const;
   QString outputDir() const;
 
+  QAction* addAssemblyAction() const;
+  QAction* removeAssemblyAction() const;
+  QAction* generateAssemblyAction() const;
+  QAction* generateProjectAction() const;
+
 public Q_SLOTS:
   void setOutputDir(const QString& outputDir);
   void outputDirChanged();
@@ -40,8 +45,11 @@ private:
   QTreeView* _treeView;
   QToolBar* _toolBar;
   QLineEdit* _outputDir;
-  QAction* _removeAction;
-  QAction* _generateAction;
+
+  QAction* _addAssemblyAction;
+  QAction* _removeAssemblyAction;
+  QAction* _generateAssemblyAction;
+  QAction* _generateProjectAction;
 };
 
 } // namespace SvgCompositor

@@ -29,14 +29,16 @@ ProjectWidget::ProjectWidget(QWidget *parent)
   _treeView->setHeaderHidden(true);
   _treeView->setContextMenuPolicy(Qt::CustomContextMenu);
 
-  _toolBar->addAction(Icon::add(), "Add new assembly",
+  _addAssemblyAction = _toolBar->addAction(Icon::add(), "Add new assembly",
                       this, SIGNAL(addAssembly()));
-  _removeAction = _toolBar->addAction(Icon::remove(), "Remove assembly",
+  _addAssemblyAction->setShortcut(QKeySequence::New);
+  _removeAssemblyAction = _toolBar->addAction(Icon::remove(), "Remove assembly",
                                       this, SIGNAL(removeAssembly()));
+  _removeAssemblyAction->setShortcut(QKeySequence("Ctrl+D"));
   _toolBar->addSeparator();
-  _generateAction = _toolBar->addAction(Icon::image(), "Generate current assembly image",
+  _generateAssemblyAction = _toolBar->addAction(Icon::image(), "Generate assembly image",
                                         this, SIGNAL(generateAssemblyImage()));
-  _toolBar->addAction(Icon::images(), "Generate project images",
+  _generateProjectAction = _toolBar->addAction(Icon::images(), "Generate project images",
                       this, SIGNAL(generateProjectImages()));
   enableAssemblyAction(false);
 
@@ -54,6 +56,26 @@ QTreeView* ProjectWidget::treeView() const
 QString ProjectWidget::outputDir() const
 {
   return _outputDir->text();
+}
+
+QAction* ProjectWidget::addAssemblyAction() const
+{
+  return _addAssemblyAction;
+}
+
+QAction* ProjectWidget::removeAssemblyAction() const
+{
+  return _removeAssemblyAction;
+}
+
+QAction* ProjectWidget::generateAssemblyAction() const
+{
+  return _generateAssemblyAction;
+}
+
+QAction* ProjectWidget::generateProjectAction() const
+{
+  return _generateProjectAction;
 }
 
 void ProjectWidget::setOutputDir(const QString& outputDir)
@@ -75,8 +97,8 @@ void ProjectWidget::onCustomMenuRequested(const QPoint& pos)
 
 void ProjectWidget::enableAssemblyAction(bool enable)
 {
-  _removeAction->setEnabled(enable);
-  _generateAction->setEnabled(enable);
+  _removeAssemblyAction->setEnabled(enable);
+  _generateAssemblyAction->setEnabled(enable);
 }
 
 } // namespace SvgCompositor

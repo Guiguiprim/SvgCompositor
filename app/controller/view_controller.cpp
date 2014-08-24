@@ -66,6 +66,7 @@ void ViewController::xConnectDescription()
 void ViewController::xCreateItem()
 {
   _item = new GraphicsItem;
+  _item->setSize((int)_assembly->size());
   if(!_assembly->background().isEmpty())
     _item->setBackground(_assembly->project()->dir().absoluteFilePath(_assembly->background()));
   int index = 0;

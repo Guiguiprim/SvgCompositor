@@ -35,10 +35,12 @@ public Q_SLOTS:
   bool saveAssembly(SvgCompose::SvgAssembly* assembly);
   bool saveAll();
   bool closeProject(bool force = false);
+  void createAssembly();
 
   bool openAssembly(SvgCompose::SvgAssembly* assembly);
   bool showAssembly(SvgCompose::SvgAssembly* assembly);
   bool closeAssembly(SvgCompose::SvgAssembly* assembly);
+  bool removeAssembly(SvgCompose::SvgAssembly* assembly);
   void setOutputDir(const QString& outputDir);
 
 Q_SIGNALS:

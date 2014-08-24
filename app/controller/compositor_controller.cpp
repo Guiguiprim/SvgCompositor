@@ -178,6 +178,12 @@ bool CompositorController::closeProject(bool force)
   return true;
 }
 
+void CompositorController::createAssembly()
+{
+  if(_project)
+    _project->createNew();
+}
+
 bool CompositorController::openAssembly(SvgCompose::SvgAssembly* assembly)
 {
   if(showAssembly(assembly))
@@ -224,6 +230,26 @@ bool CompositorController::closeAssembly(SvgCompose::SvgAssembly* assembly)
     return false;
 
   return xCloseAssembly(it.key(), it.value());
+}
+
+bool CompositorController::removeAssembly(SvgCompose::SvgAssembly* assembly)
+{
+  if(!_project || !assembly)
+    return false;
+
+  QMessageBox::StandardButton ret = QMessageBox::question(
+             _parentWidget, tr("Remove assembly"), tr("Do you really want to remove the assembly ?\nThat action can't be undone."),
+             QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel);
+
+  if(ret != QMessageBox::Ok)
+    return false;
+
+  QMap<SvgCompose::SvgAssembly*, Editor*>::iterator it;
+  it = _editors.find(assembly);
+  if(it != _editors.end())
+    xCloseAssembly(it.key(), it.value(), true);
+
+  return _project->removeAssembly(assembly);
 }
 
 void CompositorController::setOutputDir(const QString& outputDir)

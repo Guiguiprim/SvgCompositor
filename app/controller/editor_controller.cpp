@@ -161,6 +161,7 @@ void EditorController::onElementsMoved(ItemsMove itemsMove)
   if(_assembly && itemsMove.count() > 0)
   {
     QUndoCommand* cmd = new QUndoCommand;
+    cmd->setText("Move");
     Q_FOREACH(ItemMove item, itemsMove)
     {
       new SvgAssemblyCommand::SetPos(_assembly, item.index,

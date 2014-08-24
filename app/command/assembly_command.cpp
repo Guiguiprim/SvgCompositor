@@ -71,7 +71,7 @@ SetName::SetName(
   , _oldName(assembly->name())
   , _name(name)
 {
-  setText("SvgAssemblyCommand::SetName");
+  setText("Set name");
 }
 
 bool SetName::mergeWith(const QUndoCommand* other)
@@ -102,7 +102,7 @@ SetBackground::SetBackground(
   , _oldBackground(assembly->background())
   , _background(background)
 {
-  setText("SvgAssemblyCommand::SetBackground");
+  setText("Set background");
 }
 
 bool SetBackground::mergeWith(const QUndoCommand* other)
@@ -127,7 +127,7 @@ RemoveBackground::RemoveBackground(
   : SvgAssemblyCommandBase(assembly, false, parent)
   , _oldBackground(assembly->background())
 {
-  setText("SvgAssemblyCommand::RemoveBackground");
+  setText("Remove background");
 }
 
 bool RemoveBackground::mergeWith(const QUndoCommand* other)
@@ -157,7 +157,7 @@ AddElement::AddElement(
   , _addedIndex(0)
   , _file(file)
 {
-  setText("SvgAssemblyCommand::AddElement");
+  setText("Add element");
 }
 
 bool AddElement::mergeWith(const QUndoCommand* other)
@@ -186,7 +186,7 @@ SizeChanged::SizeChanged(
   , _oldSize(assembly->size())
   , _size(size)
 {
-  setText("SvgAssemblyCommand::SizeChanged");
+  setText("Changed size");
 }
 
 bool SizeChanged::mergeWith(const QUndoCommand* other)
@@ -216,7 +216,7 @@ Remove::Remove(
   : SvgAssemblyCommandIndex(assembly, index, true, parent)
   , _oldElement(assembly->element(index))
 {
-  setText("SvgAssemblyCommand::Remove");
+  setText("Remove element");
 }
 
 bool Remove::mergeWith(const QUndoCommand* other)
@@ -244,7 +244,7 @@ Lower::Lower(
   : SvgAssemblyCommandIndex(assembly, index, true, parent)
   , _oldIndex(index - 1)
 {
-  setText("SvgAssemblyCommand::Lower");
+  setText("Lower element");
 }
 
 bool Lower::mergeWith(const QUndoCommand* other)
@@ -272,7 +272,7 @@ Raise::Raise(
   : SvgAssemblyCommandIndex(assembly, index, true, parent)
   , _oldIndex(index + 1)
 {
-  setText("SvgAssemblyCommand::Raise");
+  setText("Raise element");
 }
 
 bool Raise::mergeWith(const QUndoCommand* other)
@@ -300,7 +300,7 @@ HCenter::HCenter(
   : SvgAssemblyCommandIndex(assembly, index, false, parent)
   , _oldDx(assembly->element(index).dx)
 {
-  setText("SvgAssemblyCommand::HCenter");
+  setText("Horizontal center");
 }
 
 bool HCenter::mergeWith(const QUndoCommand* other)
@@ -329,7 +329,7 @@ VCenter::VCenter(
   : SvgAssemblyCommandIndex(assembly, index, false, parent)
   , _oldDy(assembly->element(index).dy)
 {
-  setText("SvgAssemblyCommand::VCenter");
+  setText("Vertical center");
 }
 
 bool VCenter::mergeWith(const QUndoCommand* other)
@@ -361,7 +361,7 @@ ScaleChanged::ScaleChanged(
   , _oldScale(assembly->element(index).scale)
   , _scale(scale)
 {
-  setText("SvgAssemblyCommand::ScaleChanged");
+  setText("Change scale");
 }
 
 bool ScaleChanged::mergeWith(const QUndoCommand* other)
@@ -394,7 +394,7 @@ MoveDy::MoveDy(
   , _oldDy(assembly->element(index).dy)
   , _dy(dy)
 {
-  setText("SvgAssemblyCommand::MoveDy");
+  setText("Move dy");
 }
 
 bool MoveDy::mergeWith(const QUndoCommand* other)
@@ -427,7 +427,7 @@ MoveDx::MoveDx(
   , _oldDx(assembly->element(index).dx)
   , _dx(dx)
 {
-  setText("SvgAssemblyCommand::MoveDx");
+  setText("Move dx");
 }
 
 bool MoveDx::mergeWith(const QUndoCommand* other)
@@ -463,7 +463,7 @@ SetPos::SetPos(
   , _dx(dx)
   , _dy(dy)
 {
-  setText("SvgAssemblyCommand::SetPos");
+  setText("Move");
 }
 
 bool SetPos::mergeWith(const QUndoCommand* other)

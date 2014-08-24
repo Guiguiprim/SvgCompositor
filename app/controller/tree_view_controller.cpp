@@ -98,7 +98,7 @@ void TreeViewController::onAssemblyChanged()
     Link::iterator it = _link.find(assembly);
     if(it != _link.end())
     {
-      it.value()->setData(it.key()->hasChanged() ? "*" + it.key()->name() : it.key()->name(),
+      it.value()->setData(it.key()->hasChanged() ?  it.key()->name() + "*" : it.key()->name(),
                           Qt::DisplayRole);
       QFont font = it.value()->font();
       font.setBold(it.key()->hasChanged());

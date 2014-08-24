@@ -5,6 +5,8 @@
 
 class QLineEdit;
 class QModelIndex;
+class QSortFilterProxyModel;
+class QStandardItemModel;
 class QTreeView;
 class QToolBar;
 
@@ -17,7 +19,6 @@ class ProjectWidget : public QWidget
 public:
   explicit ProjectWidget(QWidget *parent = NULL);
 
-  QTreeView* treeView() const;
   QString outputDir() const;
 
   QAction* addAssemblyAction() const;
@@ -32,6 +33,12 @@ public Q_SLOTS:
 
   void enableAssemblyAction(bool enable);
 
+  void onClicked(const QModelIndex& proxyIndex);
+  void onDoubleClicked(const QModelIndex& proxyIndex);
+
+  void setItemModel(QStandardItemModel* model);
+  void resort();
+
 Q_SIGNALS:
   void outputDirChanged(const QString& outputDir);
   void customMenuRequested(const QModelIndex& index, const QPoint& pos);
@@ -41,10 +48,14 @@ Q_SIGNALS:
   void generateAssemblyImage();
   void generateProjectImages();
 
+  void clicked(const QModelIndex& index);
+  void doubleClicked(const QModelIndex& index);
+
 private:
   QTreeView* _treeView;
   QToolBar* _toolBar;
   QLineEdit* _outputDir;
+  QSortFilterProxyModel* _proxyModel;
 
   QAction* _addAssemblyAction;
   QAction* _removeAssemblyAction;

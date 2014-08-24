@@ -4,6 +4,8 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QSortFilterProxyModel>
+#include <QStandardItemModel>
 #include <QTreeView>
 #include <QToolBar>
 #include <QToolButton>
@@ -19,6 +21,7 @@ ProjectWidget::ProjectWidget(QWidget *parent)
   , _treeView(new QTreeView)
   , _toolBar(new QToolBar)
   , _outputDir(new QLineEdit)
+  , _proxyModel(new QSortFilterProxyModel(this))
 {
   QVBoxLayout* lyt = new QVBoxLayout(this);
   lyt->addWidget(new QLabel("Output dir:"));
@@ -26,8 +29,12 @@ ProjectWidget::ProjectWidget(QWidget *parent)
   lyt->addWidget(_treeView);
   lyt->addWidget(_toolBar);
 
+  _treeView->setModel(_proxyModel);
   _treeView->setHeaderHidden(true);
   _treeView->setContextMenuPolicy(Qt::CustomContextMenu);
+
+  _proxyModel->setDynamicSortFilter(true);
+  _proxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
 
   _addAssemblyAction = _toolBar->addAction(Icon::add(), "Add new assembly",
                       this, SIGNAL(addAssembly()));
@@ -44,13 +51,13 @@ ProjectWidget::ProjectWidget(QWidget *parent)
 
   connect(_outputDir, SIGNAL(editingFinished()),
           this, SLOT(outputDirChanged()));
+
   connect(_treeView, SIGNAL(customContextMenuRequested(QPoint)),
           this, SLOT(onCustomMenuRequested(QPoint)));
-}
-
-QTreeView* ProjectWidget::treeView() const
-{
-  return _treeView;
+  connect(_treeView, SIGNAL(doubleClicked(QModelIndex)),
+          this, SLOT(onDoubleClicked(QModelIndex)));
+  connect(_treeView, SIGNAL(clicked(QModelIndex)),
+          this, SLOT(onClicked(QModelIndex)));
 }
 
 QString ProjectWidget::outputDir() const
@@ -90,7 +97,8 @@ void ProjectWidget::outputDirChanged()
 
 void ProjectWidget::onCustomMenuRequested(const QPoint& pos)
 {
-  QModelIndex index = _treeView->indexAt(pos);
+  QModelIndex proxyIndex = _treeView->indexAt(pos);
+  QModelIndex index = _proxyModel->mapToSource(proxyIndex);
   QPoint gPos = _treeView->mapToGlobal(pos);
   Q_EMIT customMenuRequested(index, gPos);
 }
@@ -99,6 +107,30 @@ void ProjectWidget::enableAssemblyAction(bool enable)
 {
   _removeAssemblyAction->setEnabled(enable);
   _generateAssemblyAction->setEnabled(enable);
+}
+
+void ProjectWidget::onClicked(const QModelIndex& proxyIndex)
+{
+  QModelIndex index = _proxyModel->mapToSource(proxyIndex);
+  Q_EMIT clicked(index);
+}
+
+void ProjectWidget::onDoubleClicked(const QModelIndex& proxyIndex)
+{
+  QModelIndex index = _proxyModel->mapToSource(proxyIndex);
+  Q_EMIT doubleClicked(index);
+}
+
+void ProjectWidget::setItemModel(QStandardItemModel* model)
+{
+  _proxyModel->setSourceModel(model);
+  _proxyModel->setDynamicSortFilter(true);
+  _proxyModel->sort(0);
+}
+
+void ProjectWidget::resort()
+{
+  _proxyModel->sort(0);
 }
 
 } // namespace SvgCompositor

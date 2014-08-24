@@ -130,17 +130,14 @@ CompositorWidget::CompositorWidget(QWidget *parent)
 
   connect(_treeViewController, SIGNAL(enableAssemblyActions(bool)),
           _projectWidget, SLOT(enableAssemblyAction(bool)));
-
   connect(_treeViewController, SIGNAL(modelChanged(QStandardItemModel*)),
-          this, SLOT(xOnModelChanged(QStandardItemModel*)));
-
-  // projectWidget::TreeView connections
-  connect(_projectWidget->treeView(), SIGNAL(doubleClicked(QModelIndex)),
-          _treeViewController, SLOT(onDoubleClicked(QModelIndex)));
-  connect(_projectWidget->treeView(), SIGNAL(clicked(QModelIndex)),
-          _treeViewController, SLOT(onClicked(QModelIndex)));
+          _projectWidget, SLOT(setItemModel(QStandardItemModel*)));
 
   // projectWidget connections
+  connect(_projectWidget, SIGNAL(doubleClicked(QModelIndex)),
+          _treeViewController, SLOT(onDoubleClicked(QModelIndex)));
+  connect(_projectWidget, SIGNAL(clicked(QModelIndex)),
+          _treeViewController, SLOT(onClicked(QModelIndex)));
   connect(_projectWidget, SIGNAL(customMenuRequested(QModelIndex,QPoint)),
           _treeViewController, SLOT(customMenuRequested(QModelIndex,QPoint)));
   connect(_projectWidget, SIGNAL(generateAssemblyImage()),
@@ -236,11 +233,6 @@ void CompositorWidget::xOnTabChanged(int index)
   Editor* editor = qobject_cast<Editor*>(_tabWidget->widget(index));
   if(editor)
     _controller->undoGroup()->setActiveStack(editor->undoStack());
-}
-
-void CompositorWidget::xOnModelChanged(QStandardItemModel* model)
-{
-  _projectWidget->treeView()->setModel(model);
 }
 
 void CompositorWidget::closeEvent(QCloseEvent* event )

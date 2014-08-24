@@ -41,7 +41,6 @@ private Q_SLOTS:
   void xCloseCurrentAssembly();
   void xOnTabCloseRequested(int index);
   void xOnTabChanged(int index);
-  void xOnModelChanged(QStandardItemModel* model);
 
 protected:
   virtual void closeEvent(QCloseEvent* event );

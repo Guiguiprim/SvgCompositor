@@ -9,7 +9,7 @@ namespace SvgCompose
 
 SvgAssembliesList::SvgAssembliesList(QObject *parent)
   : QObject(parent)
-  , _fileInfo("")
+  , _fileInfo("untitled.cr")
   , _outputDir()
   , _assemblies()
 {

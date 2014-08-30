@@ -61,6 +61,8 @@ Editor::Editor(QWidget *parent)
           _editorController, SLOT(onElementsMoved(ItemsMove)));
   connect(_buttonBarController, SIGNAL(actionTriggered(int,Action)),
           _editorController, SLOT(onAction(int,Action)));
+  connect(_buttonBarController, SIGNAL(actionValueTriggered(int,Action,qreal)),
+          _editorController, SLOT(onActionValue(int,Action,qreal)));
   connect(_buttonBarController, SIGNAL(nameChanged(QString)),
           _editorController, SLOT(onNameEdited(QString)));
 

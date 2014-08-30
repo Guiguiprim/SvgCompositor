@@ -30,6 +30,7 @@ public:
 public Q_SLOTS:
   void onNameEdited(const QString& name);
   void onAction(int index, Action action);
+  void onActionValue(int index, Action action, qreal value);
   void onElementsMoved(ItemsMove itemsMove);
 
 private:

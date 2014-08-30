@@ -139,6 +139,30 @@ void EditorController::onAction(int index, Action action)
   }
 }
 
+void EditorController::onActionValue(int index, Action action, qreal value)
+{
+  if(!_assembly)
+    return;
+
+  if(index == -1 && index < _assembly->elementsCount())
+    return;
+
+  switch(action) // assembly element action
+  {
+  case ScaleChanged:
+    _undoStack->push( new SvgAssemblyCommand::ScaleChanged(_assembly, index, value));
+    break;
+  case MoveDy:
+    _undoStack->push( new SvgAssemblyCommand::MoveDy(_assembly, index, value));
+    break;
+  case MoveDx:
+    _undoStack->push( new SvgAssemblyCommand::MoveDx(_assembly, index, value));
+    break;
+  default:
+    break;
+  }
+}
+
 void EditorController::onElementsMoved(ItemsMove itemsMove)
 {
   if(_assembly && itemsMove.count() > 0)

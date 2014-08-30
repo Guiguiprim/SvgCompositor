@@ -44,8 +44,10 @@ public Q_SLOTS:
 Q_SIGNALS:
   void nameChanged(const QString& name);
   void actionTriggered(Action action);
+  void actionValueTriggered(Action action, qreal value);
 
 private Q_SLOTS:
+  void xOnSpinValueChanged();
   void xOnActionTriggered(int action);
   void xOnNameEdited();
 

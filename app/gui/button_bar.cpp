@@ -70,6 +70,13 @@ ButtonBar::ButtonBar(QWidget *parent)
   connect(_ui->nameEdit, SIGNAL(editingFinished()),
           SLOT(xOnNameEdited()));
 
+  connect(_ui->scaleSpin, SIGNAL(editingFinished()),
+          this, SLOT(xOnSpinValueChanged()));
+  connect(_ui->xPosSpin, SIGNAL(editingFinished()),
+          this, SLOT(xOnSpinValueChanged()));
+  connect(_ui->yPosSpin, SIGNAL(editingFinished()),
+          this, SLOT(xOnSpinValueChanged()));
+
   //setButtonsSize(20);
 }
 
@@ -124,22 +131,30 @@ void ButtonBar::setNameValid(bool valid)
 
 void ButtonBar::setSizeValue(int size)
 {
+  _ui->sizeSpin->blockSignals(true);
   _ui->sizeSpin->setValue(size);
+  _ui->sizeSpin->blockSignals(false);
 }
 
 void ButtonBar::setScaleValue(qreal scale)
 {
+  _ui->scaleSpin->blockSignals(true);
   _ui->scaleSpin->setValue(scale);
+  _ui->scaleSpin->blockSignals(false);
 }
 
 void ButtonBar::setXPosValue(qreal x)
 {
+  _ui->xPosSpin->blockSignals(true);
   _ui->xPosSpin->setValue(x);
+  _ui->xPosSpin->blockSignals(false);
 }
 
 void ButtonBar::setYPosValue(qreal y)
 {
+  _ui->yPosSpin->blockSignals(true);
   _ui->yPosSpin->setValue(y);
+  _ui->yPosSpin->blockSignals(false);
 }
 
 void ButtonBar::setSelectionExist(bool exist)
@@ -187,6 +202,16 @@ void ButtonBar::setButtonsSize(int size)
   _ui->downButton->setIconSize(QSize(size, size));
   _ui->noBackButton->setIconSize(QSize(size, size));
   _ui->backgroundButton->setIconSize(QSize(size, size));
+}
+
+void ButtonBar::xOnSpinValueChanged()
+{
+  if(sender() == _ui->scaleSpin)
+    Q_EMIT actionValueTriggered(ScaleChanged, (qreal)_ui->scaleSpin->value());
+  else if(sender() == _ui->xPosSpin)
+    Q_EMIT actionValueTriggered(MoveDx, (qreal)_ui->xPosSpin->value());
+  else if(sender() == _ui->yPosSpin)
+    Q_EMIT actionValueTriggered(MoveDy, (qreal)_ui->yPosSpin->value());
 }
 
 void ButtonBar::xOnActionTriggered(int action)

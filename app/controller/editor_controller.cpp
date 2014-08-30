@@ -45,7 +45,6 @@ QUndoStack* EditorController::undoStack() const
 void EditorController::onNameEdited(const QString& name)
 {
   if(_assembly)
-    //_assembly->setName(name);
     _undoStack->push( new SvgAssemblyCommand::SetName(_assembly, name) );
 }
 
@@ -64,12 +63,10 @@ void EditorController::onAction(int index, Action action)
     if(absoluteFile.isEmpty())
       break;
     LastDir::saveBackgroundDir(QFileInfo(absoluteFile).absolutePath());
-    //_assembly->setBackground(absoluteFile);
     _undoStack->push( new SvgAssemblyCommand::SetBackground(_assembly, absoluteFile) );
     break;
   }
   case RemoveBackground:
-    //_assembly->setBackground("");
     _undoStack->push( new SvgAssemblyCommand::RemoveBackground(_assembly) );
     break;
   case AddElement:
@@ -80,16 +77,13 @@ void EditorController::onAction(int index, Action action)
     if(absoluteFile.isEmpty())
       break;
     LastDir::saveLogoDir(QFileInfo(absoluteFile).absolutePath());
-    //_assembly->addElement(absoluteFile);
     _undoStack->push( new SvgAssemblyCommand::AddElement(_assembly, absoluteFile) );
     break;
   }
   case SizeIncrease:
-    //_assembly->setSize(increaseSize(_assembly->size()));
     _undoStack->push( new SvgAssemblyCommand::SizeChanged(_assembly, increaseSize(_assembly->size())) );
     break;
   case SizeDecrease:
-    //_assembly->setSize(decreaseSize(_assembly->size()));
     _undoStack->push( new SvgAssemblyCommand::SizeChanged(_assembly, decreaseSize(_assembly->size())) );
     break;
   default:
@@ -102,52 +96,41 @@ void EditorController::onAction(int index, Action action)
   switch(action) // assembly element action
   {
   case Remove:
-    //_assembly->removeElement(index);
     _undoStack->push( new SvgAssemblyCommand::Remove(_assembly, index) );
     break;
   case Lower:
-    //_assembly->lowerElement(index);
     _undoStack->push( new SvgAssemblyCommand::Lower(_assembly, index) );
     break;
   case Raise:
-    //_assembly->raiseElement(index);
     _undoStack->push( new SvgAssemblyCommand::Raise(_assembly, index) );
     break;
   case HCenter:
-    //_assembly->setElementHCenter(index);
     _undoStack->push( new SvgAssemblyCommand::HCenter(_assembly, index) );
     break;
   case VCenter:
-    //_assembly->setElementVCenter(index);
     _undoStack->push( new SvgAssemblyCommand::VCenter(_assembly, index) );
     break;
   case ScaleIncrease:
-    //_assembly->setElementScale(index, _assembly->element(index).scale + 0.1);
     _undoStack->push( new SvgAssemblyCommand::ScaleChanged(_assembly, index,
                                                            tronc_(_assembly->element(index).scale * 1.1)) );
     break;
   case ScaleDecrease:
-    //_assembly->setElementScale(index, _assembly->element(index).scale - 0.1);
     _undoStack->push( new SvgAssemblyCommand::ScaleChanged(_assembly, index,
                                                            tronc_(_assembly->element(index).scale * 0.9)) );
     break;
   case MoveUp:
-    //_assembly->setElementDy(index, _assembly->element(index).dy - 0.5);
     _undoStack->push( new SvgAssemblyCommand::MoveDy(_assembly, index,
                                                      _assembly->element(index).dy - 0.5) );
     break;
   case MoveDown:
-    //_assembly->setElementDy(index, _assembly->element(index).dy + 0.5);
     _undoStack->push( new SvgAssemblyCommand::MoveDy(_assembly, index,
                                                      _assembly->element(index).dy + 0.5) );
     break;
   case MoveRight:
-    //_assembly->setElementDx(index, _assembly->element(index).dx + 0.5);
     _undoStack->push( new SvgAssemblyCommand::MoveDx(_assembly, index,
                                                      _assembly->element(index).dx + 0.5) );
     break;
   case MoveLeft:
-    //_assembly->setElementDx(index, _assembly->element(index).dx - 0.5);
     _undoStack->push( new SvgAssemblyCommand::MoveDx(_assembly, index,
                                                      _assembly->element(index).dx - 0.5) );
     break;

@@ -30,7 +30,7 @@ CompositorWidget::CompositorWidget(QWidget *parent)
   , _widgetStack(new QStackedWidget)
   , _tabWidget(new QTabWidget)
   , _projectWidget(new ProjectWidget)
-  , _controller(new CompositorController(this))
+  , _compositorController(new CompositorController(this))
   , _treeViewController(new TreeViewController(this))
 {
   this->QMainWindow::setWindowTitle(CompositorController::k_windowTitle);
@@ -40,19 +40,19 @@ CompositorWidget::CompositorWidget(QWidget *parent)
 
   QMenu* fileMenu = menuBar->addMenu("File");
 
-  _newProjectAction = fileMenu->addAction(Icon::create(), "New project", _controller,
+  _newProjectAction = fileMenu->addAction(Icon::create(), "New project", _compositorController,
                                           SLOT(createProject()), QKeySequence("Ctrl+Shift+N"));
-  _openProjectAction = fileMenu->addAction(Icon::open(), "Open project", _controller,
+  _openProjectAction = fileMenu->addAction(Icon::open(), "Open project", _compositorController,
                                            SLOT(openProject()), QKeySequence::Open);
   _saveAssemblyAction = fileMenu->addAction(Icon::save(), "Save assembly in project", this,
                                             SLOT(xSaveCurrentAssembly()), QKeySequence::Save);
-  _saveAllAction = fileMenu->addAction(Icon::saveAll(), "Save all assemblies", _controller,
+  _saveAllAction = fileMenu->addAction(Icon::saveAll(), "Save all assemblies", _compositorController,
                                        SLOT(saveAll()), QKeySequence::SaveAs);
-  _saveAsAction = fileMenu->addAction("Save project as", _controller,
+  _saveAsAction = fileMenu->addAction("Save project as", _compositorController,
                                       SLOT(saveProjectAs()));
   _closeAssemblyAction = fileMenu->addAction( "Close current assembly", this,
                                              SLOT(xCloseCurrentAssembly()), QKeySequence::Close);
-  _closeProjectAction = fileMenu->addAction(Icon::close(), "Close project", _controller,
+  _closeProjectAction = fileMenu->addAction(Icon::close(), "Close project", _compositorController,
                                             SLOT(closeProject()), QKeySequence("Ctrl+Shift+W"));
   fileMenu->addSeparator();
   _quitAction = fileMenu->addAction(Icon::exit(), "Quit", this, SLOT(close()), QKeySequence::Quit);
@@ -65,13 +65,13 @@ CompositorWidget::CompositorWidget(QWidget *parent)
   editionMenu->addAction(_projectWidget->generateProjectAction());
   editionMenu->addSeparator();
 
-  QAction* redoAction = _controller->undoGroup()->createRedoAction(this);
+  QAction* redoAction = _compositorController->undoGroup()->createRedoAction(this);
   redoAction->setIcon(Icon::redo());
   redoAction->setShortcut(QKeySequence::Redo);
   redoAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   editionMenu->addAction(redoAction);
 
-  QAction* undoAction = _controller->undoGroup()->createUndoAction(this);
+  QAction* undoAction = _compositorController->undoGroup()->createUndoAction(this);
   undoAction->setIcon(Icon::undo());
   undoAction->setShortcut(QKeySequence::Undo);
   undoAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
@@ -98,36 +98,36 @@ CompositorWidget::CompositorWidget(QWidget *parent)
   connect(_tabWidget, SIGNAL(currentChanged(int)),
           this, SLOT(xOnTabChanged(int)));
 
-  // Controller connections
-  connect(_controller, SIGNAL(setWindowTitle(QString)),
+  // Compositor Controller connections
+  connect(_compositorController, SIGNAL(setWindowTitle(QString)),
           this, SLOT(setWindowTitle(QString)));
-  connect(_controller, SIGNAL(addEditor(Editor*,QString)),
+  connect(_compositorController, SIGNAL(addEditor(Editor*,QString)),
           this, SLOT(onAddEditor(Editor*,QString)));
-  connect(_controller, SIGNAL(renameEditor(Editor*,QString)),
+  connect(_compositorController, SIGNAL(renameEditor(Editor*,QString)),
           this, SLOT(onRenameEditor(Editor*,QString)));
-  connect(_controller, SIGNAL(removeEditor(Editor*)),
+  connect(_compositorController, SIGNAL(removeEditor(Editor*)),
           this, SLOT(onRemoveEditor(Editor*)));
-  connect(_controller, SIGNAL(setCurrentEditor(Editor*)),
+  connect(_compositorController, SIGNAL(setCurrentEditor(Editor*)),
           this, SLOT(onSetCurrentEditor(Editor*)));
 
-  connect(_controller, SIGNAL(outputDirChanged(QString)),
+  connect(_compositorController, SIGNAL(outputDirChanged(QString)),
           _projectWidget, SLOT(setOutputDir(QString)));
 
-  connect(_controller, SIGNAL(projectChanged(SvgCompose::SvgAssembliesList*)),
+  connect(_compositorController, SIGNAL(projectChanged(SvgCompose::SvgAssembliesList*)),
           _treeViewController, SLOT(onProjectChanged(SvgCompose::SvgAssembliesList*)));
 
-  connect(_controller, SIGNAL(projectChanged(SvgCompose::SvgAssembliesList*)),
+  connect(_compositorController, SIGNAL(projectChanged(SvgCompose::SvgAssembliesList*)),
           this, SLOT(onProjectChanged(SvgCompose::SvgAssembliesList*)));
 
   // TreeView Controller connections
   connect(_treeViewController, SIGNAL(openAssembly(SvgCompose::SvgAssembly*)),
-          _controller, SLOT(openAssembly(SvgCompose::SvgAssembly*)));
+          _compositorController, SLOT(openAssembly(SvgCompose::SvgAssembly*)));
   connect(_treeViewController, SIGNAL(showAssembly(SvgCompose::SvgAssembly*)),
-          _controller, SLOT(showAssembly(SvgCompose::SvgAssembly*)));
+          _compositorController, SLOT(showAssembly(SvgCompose::SvgAssembly*)));
   connect(_treeViewController, SIGNAL(generateImage(SvgCompose::SvgAssembly*)),
-          _controller, SLOT(generateAssemblyImage(SvgCompose::SvgAssembly*)));
+          _compositorController, SLOT(generateAssemblyImage(SvgCompose::SvgAssembly*)));
   connect(_treeViewController, SIGNAL(removeAssembly(SvgCompose::SvgAssembly*)),
-          _controller, SLOT(removeAssembly(SvgCompose::SvgAssembly*)));
+          _compositorController, SLOT(removeAssembly(SvgCompose::SvgAssembly*)));
 
   connect(_treeViewController, SIGNAL(enableAssemblyActions(bool)),
           _projectWidget, SLOT(enableAssemblyAction(bool)));
@@ -147,11 +147,11 @@ CompositorWidget::CompositorWidget(QWidget *parent)
           _treeViewController, SLOT(onDeleteTriggered()));
 
   connect(_projectWidget, SIGNAL(generateProjectImages()),
-          _controller, SLOT(generateProjectImages()));
+          _compositorController, SLOT(generateProjectImages()));
   connect(_projectWidget, SIGNAL(addAssembly()),
-          _controller, SLOT(createAssembly()));
+          _compositorController, SLOT(createAssembly()));
   connect(_projectWidget, SIGNAL(outputDirChanged(QString)),
-          _controller, SLOT(setOutputDir(QString)));
+          _compositorController, SLOT(setOutputDir(QString)));
 
   this->resize(800, 700);
   onProjectChanged(NULL);
@@ -210,37 +210,37 @@ void CompositorWidget::xSaveCurrentAssembly()
 {
   Editor* editor = qobject_cast<Editor*>(_tabWidget->currentWidget());
   if(editor)
-    _controller->saveAssembly(editor->assembly());
+    _compositorController->saveAssembly(editor->assembly());
   else
-    _controller->saveAll();
+    _compositorController->saveAll();
 }
 
 void CompositorWidget::xCloseCurrentAssembly()
 {
   Editor* editor = qobject_cast<Editor*>(_tabWidget->currentWidget());
   if(editor)
-    _controller->closeAssembly(editor->assembly());
+    _compositorController->closeAssembly(editor->assembly());
 }
 
 void CompositorWidget::xOnTabCloseRequested(int index)
 {
   Editor* editor = qobject_cast<Editor*>(_tabWidget->widget(index));
   if(editor)
-    _controller->closeAssembly(editor->assembly());
+    _compositorController->closeAssembly(editor->assembly());
 }
 
 void CompositorWidget::xOnTabChanged(int index)
 {
   Editor* editor = qobject_cast<Editor*>(_tabWidget->widget(index));
   if(editor)
-    _controller->undoGroup()->setActiveStack(editor->undoStack());
+    _compositorController->undoGroup()->setActiveStack(editor->undoStack());
 }
 
 void CompositorWidget::closeEvent(QCloseEvent* event )
 {
-  if(_controller->project() &&
-     _controller->project()->hasChanged() &&
-     !_controller->closeProject())
+  if(_compositorController->project() &&
+     _compositorController->project()->hasChanged() &&
+     !_compositorController->closeProject())
   {
     event->ignore();
   }

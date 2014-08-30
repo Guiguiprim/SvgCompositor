@@ -49,7 +49,7 @@ private:
   QStackedWidget* _widgetStack;
   QTabWidget* _tabWidget;
   ProjectWidget* _projectWidget;
-  CompositorController* _controller;
+  CompositorController* _compositorController;
   TreeViewController* _treeViewController;
 
   QAction* _newProjectAction;

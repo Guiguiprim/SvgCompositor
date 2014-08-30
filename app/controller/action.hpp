@@ -10,6 +10,7 @@ enum Action {
   SetBackground,
   RemoveBackground,
   AddElement,
+  SizeChanged,
   SizeIncrease,
   SizeDecrease,
   // assembly element action
@@ -18,11 +19,14 @@ enum Action {
   Raise,
   HCenter,
   VCenter,
+  ScaleChanged,
   ScaleIncrease,
   ScaleDecrease,
   SetPos,
+  MoveDy,
   MoveUp,
   MoveDown,
+  MoveDx,
   MoveRight,
   MoveLeft
 };

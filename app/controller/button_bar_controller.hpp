@@ -24,6 +24,7 @@ public:
 
 Q_SIGNALS:
   void actionTriggered(int index, Action action);
+  void actionValueTriggered(int index, Action action, qreal value);
   void nameChanged(const QString& name);
 
 public Q_SLOTS:
@@ -38,6 +39,7 @@ private Q_SLOTS:
   void xOnPosChanged(int index, qreal dx, qreal dy);
 
   void xOnActionTriggered(Action action);
+  void xOnActionValueTriggered(Action action, qreal value);
 
 private:
   void setUpConnection();

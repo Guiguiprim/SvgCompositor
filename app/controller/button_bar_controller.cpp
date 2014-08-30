@@ -15,6 +15,8 @@ ButtonBarController::ButtonBarController(ButtonBar* buttonBar, QObject *parent)
 {
   connect(_buttonBar, SIGNAL(actionTriggered(Action)),
           SLOT(xOnActionTriggered(Action)));
+  connect(_buttonBar, SIGNAL(actionValueTriggered(Action,qreal)),
+          SLOT(xOnActionValueTriggered(Action,qreal)));
   connect(_buttonBar, SIGNAL(nameChanged(QString)),
           SIGNAL(nameChanged(QString)));
 }
@@ -104,6 +106,11 @@ void ButtonBarController::xOnPosChanged(int index, qreal dx, qreal dy)
 void ButtonBarController::xOnActionTriggered(Action action)
 {
   emit actionTriggered(_sIndex, action);
+}
+
+void ButtonBarController::xOnActionValueTriggered(Action action, qreal value)
+{
+  emit actionValueTriggered(_sIndex, action, value);
 }
 
 void ButtonBarController::setUpConnection()

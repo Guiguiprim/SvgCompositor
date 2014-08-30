@@ -212,7 +212,7 @@ void TreeViewController::xOnBackgroundChanged(const QString& background)
       {
         item->setData("No background", Qt::DisplayRole);
         item->setData(QVariant(), Qt::DecorationRole);
-        backItem->setData(false, BackgroundRole);
+        item->setData(false, BackgroundRole);
       }
       else
       {
@@ -220,7 +220,7 @@ void TreeViewController::xOnBackgroundChanged(const QString& background)
         QString name = _project->dir().relativeFilePath(background);
         item->setData(name, Qt::DisplayRole);
         item->setData(QIcon(imgFile), Qt::DecorationRole);
-        backItem->setData(true, BackgroundRole);
+        item->setData(true, BackgroundRole);
       }
     }
   }

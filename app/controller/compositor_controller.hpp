@@ -50,6 +50,8 @@ public Q_SLOTS:
 
   void onAssemblyAction(SvgCompose::SvgAssembly* assembly,
                         Action action, int index);
+  void onSelectElement(SvgCompose::SvgAssembly* assembly,
+                     int index);
 
 Q_SIGNALS:
   void setWindowTitle(const QString& title);

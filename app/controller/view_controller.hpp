@@ -22,6 +22,7 @@ public:
   explicit ViewController(GraphicsView* view, QObject *parent = 0);
 
   void setAssembly(SvgCompose::SvgAssembly* assembly);
+  void selectElement(int index);
 
 Q_SIGNALS:
   void selectionChanged(int index);

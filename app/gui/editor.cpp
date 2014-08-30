@@ -120,4 +120,9 @@ void Editor::assemblyAction(int index, Action action)
   _editorController->onAction(index, action);
 }
 
+void Editor::selectElement(int index)
+{
+  _viewController->selectElement(index);
+}
+
 } // namespace SvgCompositor

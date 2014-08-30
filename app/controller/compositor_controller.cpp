@@ -294,6 +294,21 @@ void CompositorController::onAssemblyAction(
   }
 }
 
+void CompositorController::onSelectElement(
+    SvgCompose::SvgAssembly* assembly,
+    int index)
+{
+  if(_project && assembly)
+  {
+    QMap<SvgCompose::SvgAssembly*, Editor*>::iterator it;
+    it = _editors.find(assembly);
+    if(it != _editors.end())
+    {
+      it.value()->selectElement(index);
+    }
+  }
+}
+
 void CompositorController::xOnAssemblyChanged()
 {
   SvgCompose::SvgAssembly* assembly = qobject_cast<SvgCompose::SvgAssembly*>(sender());

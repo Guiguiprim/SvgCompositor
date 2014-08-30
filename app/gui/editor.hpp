@@ -36,6 +36,7 @@ public:
   SvgCompose::SvgAssembly* assembly() const;
 
   void assemblyAction(int index, Action action);
+  void selectElement(int index);
 
 private:
   GraphicsView* _view;

@@ -19,6 +19,12 @@ ViewController::ViewController(GraphicsView* view, QObject *parent)
           SLOT(xOnSelectionChanged()));
 }
 
+void ViewController::selectElement(int index)
+{
+  if(_item)
+    _item->selectElement(index);
+}
+
 void ViewController::setAssembly(SvgCompose::SvgAssembly* assembly)
 {
   if(_assembly)

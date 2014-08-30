@@ -33,6 +33,8 @@ public:
   int indexOf(QGraphicsItem* item) const;
   int indexSelection();
 
+  void selectElement(int index);
+
 public Q_SLOTS:
   void setBackground(const QString& file);
   void addElement(const QString& file, int index = -1);

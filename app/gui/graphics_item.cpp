@@ -53,6 +53,16 @@ int GraphicsItem::indexOf(QGraphicsItem* item) const
   return -1;
 }
 
+void GraphicsItem::selectElement(int index)
+{
+  Q_FOREACH(MovableSvgItem* item, _elements)
+  {
+    item->setSelected(false);
+  }
+  if(0 <= index && _elements.size() > index)
+    _elements.at(index)->setSelected(true);
+}
+
 int GraphicsItem::indexSelection()
 {
   QGraphicsScene* scene = this->scene();

@@ -135,7 +135,7 @@ public:
       bool final = false,
       QUndoCommand* parent = NULL);
 
-  virtual int id() const { return SvgCompositor::SizeIncrease; }
+  virtual int id() const { return SvgCompositor::SizeChanged; }
   virtual bool mergeWith(const QUndoCommand* other);
   virtual void redo();
   virtual void undo();
@@ -243,7 +243,7 @@ public:
       bool final = false,
       QUndoCommand* parent = NULL);
 
-  virtual int id() const { return SvgCompositor::ScaleIncrease; }
+  virtual int id() const { return SvgCompositor::ScaleChanged; }
   virtual bool mergeWith(const QUndoCommand* other);
   virtual void redo();
   virtual void undo();
@@ -264,7 +264,7 @@ public:
       bool final = false,
       QUndoCommand* parent = NULL);
 
-  virtual int id() const { return SvgCompositor::MoveUp; }
+  virtual int id() const { return SvgCompositor::MoveDy; }
   virtual bool mergeWith(const QUndoCommand* other);
   virtual void redo();
   virtual void undo();
@@ -285,7 +285,7 @@ public:
       bool final = false,
       QUndoCommand* parent = NULL);
 
-  virtual int id() const { return SvgCompositor::MoveLeft; }
+  virtual int id() const { return SvgCompositor::MoveDx; }
   virtual bool mergeWith(const QUndoCommand* other);
   virtual void redo();
   virtual void undo();

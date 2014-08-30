@@ -53,9 +53,9 @@ void TreeViewController::onProjectChanged(
     }
     _link.clear();
     disconnect(_project, SIGNAL(assemblyAdded(SvgCompose::SvgAssembly*)),
-               this, SLOT(onAssemblyAdded(SvgCompose::SvgAssembly*)));
+               this, SLOT(xOnAssemblyAdded(SvgCompose::SvgAssembly*)));
     disconnect(_project, SIGNAL(assemblyRemoved(SvgCompose::SvgAssembly*)),
-               this, SLOT(onAssemblyRemoved(SvgCompose::SvgAssembly*)));
+               this, SLOT(xOnAssemblyRemoved(SvgCompose::SvgAssembly*)));
     delete _model;
     _model = NULL;
     _lastItemSelected = ItemSelected();
@@ -73,99 +73,10 @@ void TreeViewController::onProjectChanged(
       xAddAssembly(assembly, root);
     }
     connect(_project, SIGNAL(assemblyAdded(SvgCompose::SvgAssembly*)),
-            this, SLOT(onAssemblyAdded(SvgCompose::SvgAssembly*)));
+            this, SLOT(xOnAssemblyAdded(SvgCompose::SvgAssembly*)));
     connect(_project, SIGNAL(assemblyRemoved(SvgCompose::SvgAssembly*)),
-            this, SLOT(onAssemblyRemoved(SvgCompose::SvgAssembly*)));
+            this, SLOT(xOnAssemblyRemoved(SvgCompose::SvgAssembly*)));
     Q_EMIT modelChanged(_model);
-  }
-}
-
-void TreeViewController::onAssemblyChanged()
-{
-  SvgCompose::SvgAssembly* assembly = qobject_cast<SvgCompose::SvgAssembly*>(sender());
-  if(assembly)
-  {
-    Link::iterator it = _link.find(assembly);
-    if(it != _link.end())
-    {
-      it.value()->setData(it.key()->hasChanged() ?  it.key()->name() + "*" : it.key()->name(),
-                          Qt::DisplayRole);
-      QFont font = it.value()->font();
-      font.setBold(it.key()->hasChanged());
-      it.value()->setFont(font);
-    }
-  }
-}
-
-void TreeViewController::onAssemblyAdded(SvgCompose::SvgAssembly* assembly)
-{
-  if(_project->assemblies().contains(assembly))
-  {
-    QStandardItem* root = _model->invisibleRootItem();
-    xAddAssembly(assembly, root);
-  }
-}
-
-void TreeViewController::onAssemblyRemoved(SvgCompose::SvgAssembly* assembly)
-{
-  Link::iterator it = _link.find(assembly);
-  if(it != _link.end())
-  {
-    xAssemblyConnectionTearDown(it.key());
-    QStandardItem* root = _model->invisibleRootItem();
-    root->removeRow(it.value()->row());
-    _link.remove(it.key());
-  }
-}
-
-void TreeViewController::onBackgroundChanged(const QString& background)
-{
-  SvgCompose::SvgAssembly* assembly = qobject_cast<SvgCompose::SvgAssembly*>(sender());
-  if(assembly)
-  {
-    Link::iterator it = _link.find(assembly);
-    if(it != _link.end())
-    {
-      QStandardItem* item = it.value()->child(0);
-      if(background.isEmpty())
-      {
-        item->setData("No background", Qt::DisplayRole);
-        item->setData(QVariant(), Qt::DecorationRole);
-      }
-      else
-      {
-        QString imgFile = _project->dir().absoluteFilePath(background);
-        QString name = _project->dir().relativeFilePath(background);
-        item->setData(name, Qt::DisplayRole);
-        item->setData(QIcon(imgFile), Qt::DecorationRole);
-      }
-    }
-  }
-}
-
-void TreeViewController::onElementAdded(const QString& file, int index)
-{
-  SvgCompose::SvgAssembly* assembly = qobject_cast<SvgCompose::SvgAssembly*>(sender());
-  if(assembly)
-  {
-    Link::iterator it = _link.find(assembly);
-    if(it != _link.end())
-    {
-      xAddElement(file, index, it.value());
-    }
-  }
-}
-
-void TreeViewController::onElementRemoved(int index)
-{
-  SvgCompose::SvgAssembly* assembly = qobject_cast<SvgCompose::SvgAssembly*>(sender());
-  if(assembly)
-  {
-    Link::iterator it = _link.find(assembly);
-    if(it != _link.end())
-    {
-      it.value()->removeRow(index +1); // +1 because of backgground
-    }
   }
 }
 
@@ -217,6 +128,95 @@ void TreeViewController::onAssemblyOpenStatusChanged(SvgCompose::SvgAssembly* as
     QFont font = it.value()->font();
     font.setItalic(!open);
     it.value()->setFont(font);
+  }
+}
+
+void TreeViewController::xOnAssemblyAdded(SvgCompose::SvgAssembly* assembly)
+{
+  if(_project->assemblies().contains(assembly))
+  {
+    QStandardItem* root = _model->invisibleRootItem();
+    xAddAssembly(assembly, root);
+  }
+}
+
+void TreeViewController::xOnAssemblyRemoved(SvgCompose::SvgAssembly* assembly)
+{
+  Link::iterator it = _link.find(assembly);
+  if(it != _link.end())
+  {
+    xAssemblyConnectionTearDown(it.key());
+    QStandardItem* root = _model->invisibleRootItem();
+    root->removeRow(it.value()->row());
+    _link.remove(it.key());
+  }
+}
+
+void TreeViewController::xOnAssemblyChanged()
+{
+  SvgCompose::SvgAssembly* assembly = qobject_cast<SvgCompose::SvgAssembly*>(sender());
+  if(assembly)
+  {
+    Link::iterator it = _link.find(assembly);
+    if(it != _link.end())
+    {
+      it.value()->setData(it.key()->hasChanged() ?  it.key()->name() + "*" : it.key()->name(),
+                          Qt::DisplayRole);
+      QFont font = it.value()->font();
+      font.setBold(it.key()->hasChanged());
+      it.value()->setFont(font);
+    }
+  }
+}
+
+void TreeViewController::xOnBackgroundChanged(const QString& background)
+{
+  SvgCompose::SvgAssembly* assembly = qobject_cast<SvgCompose::SvgAssembly*>(sender());
+  if(assembly)
+  {
+    Link::iterator it = _link.find(assembly);
+    if(it != _link.end())
+    {
+      QStandardItem* item = it.value()->child(0);
+      if(background.isEmpty())
+      {
+        item->setData("No background", Qt::DisplayRole);
+        item->setData(QVariant(), Qt::DecorationRole);
+      }
+      else
+      {
+        QString imgFile = _project->dir().absoluteFilePath(background);
+        QString name = _project->dir().relativeFilePath(background);
+        item->setData(name, Qt::DisplayRole);
+        item->setData(QIcon(imgFile), Qt::DecorationRole);
+      }
+    }
+  }
+}
+
+void TreeViewController::xOnElementAdded(const QString& file, int index)
+{
+  SvgCompose::SvgAssembly* assembly = qobject_cast<SvgCompose::SvgAssembly*>(sender());
+  if(assembly)
+  {
+    Link::iterator it = _link.find(assembly);
+    if(it != _link.end())
+    {
+      xAddElement(file, index, it.value());
+    }
+  }
+}
+
+void TreeViewController::xOnElementRemoved(int index)
+{
+  SvgCompose::SvgAssembly* assembly = qobject_cast<SvgCompose::SvgAssembly*>(sender());
+  if(assembly)
+  {
+    Link::iterator it = _link.find(assembly);
+    if(it != _link.end())
+    {
+      it.value()->removeRow(index +1); // +1 because of backgground
+    }
   }
 }
 
@@ -290,29 +290,29 @@ void TreeViewController::xAddElement(const QString& file, int index, QStandardIt
 void TreeViewController::xAssemblyConnectionSetup(SvgCompose::SvgAssembly* assembly)
 {
   connect(assembly, SIGNAL(nameChanged(QString)),
-          this, SLOT(onAssemblyChanged()));
+          this, SLOT(xOnAssemblyChanged()));
   connect(assembly, SIGNAL(assemblyChanged(bool)),
-          this, SLOT(onAssemblyChanged()));
+          this, SLOT(xOnAssemblyChanged()));
   connect(assembly, SIGNAL(backgroundChanged(QString)),
-          this, SLOT(onBackgroundChanged(QString)));
+          this, SLOT(xOnBackgroundChanged(QString)));
   connect(assembly, SIGNAL(elementAdded(QString,int)),
-          this, SLOT(onElementAdded(QString,int)));
+          this, SLOT(xOnElementAdded(QString,int)));
   connect(assembly, SIGNAL(elementRemoved(int)),
-          this, SLOT(onElementRemoved(int)));
+          this, SLOT(xOnElementRemoved(int)));
 }
 
 void TreeViewController::xAssemblyConnectionTearDown(SvgCompose::SvgAssembly* assembly)
 {
   disconnect(assembly, SIGNAL(nameChanged(QString)),
-             this, SLOT(onAssemblyChanged()));
+             this, SLOT(xOnAssemblyChanged()));
   disconnect(assembly, SIGNAL(assemblyChanged(bool)),
-             this, SLOT(onAssemblyChanged()));
+             this, SLOT(xOnAssemblyChanged()));
   disconnect(assembly, SIGNAL(backgroundChanged(QString)),
-             this, SLOT(onBackgroundChanged(QString)));
+             this, SLOT(xOnBackgroundChanged(QString)));
   disconnect(assembly, SIGNAL(elementAdded(QString,int)),
-             this, SLOT(onElementAdded(QString,int)));
+             this, SLOT(xOnElementAdded(QString,int)));
   disconnect(assembly, SIGNAL(elementRemoved(int)),
-             this, SLOT(onElementRemoved(int)));
+             this, SLOT(xOnElementRemoved(int)));
 }
 
 bool TreeViewController::xSetLastItemSelected(const QModelIndex& index)

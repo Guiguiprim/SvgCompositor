@@ -43,13 +43,6 @@ public:
 
 public Q_SLOTS:
   void onProjectChanged(SvgCompose::SvgAssembliesList* project);
-  void onAssemblyChanged();
-  void onAssemblyAdded(SvgCompose::SvgAssembly* assembly);
-  void onAssemblyRemoved(SvgCompose::SvgAssembly* assembly);
-
-  void onBackgroundChanged(const QString& background);
-  void onElementAdded(const QString& file, int index);
-  void onElementRemoved(int index);
 
   void onClicked(const QModelIndex& index);
   void onDoubleClicked(const QModelIndex& index);
@@ -61,6 +54,13 @@ public Q_SLOTS:
   void onAssemblyOpenStatusChanged(SvgCompose::SvgAssembly* assembly, bool open);
 
 private Q_SLOTS:
+  void xOnAssemblyAdded(SvgCompose::SvgAssembly* assembly);
+  void xOnAssemblyRemoved(SvgCompose::SvgAssembly* assembly);
+
+  void xOnAssemblyChanged();
+  void xOnBackgroundChanged(const QString& background);
+  void xOnElementAdded(const QString& file, int index);
+  void xOnElementRemoved(int index);
   void xOnOpenTriggered();
 
 Q_SIGNALS:

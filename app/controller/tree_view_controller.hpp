@@ -31,7 +31,8 @@ class TreeViewController : public QObject
     ItemType type;
     SvgCompose::SvgAssembly* assembly;
     int index;
-    ItemSelected() : type(AssemblyType) , assembly(NULL), index(-1) {}
+    bool isOpen;
+    ItemSelected() : type(AssemblyType) , assembly(NULL), index(-1), isOpen(false) {}
   };
 
 public:

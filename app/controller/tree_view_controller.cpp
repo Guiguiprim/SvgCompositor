@@ -320,9 +320,15 @@ bool TreeViewController::xSetLastItemSelected(const QModelIndex& index)
   QStandardItem* item = _model->itemFromIndex(index);
   _lastItemSelected.type = static_cast<ItemType>(item->data(TypeRole).toInt());
   if(_lastItemSelected.type == AssemblyType)
+  {
     _lastItemSelected.assembly = _link.key(item, NULL);
+    _lastItemSelected.isOpen = item->data(OpenRole).toBool();
+  }
   else
+  {
     _lastItemSelected.assembly = _link.key(item->parent(), NULL);
+    _lastItemSelected.isOpen = item->parent()->data(OpenRole).toBool();
+  }
 
   if(_lastItemSelected.type == ElementType &&
      _lastItemSelected.assembly)

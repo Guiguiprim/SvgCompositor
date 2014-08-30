@@ -56,6 +56,8 @@ Q_SIGNALS:
   void setCurrentEditor(Editor*);
   void outputDirChanged(const QString& outputDir);
 
+  bool assemblyOpenStatusChanged(SvgCompose::SvgAssembly* assembly, bool open);
+
 private Q_SLOTS:
   void xOnAssemblyChanged();
   bool xCloseAssembly(SvgCompose::SvgAssembly* assembly, Editor* editor, bool force = false);

@@ -201,6 +201,7 @@ bool CompositorController::openAssembly(SvgCompose::SvgAssembly* assembly)
   _undoGroup->addStack(editor->undoStack());
 
   Q_EMIT addEditor(editor, assembly->name());
+  Q_EMIT assemblyOpenStatusChanged(assembly, true);
 
   connect(assembly, SIGNAL(nameChanged(QString)),
           this, SLOT(xOnAssemblyChanged()));
@@ -321,8 +322,9 @@ bool CompositorController::xCloseAssembly(
              this, SLOT(xOnAssemblyChanged()));
   Q_EMIT removeEditor(editor);
   _undoGroup->removeStack(editor->undoStack());
-  delete editor;
   _editors.remove(assembly);
+  delete editor;
+  Q_EMIT assemblyOpenStatusChanged(assembly, false);
 
   if(toReset) // reset the assembly to the last save state
     assembly->resetLastState();

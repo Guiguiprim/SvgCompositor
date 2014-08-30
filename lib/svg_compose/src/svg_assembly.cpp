@@ -244,8 +244,18 @@ void SvgAssembly::setSize(SvgAssemblySize size)
 {
   if(_data.size != size)
   {
+    SvgAssemblySize old = _data.size;
     _data.size = size;
     emit sizeChanged((int)size);
+    qreal fac = (qreal)size / (qreal) old;
+    for(int i=0; i < _data.elements.size(); ++i)
+    {
+      qreal x = _data.elements.at(i).dx * fac;
+      qreal y = _data.elements.at(i).dy * fac;
+      qreal s = _data.elements.at(i).scale * fac;
+      setElementScale(i, s);
+      setElementPos(i, x, y);
+    }
     xChanged();
   }
 }

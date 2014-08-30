@@ -16,10 +16,15 @@ namespace SvgCompose
 {
 
 void generateAssemblies(
-    const SvgAssembliesList* list)
+    const SvgAssembliesList* list,
+    const QString& outputDir)
 {
   QDir pDir = list->dir();
-  QDir oDir = list->outputDir();
+  QDir oDir;
+  if(outputDir.isEmpty())
+    oDir = list->outputDir();
+  else
+    oDir = QDir(outputDir);
   pDir.mkpath(oDir.path());
 
   Q_FOREACH(SvgAssembly* assembly, list->assemblies())

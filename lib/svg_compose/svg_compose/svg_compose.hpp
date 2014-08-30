@@ -1,9 +1,10 @@
 #ifndef SVG_UNION_H
 #define SVG_UNION_H
 
+#include <QString>
+
 class QDir;
 class QDomElement;
-class QString;
 
 namespace SvgCompose
 {
@@ -11,8 +12,14 @@ class SvgAssembliesList;
 class SvgAssembly;
 struct SvgAssemblyElement;
 
+/**
+ * @brief generateAssemblies
+ * @param list: the project to generate
+ * @param outputDir: Output folder (will overright the project output folder)
+ */
 void generateAssemblies(
-    const SvgAssembliesList* list);
+    const SvgAssembliesList* list,
+    const QString& outputDir = QString());
 
 bool generateAssembly(
     const SvgAssembly* assembly,

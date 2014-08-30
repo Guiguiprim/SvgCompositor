@@ -26,9 +26,27 @@ TreeViewController::TreeViewController(QObject *parent)
   _openAction->setFont(font);
   connect(_openAction, SIGNAL(triggered())
           , this, SLOT(xOnOpenTriggered()));
+
   _deleteAction = new QAction("Delete", this);
   connect(_deleteAction, SIGNAL(triggered())
           , this, SLOT(onDeleteTriggered()));
+
+  _chooseBackgroundAction = new QAction("Choose a background", this);
+  connect(_chooseBackgroundAction, SIGNAL(triggered())
+          , this, SLOT(xOnChooseBackTriggered()));
+
+  _removeBackgroundAction = new QAction("Remove", this);
+  connect(_removeBackgroundAction, SIGNAL(triggered())
+          , this, SLOT(xOnRemoveBackTriggered()));
+
+  _selectElementAction = new QAction("Select", this);
+  _selectElementAction->setFont(font);
+  connect(_selectElementAction, SIGNAL(triggered())
+          , this, SLOT(xOnSelectElementTriggered()));
+
+  _removeElementAction = new QAction("Remove", this);
+  connect(_removeElementAction, SIGNAL(triggered())
+          , this, SLOT(xOnRemoveElementTriggered()));
 }
 
 QStandardItemModel* TreeViewController::model() const
@@ -92,6 +110,8 @@ void TreeViewController::onDoubleClicked(const QModelIndex& index)
   xSetLastItemSelected(index);
   if(_lastItemSelected.type == AssemblyType)
     Q_EMIT openAssembly(_lastItemSelected.assembly);
+  else if(_lastItemSelected.type == ElementType && _lastItemSelected.isOpen)
+    xOnSelectElementTriggered();
 }
 
 void TreeViewController::customMenuRequested(const QModelIndex& index, const QPoint& pos)
@@ -101,6 +121,16 @@ void TreeViewController::customMenuRequested(const QModelIndex& index, const QPo
 
   if(_lastItemSelected.type == AssemblyType)
     actions << _openAction << _deleteAction;
+
+  if(_lastItemSelected.type == BackgroundType && _lastItemSelected.isOpen)
+  {
+    actions << _chooseBackgroundAction;
+    if(index.data(BackgroundRole).toBool())
+      actions << _removeBackgroundAction;
+  }
+
+  if(_lastItemSelected.type == ElementType && _lastItemSelected.isOpen)
+    actions << _selectElementAction << _removeElementAction;
 
   if(actions.count() > 0)
     QMenu::exec(actions, pos);
@@ -182,6 +212,7 @@ void TreeViewController::xOnBackgroundChanged(const QString& background)
       {
         item->setData("No background", Qt::DisplayRole);
         item->setData(QVariant(), Qt::DecorationRole);
+        backItem->setData(false, BackgroundRole);
       }
       else
       {
@@ -189,6 +220,7 @@ void TreeViewController::xOnBackgroundChanged(const QString& background)
         QString name = _project->dir().relativeFilePath(background);
         item->setData(name, Qt::DisplayRole);
         item->setData(QIcon(imgFile), Qt::DecorationRole);
+        backItem->setData(true, BackgroundRole);
       }
     }
   }
@@ -252,6 +284,49 @@ void TreeViewController::xOnOpenTriggered()
     Q_EMIT openAssembly(_lastItemSelected.assembly);
 }
 
+void TreeViewController::xOnChooseBackTriggered()
+{
+  if(_lastItemSelected.type == BackgroundType &&
+     _lastItemSelected.isOpen)
+  {
+    Q_EMIT assemblyAction(_lastItemSelected.assembly,
+                          SetBackground);
+  }
+}
+
+void TreeViewController::xOnRemoveBackTriggered()
+{
+  if(_lastItemSelected.type == BackgroundType &&
+     _lastItemSelected.isOpen)
+  {
+    Q_EMIT assemblyAction(_lastItemSelected.assembly,
+                          RemoveBackground);
+  }
+}
+
+void TreeViewController::xOnSelectElementTriggered()
+{
+  if(_lastItemSelected.type == ElementType &&
+     _lastItemSelected.isOpen &&
+     _lastItemSelected.index != -1)
+  {
+    Q_EMIT selectElement(_lastItemSelected.assembly,
+                          _lastItemSelected.index);
+  }
+}
+
+void TreeViewController::xOnRemoveElementTriggered()
+{
+  if(_lastItemSelected.type == ElementType &&
+     _lastItemSelected.isOpen &&
+     _lastItemSelected.index != -1)
+  {
+    Q_EMIT assemblyAction(_lastItemSelected.assembly,
+                          Remove,
+                          _lastItemSelected.index);
+  }
+}
+
 void TreeViewController::xAddAssembly(SvgCompose::SvgAssembly* assembly, QStandardItem* root)
 {
   QStandardItem* item = new QStandardItem(assembly->name());
@@ -280,7 +355,10 @@ void TreeViewController::xAddBackground(const QString& background, QStandardItem
   font.setItalic(true);
   QStandardItem* backItem;
   if(background.isEmpty())
+  {
     backItem = new QStandardItem("No background");
+    backItem->setData(false, BackgroundRole);
+  }
   else
   {
     QString imgFile = _project->dir().absoluteFilePath(background);
@@ -290,6 +368,7 @@ void TreeViewController::xAddBackground(const QString& background, QStandardItem
       icon = QIcon(imgFile);
     // TODO else icon = Icon::InvalideFile
     backItem = new QStandardItem(icon, name);
+    backItem->setData(true, BackgroundRole);
   }
   backItem->setData(BackgroundType, TypeRole);
   backItem->setEditable(false);

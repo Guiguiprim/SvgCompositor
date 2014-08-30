@@ -8,8 +8,10 @@ namespace SvgCompositor {
 enum Role
 {
   TypeRole = Qt::UserRole + 1,
-  OpenRole = Qt::UserRole + 2
+  OpenRole,
+  BackgroundRole
 };
+
 enum ItemType
 {
   AssemblyType,

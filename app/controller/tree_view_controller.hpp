@@ -5,6 +5,7 @@
 #include <QMap>
 #include <QModelIndex>
 
+#include "action.hpp"
 #include "misc/project_model_enum.hpp"
 
 class QAction;
@@ -66,6 +67,11 @@ private Q_SLOTS:
 
   void xOnOpenTriggered();
 
+  void xOnChooseBackTriggered();
+  void xOnRemoveBackTriggered();
+  void xOnSelectElementTriggered();
+  void xOnRemoveElementTriggered();
+
 Q_SIGNALS:
   void modelChanged(QStandardItemModel* model);
   void openAssembly(SvgCompose::SvgAssembly* assembly);
@@ -74,6 +80,11 @@ Q_SIGNALS:
   void generateImage(SvgCompose::SvgAssembly* assembly);
 
   void enableAssemblyActions(bool enable);
+
+  void assemblyAction(SvgCompose::SvgAssembly* assembly,
+                      Action action, int index = -1);
+  void selectElement(SvgCompose::SvgAssembly* assembly,
+                     int index);
 
 private:
   void xAddAssembly(SvgCompose::SvgAssembly* assembly, QStandardItem* root);
@@ -92,6 +103,10 @@ private:
   Link _link;
   QAction* _openAction;
   QAction* _deleteAction;
+  QAction* _chooseBackgroundAction;
+  QAction* _removeBackgroundAction;
+  QAction* _selectElementAction;
+  QAction* _removeElementAction;
   ItemSelected _lastItemSelected;
 };
 

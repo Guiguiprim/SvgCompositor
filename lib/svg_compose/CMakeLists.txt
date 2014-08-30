@@ -4,7 +4,6 @@ find_package(qibuild)
 
 include(qibuild/modules/qt-tools)
 
-#include(${QT_USE_FILE})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 include_directories(".")

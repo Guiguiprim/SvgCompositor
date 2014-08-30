@@ -220,6 +220,32 @@ void TreeViewController::xOnElementRemoved(int index)
   }
 }
 
+void TreeViewController::xOnElementLowered(int index)
+{
+  SvgCompose::SvgAssembly* assembly = qobject_cast<SvgCompose::SvgAssembly*>(sender());
+  if(assembly)
+  {
+    Link::iterator it = _link.find(assembly);
+    if(it != _link.end())
+    {
+      xMoveElement(index, index-1, it.value());
+    }
+  }
+}
+
+void TreeViewController::xOnElementRaised(int index)
+{
+  SvgCompose::SvgAssembly* assembly = qobject_cast<SvgCompose::SvgAssembly*>(sender());
+  if(assembly)
+  {
+    Link::iterator it = _link.find(assembly);
+    if(it != _link.end())
+    {
+      xMoveElement(index, index+1, it.value());
+    }
+  }
+}
+
 void TreeViewController::xOnOpenTriggered()
 {
   if(_lastItemSelected.type == AssemblyType)
@@ -287,6 +313,16 @@ void TreeViewController::xAddElement(const QString& file, int index, QStandardIt
   assItem->insertRow(index +1, elemItem); // +1 because of backgground
 }
 
+void TreeViewController::xMoveElement(int oldindex, int newIndex, QStandardItem* assItem)
+{
+  QStandardItem* oldItem = assItem->child(oldindex + 1); // +1 because of backgground
+  if(!oldItem)
+    return;
+  QStandardItem* newItem = oldItem->clone();
+  assItem->removeRow(oldindex + 1);
+  assItem->insertRow(newIndex + 1, newItem); // +1 because of backgground
+}
+
 void TreeViewController::xAssemblyConnectionSetup(SvgCompose::SvgAssembly* assembly)
 {
   connect(assembly, SIGNAL(nameChanged(QString)),
@@ -299,6 +335,10 @@ void TreeViewController::xAssemblyConnectionSetup(SvgCompose::SvgAssembly* assem
           this, SLOT(xOnElementAdded(QString,int)));
   connect(assembly, SIGNAL(elementRemoved(int)),
           this, SLOT(xOnElementRemoved(int)));
+  connect(assembly, SIGNAL(elementLowered(int)),
+          this, SLOT(xOnElementLowered(int)));
+  connect(assembly, SIGNAL(elementRaised(int)),
+          this, SLOT(xOnElementRaised(int)));
 }
 
 void TreeViewController::xAssemblyConnectionTearDown(SvgCompose::SvgAssembly* assembly)
@@ -313,6 +353,10 @@ void TreeViewController::xAssemblyConnectionTearDown(SvgCompose::SvgAssembly* as
              this, SLOT(xOnElementAdded(QString,int)));
   disconnect(assembly, SIGNAL(elementRemoved(int)),
              this, SLOT(xOnElementRemoved(int)));
+  disconnect(assembly, SIGNAL(elementLowered(int)),
+             this, SLOT(xOnElementLowered(int)));
+  disconnect(assembly, SIGNAL(elementRaised(int)),
+             this, SLOT(xOnElementRaised(int)));
 }
 
 bool TreeViewController::xSetLastItemSelected(const QModelIndex& index)

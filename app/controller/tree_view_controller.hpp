@@ -61,6 +61,9 @@ private Q_SLOTS:
   void xOnBackgroundChanged(const QString& background);
   void xOnElementAdded(const QString& file, int index);
   void xOnElementRemoved(int index);
+  void xOnElementLowered(int index);
+  void xOnElementRaised(int index);
+
   void xOnOpenTriggered();
 
 Q_SIGNALS:
@@ -76,6 +79,7 @@ private:
   void xAddAssembly(SvgCompose::SvgAssembly* assembly, QStandardItem* root);
   void xAddBackground(const QString& background, QStandardItem* assItem);
   void xAddElement(const QString& file, int index, QStandardItem* assItem);
+  void xMoveElement(int oldindex, int newIndex, QStandardItem* assItem);
 
   void xAssemblyConnectionSetup(SvgCompose::SvgAssembly* assembly);
   void xAssemblyConnectionTearDown(SvgCompose::SvgAssembly* assembly);

@@ -47,6 +47,7 @@ set(
   "misc/last_dir.hpp"
   "misc/last_dir.cpp"
   "misc/move_struct.hpp"
+  "misc/project_model_enum.hpp"
 )
 
 qt4_wrap_cpp(

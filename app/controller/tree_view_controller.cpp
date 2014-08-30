@@ -10,21 +10,8 @@
 #include <svg_compose/svg_assembly.hpp>
 #include <svg_compose/svg_assembly_element.hpp>
 
-namespace SvgCompositor {
-
-namespace
+namespace SvgCompositor
 {
-enum Role
-{
-  TypeRole = Qt::UserRole + 1
-};
-enum ItemType
-{
-  AssemblyType,
-  BackgroundType,
-  ElementType
-};
-} // namespace
 
 TreeViewController::TreeViewController(QObject *parent)
   : QObject(parent)

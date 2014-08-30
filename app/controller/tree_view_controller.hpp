@@ -5,6 +5,8 @@
 #include <QMap>
 #include <QModelIndex>
 
+#include "misc/project_model_enum.hpp"
+
 class QAction;
 class QPoint;
 class QStandardItem;

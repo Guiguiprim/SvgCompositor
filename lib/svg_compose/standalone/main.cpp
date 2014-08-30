@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
   po::options_description config("Configuration");
   config.add_options()
       ("output,o", po::value< std::string >(), "Output folder (over-right output folder from project)")
-      ("image,i", po::value< std::vector<std::string> >(), "Specific image to generate (instead of the all project)");
+      ("image,i", po::value< std::vector<std::string> >()->multitoken(), "Specific image(s) to generate (instead of the all project)");
 
   po::options_description hidden("Hidden options");
   hidden.add_options()

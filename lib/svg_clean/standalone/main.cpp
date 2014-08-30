@@ -21,9 +21,9 @@ int main(int argc, char *argv[])
   po::options_description config("Configuration");
   config.add_options()
       ("output,o", po::value< std::string >(), "output file to create (while be overright if already exists)")
-      ("keep,k", po::value< std::vector<std::string> >(), "specific xml namespace to keep")
-      ("remove-tag,t", po::value< std::vector<std::string> >(), "specific xml tag to remove")
-      ("remove-attr,a", po::value< std::vector<std::string> >(), "specific xml attribute to remove");
+      ("keep,k", po::value< std::vector<std::string> >()->multitoken(), "specific xml namespace(s) to keep")
+      ("remove-tag,t", po::value< std::vector<std::string> >()->multitoken(), "specific xml tag(s) to remove")
+      ("remove-attr,a", po::value< std::vector<std::string> >()->multitoken(), "specific xml attribute(s) to remove");
 
   po::options_description hidden("Hidden options");
   hidden.add_options()

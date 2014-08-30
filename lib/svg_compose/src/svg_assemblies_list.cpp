@@ -57,6 +57,16 @@ SvgAssembly* SvgAssembliesList::assembly(int index) const
   return NULL;
 }
 
+SvgAssembly* SvgAssembliesList::assembly(const QString& name) const
+{
+  Q_FOREACH(SvgAssembly* assembly, _assemblies)
+  {
+    if(assembly->name() == name)
+      return assembly;
+  }
+  return NULL;
+}
+
 QVector<SvgAssembly*> SvgAssembliesList::assemblies() const
 {
   return _assemblies;

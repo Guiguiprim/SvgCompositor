@@ -25,6 +25,7 @@ public:
   QDir outputDir() const;
 
   SvgAssembly* assembly(int index) const;
+  SvgAssembly* assembly(const QString& name) const;
   QVector<SvgAssembly*> assemblies() const;
   int count() const;
 

@@ -54,3 +54,11 @@ qi_install_header(
   ${svg_compose_public_header}
 )
 
+# standalone
+qi_create_bin(
+  SvgCompose
+  "standalone/main.cpp"
+  DEPENDS
+  svg_compose
+  boost_program_options
+)

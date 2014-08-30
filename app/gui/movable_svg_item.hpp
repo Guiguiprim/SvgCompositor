@@ -12,10 +12,8 @@ class MovableSvgItem : public QGraphicsSvgItem
 public:
   explicit MovableSvgItem(const QString& filename, QGraphicsItem *parent = 0);
 
-signals:
+Q_SIGNALS:
   void moveEnded();
-
-public slots:
 
 protected:
   void mouseMoveEvent(QGraphicsSceneMouseEvent* event);

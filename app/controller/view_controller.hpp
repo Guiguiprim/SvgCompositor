@@ -23,11 +23,11 @@ public:
 
   void setAssembly(SvgCompose::SvgAssembly* assembly);
 
-signals:
+Q_SIGNALS:
   void selectionChanged(int index);
   void elementsMoved(ItemsMove itemsMove);
 
-private slots:
+private Q_SLOTS:
   void xOnSelectionChanged();
 
 private:

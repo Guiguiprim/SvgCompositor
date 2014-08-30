@@ -16,9 +16,7 @@ public:
   void setItem(GraphicsItem* item);
   GraphicsItem* item() const;
 
-signals:
-
-public slots:
+public Q_SLOTS:
   void onComposeSizeChanged();
 
 protected:

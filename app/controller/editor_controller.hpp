@@ -27,7 +27,7 @@ public:
 
   QUndoStack* undoStack() const;
 
-public slots:
+public Q_SLOTS:
   void onNameEdited(const QString& name);
   void onAction(int index, Action action);
   void onElementsMoved(ItemsMove itemsMove);

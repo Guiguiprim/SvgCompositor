@@ -33,7 +33,7 @@ public:
   int indexOf(QGraphicsItem* item) const;
   int indexSelection();
 
-public slots:
+public Q_SLOTS:
   void setBackground(const QString& file);
   void addElement(const QString& file, int index = -1);
   void setSize(int size);
@@ -45,10 +45,10 @@ public slots:
   void lowerElement(int index);
   void raiseElement(int index);
 
-private slots:
+private Q_SLOTS:
   void xOnElementMoved();
 
-signals:
+Q_SIGNALS:
   void elementsMoved(ItemsMove itemsMove);
   void sizeChanged(int size);
   void selectionIndexChanged(int index);

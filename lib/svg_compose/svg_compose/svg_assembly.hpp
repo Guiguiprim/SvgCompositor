@@ -53,7 +53,7 @@ public:
   void resetLastState();
   bool hasChanged() const;
 
-public slots:
+public Q_SLOTS:
   void setName(const QString& name);
   void setSize(SvgAssemblySize size);
   void setBackground(const QString& filePath);
@@ -68,7 +68,7 @@ public slots:
   void setElementHCenter(int index); /// need element width
   void setElementVCenter(int index); /// need element height
 
-signals:
+Q_SIGNALS:
   void nameChanged(const QString& name);
   void sizeChanged(int size);
   void backgroundChanged(const QString& background);

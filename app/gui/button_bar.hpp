@@ -27,7 +27,7 @@ public:
   qreal dx() const;
   qreal dy() const;
 
-public slots:
+public Q_SLOTS:
   void setName(const QString& name);
   void setNameValid(bool valid);
   void setSizeValue(int size);
@@ -41,11 +41,11 @@ public slots:
 
   void setButtonsSize(int size);
 
-signals:
+Q_SIGNALS:
   void nameChanged(const QString& name);
   void actionTriggered(Action action);
 
-private slots:
+private Q_SLOTS:
   void xOnActionTriggered(int action);
   void xOnNameEdited();
 

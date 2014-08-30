@@ -22,14 +22,14 @@ public:
 
   void setAssembly(SvgCompose::SvgAssembly* assembly);
 
-signals:
+Q_SIGNALS:
   void actionTriggered(int index, Action action);
   void nameChanged(const QString& name);
 
-public slots:
+public Q_SLOTS:
   void onSelectionChanged(int index);
 
-private slots:
+private Q_SLOTS:
   void xOnBackgroundChanged(const QString& background);
   void xOnSizeChanged(int size);
   void xOnScaleChanged(int index, qreal scale);

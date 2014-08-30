@@ -29,18 +29,19 @@ set(
   "controller/view_controller.hpp"
   "controller/view_controller.cpp"
 
+  "graphics/graphics_item.hpp"
+  "graphics/graphics_item.cpp"
+  "graphics/graphics_view.hpp"
+  "graphics/graphics_view.cpp"
+  "graphics/movable_svg_item.hpp"
+  "graphics/movable_svg_item.cpp"
+
   "gui/button_bar.hpp"
   "gui/button_bar.cpp"
   "gui/compositor_widget.hpp"
   "gui/compositor_widget.cpp"
   "gui/editor.hpp"
   "gui/editor.cpp"
-  "gui/graphics_item.hpp"
-  "gui/graphics_item.cpp"
-  "gui/graphics_view.hpp"
-  "gui/graphics_view.cpp"
-  "gui/movable_svg_item.hpp"
-  "gui/movable_svg_item.cpp"
   "gui/project_widget.hpp"
   "gui/project_widget.cpp"
 
@@ -61,12 +62,13 @@ qt4_wrap_cpp(
   "controller/tree_view_controller.hpp"
   "controller/view_controller.hpp"
 
+  "graphics/graphics_item.hpp"
+  "graphics/graphics_view.hpp"
+  "graphics/movable_svg_item.hpp"
+
   "gui/button_bar.hpp"
   "gui/compositor_widget.hpp"
   "gui/editor.hpp"
-  "gui/graphics_item.hpp"
-  "gui/graphics_view.hpp"
-  "gui/movable_svg_item.hpp"
   "gui/project_widget.hpp"
 )
 

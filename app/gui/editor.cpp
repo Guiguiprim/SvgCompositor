@@ -14,8 +14,7 @@
 #include "controller/view_controller.hpp"
 #include "misc/move_struct.hpp"
 #include "button_bar.hpp"
-#include "graphics_item.hpp"
-#include "graphics_view.hpp"
+#include "graphics/graphics_view.hpp"
 
 namespace SvgCompositor
 {

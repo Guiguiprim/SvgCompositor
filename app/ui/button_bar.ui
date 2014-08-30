@@ -52,7 +52,7 @@
         <string>Lower selection</string>
        </property>
        <property name="text">
-        <string>Lower selection</string>
+        <string>Raise selection</string>
        </property>
        <property name="icon">
         <iconset resource="../res/media.qrc">
@@ -82,7 +82,7 @@
         <string>Raise selection</string>
        </property>
        <property name="text">
-        <string>Raise selection</string>
+        <string>Lower selection</string>
        </property>
        <property name="icon">
         <iconset resource="../res/media.qrc">

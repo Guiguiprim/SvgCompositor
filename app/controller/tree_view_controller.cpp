@@ -208,6 +208,18 @@ void TreeViewController::onDeleteTriggered()
     Q_EMIT removeAssembly(_lastItemSelected.assembly);
 }
 
+void TreeViewController::onAssemblyOpenStatusChanged(SvgCompose::SvgAssembly* assembly, bool open)
+{
+  Link::iterator it = _link.find(assembly);
+  if(it != _link.end())
+  {
+    it.value()->setData(open, OpenRole);
+    QFont font = it.value()->font();
+    font.setItalic(!open);
+    it.value()->setFont(font);
+  }
+}
+
 void TreeViewController::xOnOpenTriggered()
 {
   if(_lastItemSelected.type == AssemblyType)
@@ -219,6 +231,12 @@ void TreeViewController::xAddAssembly(SvgCompose::SvgAssembly* assembly, QStanda
   QStandardItem* item = new QStandardItem(assembly->name());
   item->setData(AssemblyType, TypeRole);
   item->setEditable(false);
+
+  item->setData(false, OpenRole);
+  QFont font = item->font();
+  font.setItalic(true);
+  item->setFont(font);
+
   root->appendRow(item);
   _link[assembly] = item;
   xAssemblyConnectionSetup(assembly);

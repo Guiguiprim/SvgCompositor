@@ -57,6 +57,8 @@ public Q_SLOTS:
   void onGenerateImageTriggered();
   void onDeleteTriggered();
 
+  void onAssemblyOpenStatusChanged(SvgCompose::SvgAssembly* assembly, bool open);
+
 private Q_SLOTS:
   void xOnOpenTriggered();
 

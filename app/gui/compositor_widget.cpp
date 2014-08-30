@@ -115,6 +115,8 @@ CompositorWidget::CompositorWidget(QWidget *parent)
 
   connect(_compositorController, SIGNAL(projectChanged(SvgCompose::SvgAssembliesList*)),
           _treeViewController, SLOT(onProjectChanged(SvgCompose::SvgAssembliesList*)));
+  connect(_compositorController, SIGNAL(assemblyOpenStatusChanged(SvgCompose::SvgAssembly*,bool)),
+          _treeViewController, SLOT(onAssemblyOpenStatusChanged(SvgCompose::SvgAssembly*,bool)));
 
   connect(_compositorController, SIGNAL(projectChanged(SvgCompose::SvgAssembliesList*)),
           this, SLOT(onProjectChanged(SvgCompose::SvgAssembliesList*)));

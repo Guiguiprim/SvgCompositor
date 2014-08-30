@@ -42,6 +42,7 @@ qi_create_bin(
   "standalone/main.cpp"
   DEPENDS
   svg_clean
+  boost_program_options
 )
 
 

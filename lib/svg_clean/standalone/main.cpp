@@ -1,59 +1,101 @@
 #include <QCoreApplication>
-#include <QTextStream>
+
+#include <boost/program_options.hpp>
+#include <iostream>
+#include <string>
+#include <vector>
 
 #include <svg_clean/svg_clean.hpp>
+
+namespace po = boost::program_options;
 
 int main(int argc, char *argv[])
 {
   QCoreApplication a(argc, argv);
+  Q_UNUSED(a)
 
-  QTextStream cout(stdout);
-  if(argc < 2)
+  po::options_description generic("Generic options");
+  generic.add_options()
+      ("help,h", "produce help message");
+
+  po::options_description config("Configuration");
+  config.add_options()
+      ("output,o", po::value< std::string >(), "output file to create (while be overright if already exists)")
+      ("keep,k", po::value< std::vector<std::string> >(), "specific xml namespace to keep")
+      ("remove-tag,t", po::value< std::vector<std::string> >(), "specific xml tag to remove")
+      ("remove-attr,a", po::value< std::vector<std::string> >(), "specific xml attribute to remove");
+
+  po::options_description hidden("Hidden options");
+  hidden.add_options()
+      ("file,f", po::value< std::string >(), "SVG file to clean");
+  po::positional_options_description p;
+  p.add("file", -1);
+
+  po::options_description cmdline_options;
+  cmdline_options.add(generic).add(config).add(hidden);
+
+  po::options_description visible("Allowed options");
+  visible.add(generic).add(config);
+
+  bool help = false;
+  po::variables_map vm;
+  try
   {
-    cout << "clean_svg fileNameIn [OPTION]" << endl << endl;
-    cout << "\t fileNameIn:           The file you want to clean" << endl;
-    cout << "\t -o, --output file:    The file to create" << endl;
-    cout << "\t -k, --keep:           List of specific namespaces that you want to keep" << endl;
-    cout << "\t -t, --remove-tag:     List of specific tags that you want to remove" << endl;
-    cout << "\t -a, --remove-attr:    List of specific attributes that you want to remove" << endl << endl;
-    cout << "\t Keep only the main namespace, svg and xlink" << endl;
-    cout << "\t Remove the metadata balise" << endl;
-    cout << "\t Reduce number to only three digits after dot: D*.DDD" << endl << endl;
-    return 0;
+    po::store(po::command_line_parser(argc, argv).
+              options(cmdline_options).positional(p).run(), vm);
+    po::notify(vm);
+  }
+  catch(const std::exception&)
+  {
+    help = true;
   }
 
-  SvgClean::RemoveConfig rc;
-  int c = 0;
-  QString args;
-  QString outFile = "";
-  for(int i=2; i<argc; ++i)
+  if(vm.count("help"))
+    help = true;
+
+  if(vm.count("file") && !help)
   {
-    args = QString(argv[i]);
-    if(args == "-k" || args == "--keep")
-      c = 1;
-    else if(args == "-t" || args == "--remove-tag")
-      c = 2;
-    else if(args == "-a" || args == "--remove-attr")
-      c = 3;
-    else if(args == "-o" || args == "--output")
-      c = 4;
-    else
+    std::string file = vm["file"].as<std::string>();
+
+    SvgClean::RemoveConfig rc;
+
+    if(vm.count("keep"))
     {
-      if(c == 1)
-        rc.addAllowedNamespace(args);
-      else if(c == 2)
-        rc.addDropedTag(args);
-      else if(c == 3)
-        rc.addDropedAttribute(args);
-      else if(c == 4)
-        outFile = args;
+      std::vector<std::string> keep = vm["keep"].as< std::vector<std::string> >();
+      for(int i=0; i<keep.size(); ++i)
+        rc.addAllowedNamespace(keep.at(i).c_str());
     }
-  }
 
-  if(outFile.isEmpty())
-    SvgClean::clean(argv[1], rc);
+    if(vm.count("remove-tag"))
+    {
+      std::vector<std::string> rtag = vm["remove-tag"].as< std::vector<std::string> >();
+      for(int i=0; i<rtag.size(); ++i)
+        rc.addDropedTag(rtag.at(i).c_str());
+    }
+
+    if(vm.count("remove-attr"))
+    {
+      std::vector<std::string> rattr = vm["remove-attr"].as< std::vector<std::string> >();
+      for(int i=0; i<rattr.size(); ++i)
+        rc.addDropedAttribute(rattr.at(i).c_str());
+    }
+
+    if(vm.count("output"))
+    {
+      std::string output = vm["output"].as<std::string>();
+      if(output.empty())
+        SvgClean::clean(file.c_str(), rc);
+      else
+        SvgClean::clean(file.c_str(), output.c_str(), rc);
+    }
+    else
+      SvgClean::clean(file.c_str(), rc);
+  }
   else
-    SvgClean::clean(argv[1], outFile, rc);
+  {
+    std::cout << "usage: SvgCleaner [options] file" << std::endl << std::endl;
+    std::cout << visible << std::endl;
+  }
 
   return 0;
 }

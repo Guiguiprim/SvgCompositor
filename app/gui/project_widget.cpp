@@ -4,7 +4,6 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
-#include <QSortFilterProxyModel>
 #include <QStandardItemModel>
 #include <QTreeView>
 #include <QToolBar>
@@ -12,6 +11,7 @@
 #include <QVBoxLayout>
 
 #include "icon.hpp"
+#include "misc/project_sort_filter_model.hpp"
 
 namespace SvgCompositor
 {
@@ -21,7 +21,7 @@ ProjectWidget::ProjectWidget(QWidget *parent)
   , _treeView(new QTreeView)
   , _toolBar(new QToolBar)
   , _outputDir(new QLineEdit)
-  , _proxyModel(new QSortFilterProxyModel(this))
+  , _proxyModel(new ProjectSortFilterModel(this))
 {
   QVBoxLayout* lyt = new QVBoxLayout(this);
   lyt->addWidget(new QLabel("Output dir:"));

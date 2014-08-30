@@ -48,6 +48,8 @@ set(
   "misc/last_dir.cpp"
   "misc/move_struct.hpp"
   "misc/project_model_enum.hpp"
+  "misc/project_sort_filter_model.hpp"
+  "misc/project_sort_filter_model.cpp"
 )
 
 qt4_wrap_cpp(

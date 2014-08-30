@@ -5,13 +5,13 @@
 
 class QLineEdit;
 class QModelIndex;
-class QSortFilterProxyModel;
 class QStandardItemModel;
 class QTreeView;
 class QToolBar;
 
 namespace SvgCompositor
 {
+class ProjectSortFilterModel;
 
 class ProjectWidget : public QWidget
 {
@@ -55,7 +55,7 @@ private:
   QTreeView* _treeView;
   QToolBar* _toolBar;
   QLineEdit* _outputDir;
-  QSortFilterProxyModel* _proxyModel;
+  ProjectSortFilterModel* _proxyModel;
 
   QAction* _addAssemblyAction;
   QAction* _removeAssemblyAction;

@@ -277,6 +277,23 @@ void CompositorController::generateProjectImages() const
     SvgCompose::generateAssemblies(_project);
 }
 
+
+void CompositorController::onAssemblyAction(
+    SvgCompose::SvgAssembly* assembly,
+    Action action,
+    int index)
+{
+  if(_project && assembly)
+  {
+    QMap<SvgCompose::SvgAssembly*, Editor*>::iterator it;
+    it = _editors.find(assembly);
+    if(it != _editors.end())
+    {
+      it.value()->assemblyAction(index, action);
+    }
+  }
+}
+
 void CompositorController::xOnAssemblyChanged()
 {
   SvgCompose::SvgAssembly* assembly = qobject_cast<SvgCompose::SvgAssembly*>(sender());

@@ -130,6 +130,8 @@ CompositorWidget::CompositorWidget(QWidget *parent)
           _compositorController, SLOT(generateAssemblyImage(SvgCompose::SvgAssembly*)));
   connect(_treeViewController, SIGNAL(removeAssembly(SvgCompose::SvgAssembly*)),
           _compositorController, SLOT(removeAssembly(SvgCompose::SvgAssembly*)));
+  connect(_treeViewController, SIGNAL(assemblyAction(SvgCompose::SvgAssembly*,Action,int)),
+          _compositorController, SLOT(onAssemblyAction(SvgCompose::SvgAssembly*,Action,int)));
 
   connect(_treeViewController, SIGNAL(enableAssemblyActions(bool)),
           _projectWidget, SLOT(enableAssemblyAction(bool)));

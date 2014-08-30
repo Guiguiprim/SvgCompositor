@@ -35,6 +35,8 @@ public:
   void setAssembly(SvgCompose::SvgAssembly* assembly);
   SvgCompose::SvgAssembly* assembly() const;
 
+  void assemblyAction(int index, Action action);
+
 private:
   GraphicsView* _view;
   ButtonBar* _buttonBar;

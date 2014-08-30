@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QMap>
 
+#include "controller/action.hpp"
+
 class QUndoGroup;
 class QWidget;
 
@@ -45,6 +47,9 @@ public Q_SLOTS:
 
   void generateAssemblyImage(SvgCompose::SvgAssembly* assembly) const;
   void generateProjectImages() const;
+
+  void onAssemblyAction(SvgCompose::SvgAssembly* assembly,
+                        Action action, int index);
 
 Q_SIGNALS:
   void setWindowTitle(const QString& title);

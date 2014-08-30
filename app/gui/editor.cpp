@@ -115,4 +115,9 @@ SvgCompose::SvgAssembly* Editor::assembly() const
   return _assembly;
 }
 
+void Editor::assemblyAction(int index, Action action)
+{
+  _editorController->onAction(index, action);
+}
+
 } // namespace SvgCompositor

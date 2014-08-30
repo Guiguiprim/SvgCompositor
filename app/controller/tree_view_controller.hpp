@@ -26,6 +26,14 @@ class TreeViewController : public QObject
   Q_OBJECT
   typedef QMap<SvgCompose::SvgAssembly*, QStandardItem*> Link;
 
+  struct ItemSelected
+  {
+    ItemType type;
+    SvgCompose::SvgAssembly* assembly;
+    int index;
+    ItemSelected() : type(AssemblyType) , assembly(NULL), index(-1) {}
+  };
+
 public:
   explicit TreeViewController(QObject *parent = NULL);
 
@@ -69,8 +77,7 @@ private:
   void xAssemblyConnectionSetup(SvgCompose::SvgAssembly* assembly);
   void xAssemblyConnectionTearDown(SvgCompose::SvgAssembly* assembly);
 
-  bool xSetLastClickedAssembly(const QModelIndex& index);
-  void xSetLastClickedAssembly(SvgCompose::SvgAssembly* assembly);
+  bool xSetLastItemSelected(const QModelIndex& index);
 
 private:
   QStandardItemModel* _model;
@@ -78,7 +85,7 @@ private:
   Link _link;
   QAction* _openAction;
   QAction* _deleteAction;
-  SvgCompose::SvgAssembly* _lastClickedAssembly;
+  ItemSelected _lastItemSelected;
 };
 
 } // namespace SvgCompositor

@@ -18,9 +18,12 @@ TreeViewController::TreeViewController(QObject *parent)
   , _model(NULL)
   , _project(NULL)
   , _link()
-  , _lastClickedAssembly(NULL)
+  , _lastItemSelected()
 {
   _openAction = new QAction("Open", this);
+  QFont font = _openAction->font();
+  font.setBold(true);
+  _openAction->setFont(font);
   connect(_openAction, SIGNAL(triggered())
           , this, SLOT(xOnOpenTriggered()));
   _deleteAction = new QAction("Delete", this);
@@ -55,7 +58,7 @@ void TreeViewController::onProjectChanged(
                this, SLOT(onAssemblyRemoved(SvgCompose::SvgAssembly*)));
     delete _model;
     _model = NULL;
-    xSetLastClickedAssembly(NULL);
+    _lastItemSelected = ItemSelected();
     Q_EMIT modelChanged(NULL);
   }
   _project = project;
@@ -168,27 +171,25 @@ void TreeViewController::onElementRemoved(int index)
 
 void TreeViewController::onClicked(const QModelIndex& index)
 {
-  if(!xSetLastClickedAssembly(index))
-    return;
-
-  Q_EMIT showAssembly(_lastClickedAssembly);
+  xSetLastItemSelected(index);
+  if(_lastItemSelected.type == AssemblyType)
+    Q_EMIT showAssembly(_lastItemSelected.assembly);
 }
 
 void TreeViewController::onDoubleClicked(const QModelIndex& index)
 {
-  if(!xSetLastClickedAssembly(index))
-    return;
-
-  Q_EMIT openAssembly(_lastClickedAssembly);
+  xSetLastItemSelected(index);
+  if(_lastItemSelected.type == AssemblyType)
+    Q_EMIT openAssembly(_lastItemSelected.assembly);
 }
 
 void TreeViewController::customMenuRequested(const QModelIndex& index, const QPoint& pos)
 {
-  if(!xSetLastClickedAssembly(index))
-    return;
-
+  xSetLastItemSelected(index);
   QList<QAction*> actions;
-  actions << _openAction << _deleteAction;
+
+  if(_lastItemSelected.type == AssemblyType)
+    actions << _openAction << _deleteAction;
 
   if(actions.count() > 0)
     QMenu::exec(actions, pos);
@@ -197,20 +198,20 @@ void TreeViewController::customMenuRequested(const QModelIndex& index, const QPo
 
 void TreeViewController::onGenerateImageTriggered()
 {
-  if(_lastClickedAssembly)
-    Q_EMIT generateImage(_lastClickedAssembly);
+  if(_lastItemSelected.type == AssemblyType)
+    Q_EMIT generateImage(_lastItemSelected.assembly);
 }
 
 void TreeViewController::onDeleteTriggered()
 {
-  if(_lastClickedAssembly)
-    Q_EMIT removeAssembly(_lastClickedAssembly);
+  if(_lastItemSelected.type == AssemblyType)
+    Q_EMIT removeAssembly(_lastItemSelected.assembly);
 }
 
 void TreeViewController::xOnOpenTriggered()
 {
-  if(_lastClickedAssembly)
-    Q_EMIT openAssembly(_lastClickedAssembly);
+  if(_lastItemSelected.type == AssemblyType)
+    Q_EMIT openAssembly(_lastItemSelected.assembly);
 }
 
 void TreeViewController::xAddAssembly(SvgCompose::SvgAssembly* assembly, QStandardItem* root)
@@ -296,23 +297,22 @@ void TreeViewController::xAssemblyConnectionTearDown(SvgCompose::SvgAssembly* as
              this, SLOT(onElementRemoved(int)));
 }
 
-
-bool TreeViewController::xSetLastClickedAssembly(const QModelIndex& index)
+bool TreeViewController::xSetLastItemSelected(const QModelIndex& index)
 {
   QStandardItem* item = _model->itemFromIndex(index);
-  if(item->data(TypeRole) != AssemblyType)
-    return false;
-  xSetLastClickedAssembly(_link.key(item, NULL));
-  return true;
-}
+  _lastItemSelected.type = static_cast<ItemType>(item->data(TypeRole).toInt());
+  if(_lastItemSelected.type == AssemblyType)
+    _lastItemSelected.assembly = _link.key(item, NULL);
+  else
+    _lastItemSelected.assembly = _link.key(item->parent(), NULL);
 
-void TreeViewController::xSetLastClickedAssembly(SvgCompose::SvgAssembly* assembly)
-{
-  if(_lastClickedAssembly != assembly)
+  if(_lastItemSelected.type == ElementType &&
+     _lastItemSelected.assembly)
   {
-    _lastClickedAssembly = assembly;
-    Q_EMIT enableAssemblyActions(assembly ? true : false);
+    _lastItemSelected.index = item->row() - 1; // -1 because of backgground
   }
+  else
+    _lastItemSelected.index = -1;
 }
 
 } // namespace SvgCompositor

@@ -28,6 +28,8 @@ class CompositorWidget : public QMainWindow
 public:
   explicit CompositorWidget(QWidget *parent = NULL);
 
+  bool openProject(const QString& filename);
+
 public Q_SLOTS:
   void setWindowTitle(const QString& title);
   void onAddEditor(Editor*, const QString& name);

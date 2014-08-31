@@ -97,6 +97,7 @@ qi_use_lib(
   QT_QTGUI
   QT_QTXML
   QT_QTSVG
+  boost_program_options
   svg_clean
   svg_compose
 )

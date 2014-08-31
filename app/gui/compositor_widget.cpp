@@ -163,6 +163,11 @@ CompositorWidget::CompositorWidget(QWidget *parent)
   onProjectChanged(NULL);
 }
 
+bool CompositorWidget::openProject(const QString& filename)
+{
+  return _compositorController->openProject(filename);
+}
+
 void CompositorWidget::setWindowTitle(const QString& title)
 {
   this->QMainWindow::setWindowTitle(title);
